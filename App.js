@@ -5,7 +5,9 @@ import tw from 'twrnc';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text style={tw`text-red-600`}>Open up App.js to start working on your app!</Text>
+      <Text style={tw`text-red-600`}>
+        Open up App.js to start working on your app!
+      </Text>
       <StatusBar style="auto" />
     </View>
   );
