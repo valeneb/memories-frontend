@@ -4,20 +4,12 @@ import tw from 'twrnc';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text style={tw`text-red-600`}>
-        Open up App.js to start working on your app!
-      </Text>
-      <StatusBar style="auto" />
+    <View style={tw`flex items-center justify-center w-full h-full bg-[#D8725B] p-[1rem]`}>
+      <Text style={tw`text-[#F2DDC2] text-[1rem]`}>Memories</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  
 });
