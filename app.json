@@ -26,11 +26,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "0ef263e7-041e-4900-b15b-94c834280509"
-      }
-    },
     "owner": "val-b"
   }
 }
