@@ -2,17 +2,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View } from 'react-native';
-// import { Provider } from 'react-redux';
-//import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import ProfilScreen from './screens/ProfilScreen';
 import SearchScreen from './screens/SearchScreen';
 
-// const store = configureStore({
-//   reducer: { user },
-// });
+const store = configureStore({
+   reducer: { user },
+});
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -67,9 +67,19 @@ const TabNavigator = () => {
   );
 };
 
+import 'expo-dev-client';
+
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import user from './reducers/user';
+
+const store = configureStore({
+  reducer: { user },
+});
+
 export default function App() {
   return (
-    // <Provider store={store}>
+  <Provider store={store}>
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -121,7 +131,8 @@ export default function App() {
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator> */}
     </NavigationContainer>
-    // </Provider>
+     </Provider>
+
   );
 }
 
