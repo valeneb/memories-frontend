@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -10,6 +10,7 @@ import HomeScreen from './screens/HomeScreen';
 import ProfilScreen from './screens/ProfilScreen';
 import SearchScreen from './screens/SearchScreen';
 import user from './reducers/user';
+import tw from 'twrnc';
 
 const store = configureStore({
   reducer: { user },
@@ -76,10 +77,12 @@ export default function App() {
           screenOptions={({ route }) => ({
             tabBarIcon: ({ color, size }) => {
               let iconName = '';
-              let iconImage = null;
 
               if (route.name === 'Map') {
-                iconName = 'globe';
+                return (
+                  <Image source={require('./assets/logo-blanc-hd.png')} alt="home" style={{ marginBottom: -16, height: 48, width: 48 }} />
+                )
+                //iconName = 'globe';
               } else if (route.name === 'Profil') {
                 iconName = 'user';
               } else if (route.name === 'Search') {
@@ -96,8 +99,8 @@ export default function App() {
               );
             },
             tabBarActiveTintColor: '#fff',
-            tabBarInactiveTintColor: 'rgba(255,255,255,0.5)',
-            tabBarStyle: { backgroundColor: '#D8725B' },
+            tabBarInactiveTintColor: 'rgba(255,255,255,1)',
+            tabBarStyle: { backgroundColor: '#D8725B', borderColor: 'transparent', shadowOpacity: 0, borderWidth: 0, elevation: 0 },
             headerShown: false,
           })}
         >
