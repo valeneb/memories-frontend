@@ -4,7 +4,7 @@ import Input from '../Input';
 import Button from '../Button';
 import { useState } from 'react';
 
-export default function SignInUp({register, setIsLogin}) {
+export default function SignInUp({register, setIsLogin, navigation}) {
  const [username, setUsername] = useState('');
  const [password, setPassword] = useState('');
  const [confirmPassword, setConfirmPassword] = useState('');
@@ -26,7 +26,9 @@ export default function SignInUp({register, setIsLogin}) {
 
  const signIn = () => {
     if (username && password) {
+        navigation.navigate('TabNavigator');
         console.log('fetch connect');
+
     } else {
         setError(!email ? 'Email' : 'Password');
     }
@@ -36,6 +38,7 @@ export default function SignInUp({register, setIsLogin}) {
 
  const signUp = () => {
     if (registerInfosIsOk) {
+        navigation.navigate('TabNavigator');
         console.log('fetch connect');
     } else {
         if (!checkEmail()) {

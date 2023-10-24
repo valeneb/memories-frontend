@@ -4,7 +4,7 @@ import tw from 'twrnc';
 import Login from '../components/login/Login';
 import SignInUp from '../components/login/SignInUp';
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
   const [isLogin, setIsLogin] = useState(true);
   const [register, setRegister] = useState(false);
 
@@ -20,7 +20,7 @@ export default function LoginScreen() {
       {isLogin ? (
         <Login onClick={onClick} />
       ) : (
-        <SignInUp register={register} setIsLogin={setIsLogin} />
+        <SignInUp register={register} setIsLogin={setIsLogin} navigation={navigation}/>
       )}
     </View>
   );

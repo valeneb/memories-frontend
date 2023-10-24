@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   Dimensions,
@@ -71,7 +70,7 @@ export default function HomeScreen({ navigation }) {
             >
               <Image source={require('../assets/compass.png')} alt="compass" style={{height: 48, width: 48 }} />
             </TouchableOpacity>
-            <LayoutHome children={<NewTravel />}/>
+            <LayoutHome children={<NewTravel />} type="new"/>
           </Animated.View>
         }
       </SafeAreaView>
