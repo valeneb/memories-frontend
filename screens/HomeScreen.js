@@ -8,6 +8,7 @@ import {
   ScrollView,
   Animated,
   Button,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView from 'react-native-maps';
@@ -18,13 +19,14 @@ const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [modalY] = useState(new Animated.Value(height - 120)); // affichage du bouton ok, quand fermé
+  const [modalY] = useState(new Animated.Value(height - 120)); //// affichage du bouton ok, quand fermé
 
   const handleButtonPress = () => {
     setIsOpen(!isOpen);
     isOpen ? closeModal() : openModal();
   };
 
+  //useEffect pas nécessaire, juste pour comprendre où est modalY
   useEffect(() => {
     console.log('====', modalY);
   }, [modalY]);
@@ -44,14 +46,6 @@ export default function HomeScreen({ navigation }) {
       useNativeDriver: true,
     }).start();
   };
-
-  const ButtonLarge = () => {
-    return (
-      <TouchableOpacity style={styles.buttonLarge}>
-        <Text>Mon Bouton</Text>
-      </TouchableOpacity>
-    );
-  }; // ajouter l'action
 
   return (
     <View style={{ flex: 1 }}>
@@ -85,7 +79,6 @@ export default function HomeScreen({ navigation }) {
             </TouchableOpacity>
             <Text style={styles.title}>Mes voyages</Text>
             <View style={styles.line}></View>
-            <ButtonLarge />
           </Animated.View>
         }
       </SafeAreaView>
@@ -137,5 +130,4 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
-  buttonLarge: {},
 });
