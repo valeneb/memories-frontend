@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, Image, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, Image, View, Dimensions } from 'react-native';
 
 export default function TarvelCard({
   title,

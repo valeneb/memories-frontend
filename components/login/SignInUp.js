@@ -30,7 +30,7 @@ export default function SignInUp({register, setIsLogin, navigation}) {
         console.log('fetch connect');
 
     } else {
-        setError(!email ? 'Email' : 'Password');
+        setError(!username ? 'Username' : 'Password');
     }
  };
 
@@ -78,8 +78,8 @@ export default function SignInUp({register, setIsLogin, navigation}) {
       <Image source={require('../../assets/logo-blanc-hd.png')} style={tw`w-[22rem] h-[22rem] opacity-70 relative`} />
       <View style={tw`absolute w-full h-full flex flex-col items-center justify-around`}>
         <View style={tw`flex flex-col w-full items-center h-[45%] justify-center`}>
-            <Input value={username} setValue={setUsername} placeholder="Username" size={register ? 'normal' : 'large'} border/>
-            <Input value={password} setValue={setPassword} placeholder="Password" size={register ? 'normal' : 'large'} border/>
+            <Input placeholder="Connect with Google" size={register ? 'normal' : 'large'} border/>
+            <Input placeholder="Connect with Facebook" size={register ? 'normal' : 'large'} border/>
         </View>
         <View style={tw`w-full flex flex-row items-center justify-center`}>
             <View style={tw`w-[45%] h-px bg-black`}/>
