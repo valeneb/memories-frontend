@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import tw from 'twrnc';
 import Input from '../Input';
 import Button from '../Button';
