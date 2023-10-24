@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
 
-export default function LayoutHome({children, type}) {
+export default function LayoutHome({children, type, onClick}) {
  const title = type === 'new' ? 'Nouveau voyage' : 'Mes voyages';
  const buttonTitle = type === 'new' ? 'Créer un nouveau voyage' : 'Ajouter un nouveau voyage';
  const icon = type === 'new' ? 'check' : 'plus';
@@ -15,7 +15,7 @@ export default function LayoutHome({children, type}) {
         </View>
         <View style={tw`w-full h-[70%] flex items-center justify-between`}>
             {children}
-            <ButtonLarge title={buttonTitle} icon={icon}/>
+            <ButtonLarge title={buttonTitle} icon={icon} onClick={onClick}/>
         </View>
     </View>
  );

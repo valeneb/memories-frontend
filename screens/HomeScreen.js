@@ -12,15 +12,18 @@ import MapView from 'react-native-maps';
 import mapStyle from '../components/homepage/mapStyle.json';
 import LayoutHome from '../components/homepage/LayoutHome';
 import NewTravel from '../components/homepage/NewTravel';
+import TravelCard from '../components/TravelCard';
 
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
   const [modalY] = useState(new Animated.Value(height)); // affichage du bouton ok, quand fermé
+  const [newTravel, setNewTravel] = useState(false);
 
-  const handleButtonPress = () => {
+  const handleCompassPress = () => {
     setIsOpen(!isOpen);
+    setNewTravel(false);
     isOpen ? closeModal() : openModal();
   };
 
@@ -39,6 +42,14 @@ export default function HomeScreen({ navigation }) {
       useNativeDriver: true,
     }).start();
   };
+
+  const handleClick = () => {
+    if (newTravel) {
+      console.log('create new travel');
+    } else {
+      setNewTravel(true);
+    }
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -64,13 +75,13 @@ export default function HomeScreen({ navigation }) {
           >
             {isOpen && <View style={{backgroundColor: '#D8725B', height: 50, width: '100%'}} />}
             <TouchableOpacity
-              onPress={handleButtonPress}
+              onPress={handleCompassPress}
               style={styles.button}
               activeOpacity={0.8}
             >
               <Image source={require('../assets/compass.png')} alt="compass" style={{height: 48, width: 48 }} />
             </TouchableOpacity>
-            <LayoutHome children={<NewTravel />} type="new"/>
+            <LayoutHome children={newTravel ? <NewTravel /> : <TravelCard />} type={`${newTravel ? 'new' : 'travel'}`} onClick={handleClick}/>
           </Animated.View>
         }
       </SafeAreaView>
