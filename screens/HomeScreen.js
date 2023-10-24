@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
   Dimensions,
   Animated,
-  Image
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView from 'react-native-maps';
 import mapStyle from '../components/homepage/mapStyle.json';
 import LayoutHome from '../components/homepage/LayoutHome';
-import NewTravel from '../components/homepage/NewTravel';
+import TravelCard from '../components/TravelCard';
 
 const { width, height } = Dimensions.get('window');
 
@@ -63,15 +63,27 @@ export default function HomeScreen({ navigation }) {
               transform: [{ translateY: modalY }],
             }}
           >
-            {isOpen && <View style={{backgroundColor: '#D8725B', height: 50, width: '100%'}} />}
+            {isOpen && (
+              <View
+                style={{
+                  backgroundColor: '#D8725B',
+                  height: 50,
+                  width: '100%',
+                }}
+              />
+            )}
             <TouchableOpacity
               onPress={handleButtonPress}
               style={styles.button}
               activeOpacity={0.8}
             >
-              <Image source={require('../assets/compass.png')} alt="compass" style={{height: 48, width: 48 }} />
+              <Image
+                source={require('../assets/compass.png')}
+                alt="compass"
+                style={{ height: 48, width: 48 }}
+              />
             </TouchableOpacity>
-            <LayoutHome children={<NewTravel />}/>
+            <LayoutHome children={<TravelCard />} />
           </Animated.View>
         }
       </SafeAreaView>
@@ -99,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#073141',
     justifyContent: 'center',
     alignItems: 'center',
-    top: -32
+    top: -32,
   },
   modal: {
     width: width,
