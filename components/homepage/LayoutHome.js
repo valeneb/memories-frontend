@@ -1,13 +1,22 @@
 import { View, Text } from 'react-native';
 import tw from 'twrnc';
-import NewTravel from './NewTravel';
+import ButtonLarge from '../ButtonLarge';
 
-export default function LayoutHome({children}) {
+export default function LayoutHome({children, type}) {
+ const title = type === 'new' ? 'Nouveau voyage' : 'Mes voyages';
+ const buttonTitle = type === 'new' ? 'Créer un nouveau voyage' : 'Ajouter un nouveau voyage';
+ const icon = type === 'new' ? 'check' : 'plus';
+
  return (
-    <View style={tw`w-full flex flex-col items-center`}>
-        <Text style={tw`text-[1.375rem] font-bold text-[#073040]`}>Mes voyages</Text>
-        <View style={tw`h-0.5 bg-[#073040] w-[80%] mt-[1rem]`} />
-        {children}
+    <View style={tw`w-full h-full flex flex-col items-center`}>
+        <View style={tw`w-full flex items-center`}>
+            <Text style={tw`text-[1.375rem] font-bold text-[#073040]`}>{title}</Text>
+            <View style={tw`h-0.5 bg-[#073040] w-[80%] mt-[1rem]`} />
+        </View>
+        <View style={tw`w-full h-[70%] flex items-center justify-between`}>
+            {children}
+            <ButtonLarge title={buttonTitle} icon={icon}/>
+        </View>
     </View>
  );
 }
