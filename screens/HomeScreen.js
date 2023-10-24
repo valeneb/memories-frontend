@@ -41,14 +41,6 @@ export default function HomeScreen({ navigation }) {
     }).start();
   };
 
-  const ButtonLarge = () => {
-    return (
-      <TouchableOpacity style={styles.buttonLarge}>
-        <Text>Mon Bouton</Text>
-      </TouchableOpacity>
-    );
-  }; // ajouter l'action
-
   return (
     <View style={{ flex: 1 }}>
       <MapView
@@ -118,5 +110,4 @@ const styles = StyleSheet.create({
     bottom: 60,
     left: 0,
   },
-  buttonLarge: {},
 });
