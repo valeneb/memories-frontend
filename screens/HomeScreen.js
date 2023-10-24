@@ -81,7 +81,7 @@ export default function HomeScreen({ navigation }) {
             >
               <Image source={require('../assets/compass.png')} alt="compass" style={{height: 48, width: 48 }} />
             </TouchableOpacity>
-            <LayoutHome children={newTravel ? <NewTravel /> : <TravelCard title="Koh Samui" departureDate="31/>01/2024" returnDate="31/03/2024" />} type={`${newTravel ? 'new' : 'travel'}`} onClick={handleClick}/>
+            <LayoutHome children={newTravel ? <NewTravel /> : <TravelCard title="Koh Samui" departureDate="31/01/2024" returnDate="31/03/2024" />} type={`${newTravel ? 'new' : 'travel'}`} onClick={handleClick}/>
           </Animated.View>
         }
       </SafeAreaView>
