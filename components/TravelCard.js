@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, Image, View, Dimensions } from 'react-native';
+import tw from 'twrnc';
 
 export default function TarvelCard({
   title,
   image,
-  departure,
-  arrival,
+  departureDate,
+  returnDate,
   onClick,
 }) {
   const handleClick = () => {
@@ -13,21 +14,23 @@ export default function TarvelCard({
   };
 
   return (
-    <TouchableOpacity
-      style={styles.buttonTravelCard}
-      onPress={() => handleClick()}
-    >
-      <View style={styles.imageContainer}>
-        <Image source={image} style={styles.image} />
-      </View>
-      <View style={styles.travelCardTextContainer}>
-        <Text style={styles.travelCardDestination}>{title}</Text>
-        <View style={styles.dateContainer}>
-          <Text style={styles.travelCardDate}>Du {departure}</Text>
-          <Text style={styles.travelCardDate}>au {arrival}</Text>
+    <View style={tw`w-full flex flex-col items-center mt-[4rem]`}>
+      <TouchableOpacity
+        style={styles.buttonTravelCard}
+        onPress={() => handleClick()}
+      >
+        <View style={styles.imageContainer}>
+          <Image source={require(`../assets/favicon.png`)} style={styles.image} />
         </View>
-      </View>
-    </TouchableOpacity>
+        <View style={styles.travelCardTextContainer}>
+          <Text style={styles.travelCardDestination}>{title}</Text>
+          <View style={styles.dateContainer}>
+            <Text style={styles.travelCardDate}>Du {departureDate}</Text>
+            <Text style={styles.travelCardDate}>au {returnDate}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 }
 
