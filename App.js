@@ -9,6 +9,7 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import ProfilScreen from './screens/ProfilScreen';
 import SearchScreen from './screens/SearchScreen';
+import user from './reducers/user';
 
 const store = configureStore({
   reducer: { user },
