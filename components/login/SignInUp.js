@@ -1,10 +1,18 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
 import Input from '../Input';
 import Button from '../Button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function SignInUp({register, setIsLogin}) {
+import 'expo-dev-client';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+
+export default function SignInUp({register, setRegister}) {
+ GoogleSignin.configure({
+    webClientId: '779362993332-pneuafjhb61crsnnuuac83ebo99kbmcq.apps.googleusercontent.com',
+  });
+
  const [username, setUsername] = useState('');
  const [password, setPassword] = useState('');
  const [confirmPassword, setConfirmPassword] = useState('');
@@ -70,13 +78,26 @@ export default function SignInUp({register, setIsLogin}) {
     }
  };
 
+
+ const handleGoogleConnect = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('user', userInfo);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
  return (
     <View style={tw`flex items-center justify-center w-full h-full bg-[#D8725B] p-[1rem]`}>
       <Image source={require('../../assets/logo-blanc-hd.png')} style={tw`w-[22rem] h-[22rem] opacity-70 relative`} />
       <View style={tw`absolute w-full h-full flex flex-col items-center justify-around`}>
         <View style={tw`flex flex-col w-full items-center h-[45%] justify-center`}>
-            <Input value={username} setValue={setUsername} placeholder="Username" size={register ? 'normal' : 'large'} border/>
-            <Input value={password} setValue={setPassword} placeholder="Password" size={register ? 'normal' : 'large'} border/>
+            <GoogleSigninButton onPress={handleGoogleConnect} style={tw`rounded-[.75rem] h-[3.5rem] w-[80%]`} />
+            <TouchableOpacity style={tw`p-[.5rem]`} onPress={() => setRegister(!register)}>
+                <Text>{register ? 'Déjà un compte ? Cliquez ici' : 'Pas encore de compte ? Cliquez ici'}</Text>
+            </TouchableOpacity>
         </View>
         <View style={tw`w-full flex flex-row items-center justify-center`}>
             <View style={tw`w-[45%] h-px bg-black`}/>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "779362993332",
+    "project_id": "memories-1ab74",
+    "storage_bucket": "memories-1ab74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779362993332:android:842f3bca805820540fc3e1",
+        "android_client_info": {
+          "package_name": "com.lacapsule.memories"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "779362993332-p61nv0roabd1er9bjpsma379phu7rot3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lacapsule.memories",
+            "certificate_hash": "ac393d5137420a510d389c442a50f504035290da"
+          }
+        },
+        {
+          "client_id": "779362993332-pneuafjhb61crsnnuuac83ebo99kbmcq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfaGEWuKtwhxlms6lzB5mMFdlwZ7EB6uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "779362993332-pneuafjhb61crsnnuuac83ebo99kbmcq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
