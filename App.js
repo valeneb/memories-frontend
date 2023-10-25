@@ -7,6 +7,7 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import ProfilScreen from './screens/ProfilScreen';
 import SearchScreen from './screens/SearchScreen';
+import TravelScreen from './screens/TravelScreen';
 
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -58,7 +59,7 @@ const TabNavigator = () => {
     />
     <Tab.Screen
       name="Profil"
-      component={ProfilScreen}
+      component={TravelScreen}
       options={{ tabBarLabel: '' }}
     />
     <Tab.Screen
