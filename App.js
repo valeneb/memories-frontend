@@ -81,14 +81,15 @@ const TabNavigator = () => {
 export default function App() {
   return (
     <Provider store={store}>
-      <PersistGate persistor={persistor}>
+      <TravelScreen />
+      {/* <PersistGate persistor={persistor}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
-      </PersistGate>
+      </PersistGate> */}
     </Provider>
   );
 }
