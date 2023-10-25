@@ -44,8 +44,6 @@ export default function SignInUp({register, setRegister, navigation}) {
                 navigation.navigate('TabNavigator');
             }
         })
-    
-
     } else {
         setError(!password ? 'Password' : 'Email');
     }
