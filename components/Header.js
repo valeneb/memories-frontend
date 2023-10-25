@@ -7,7 +7,7 @@ export default function Header({title, icon, onClick, isDairyActive, setIsDairyA
     <View style={tw`w-full`}>
         <View style={tw`flex flex-row items-center justify-between bg-[#D8725B] px-[1rem] pt-[2rem] pb-[1rem]`}>
             <Text style={tw`text-[#F2DDC2] text-[2rem]`}>{title}</Text>
-            <TouchableOpacity onPress={() => onClick(title)}>
+            <TouchableOpacity onPress={onClick}>
                 <FontAwesome
                     name={icon}
                     size={32}

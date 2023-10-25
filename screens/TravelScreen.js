@@ -1,20 +1,15 @@
 import { Text, View } from 'react-native';
-import Header from '../components/Header';
 import { useState } from 'react';
 import tw from 'twrnc';
 import Diary from '../components/diary/Diary';
 
 export default function TravelScreen() {
-  const [isDairyActive, setIsDairyActive] = useState(false);
-
-  const onClick = (title) => {
-    console.log('title', title);
-  };
+  const [isDairyActive, setIsDairyActive] = useState(true);
+  
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full`}>
-      <Header title="Brazil" icon="edit" onClick={onClick} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
       {isDairyActive ? (
-        <Diary />
+        <Diary isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
       ) : (
         <Text>Program Screen</Text>
       )}
