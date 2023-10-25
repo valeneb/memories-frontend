@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, View, Text } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -24,24 +24,33 @@ const TabNavigator = () => {
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
-        if (route.name === 'Home') {
+        if(route.name !== 'Travel') {
+          if (route.name === 'Home') {
+            return (
+              <Image source={require('./assets/logo-blanc-hd.png')} alt="home" style={{ marginBottom: -16, height: 48, width: 48 }} />
+            )
+          } else if (route.name === 'Profil') {
+            iconName = 'user';
+          } else if (route.name === 'Search') {
+            iconName = 'search';
+          } 
+  
           return (
-            <Image source={require('./assets/logo-blanc-hd.png')} alt="home" style={{ marginBottom: -16, height: 48, width: 48 }} />
+            <FontAwesome
+              name={iconName}
+              size={size + 8}
+              color={color}
+              style={{ marginBottom: -16 }}
+            />
+          );
+        } else {
+          return (
+            <View>
+              <Text>lalal</Text>
+            </View>
           )
-        } else if (route.name === 'Profil') {
-          iconName = 'user';
-        } else if (route.name === 'Search') {
-          iconName = 'search';
         }
-
-        return (
-          <FontAwesome
-            name={iconName}
-            size={size + 8}
-            color={color}
-            style={{ marginBottom: -16 }}
-          />
-        );
+        
       },
       tabBarActiveTintColor: '#fff',
       tabBarInactiveTintColor: 'rgba(255,255,255,1)',
@@ -56,13 +65,20 @@ const TabNavigator = () => {
     />
     <Tab.Screen
       name="Profil"
-      component={TravelScreen}
+      component={ProfilScreen}
       options={{ tabBarLabel: '' }}
     />
     <Tab.Screen
       name="Search"
       component={SearchScreen}
       options={{ tabBarLabel: '' }}
+    />
+    <Tab.Screen
+      name="Travel"
+      component={TravelScreen}
+      options={{
+        tabBarLabel: '',
+      }}
     />
   </Tab.Navigator>
   );
@@ -75,6 +91,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Travel" component={TravelScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator> 
         </NavigationContainer>
