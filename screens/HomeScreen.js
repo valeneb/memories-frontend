@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView from 'react-native-maps';
 import mapStyle from '../components/homepage/mapStyle.json';
 import LayoutHome from '../components/homepage/LayoutHome';
-import TravelCard from '../components/TravelCard';
+import TravelList from '../components/homepage/TravelList';
 
 const { width, height } = Dimensions.get('window');
 
@@ -83,7 +83,7 @@ export default function HomeScreen({ navigation }) {
                 style={{ height: 48, width: 48 }}
               />
             </TouchableOpacity>
-            <LayoutHome children={<TravelCard />} />
+            <LayoutHome children={<TravelList />} />
           </Animated.View>
         }
       </SafeAreaView>

@@ -9,71 +9,36 @@ import {
   ScrollView,
 } from 'react-native';
 
-export default function TarvelCard() {
-  const travelData = [
-    {
-      title: 'Voyage 1',
-      image: require('../assets/favicon.png'),
-      departure: '01 Janvier 2023',
-      arrival: '10 Janvier 2023',
-    },
-    {
-      title: 'Voyage 2',
-      image: require('../assets/favicon.png'),
-      departure: '15 Février 2023',
-      arrival: '25 Février 2023',
-    },
-    {
-      title: 'Voyage 3',
-      image: require('../assets/favicon.png'),
-      departure: '15 Février 2023',
-      arrival: '25 Février 2023',
-    },
-    {
-      title: 'Voyage 4',
-      image: require('../assets/favicon.png'),
-      departure: '15 Février 2023',
-      arrival: '25 Février 2023',
-    },
-    {
-      title: 'Voyage 5',
-      image: require('../assets/favicon.png'),
-      departure: '15 Février 2023',
-      arrival: '25 Février 2023',
-    },
-  ];
-
+export default function TravelCard({ title, image, departure, arrival }) {
   const handleClick = () => {
     onClick(title);
   };
 
-  const travelList = travelData.map((data, i) => {
-    return (
-      <TouchableOpacity
-        key={i}
-        style={styles.buttonTravelCard}
-        // onPress={() => handleClick()} COMPLETER LA FONCTIONNALITE
-      >
-        <View style={styles.imageContainer}>
-          <Image source={data.image} style={styles.image} />
+  return (
+    <TouchableOpacity
+      style={styles.buttonTravelCard}
+      // onPress={() => handleClick()} COMPLETER LA FONCTIONNALITE
+    >
+      <View style={styles.imageContainer}>
+        <Image source={image} style={styles.image} />
+      </View>
+      <View style={styles.travelCardTextContainer}>
+        <Text style={styles.travelCardDestination}>{title}</Text>
+        <View>
+          <Text style={styles.travelCardDate}>Du {departure}</Text>
+          <Text style={styles.travelCardDate}>au {arrival}</Text>
         </View>
-        <View style={styles.travelCardTextContainer}>
-          <Text style={styles.travelCardDestination}>{data.title}</Text>
-          <View style={styles.dateContainer}>
-            <Text style={styles.travelCardDate}>Du {data.departure}</Text>
-            <Text style={styles.travelCardDate}>au {data.arrival}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  });
-
-  return <ScrollView style={styles.travelList}>{travelList}</ScrollView>;
+      </View>
+    </TouchableOpacity>
+  );
 }
 
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  travelList: {
+    height: height * 0.7,
+  },
   buttonTravelCard: {
     flexDirection: 'row',
     backgroundColor: '#073040',
