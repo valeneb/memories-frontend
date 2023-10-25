@@ -30,7 +30,6 @@ const TabNavigator = () => {
           return (
             <Image source={require('./assets/logo-blanc-hd.png')} alt="home" style={{ marginBottom: -16, height: 48, width: 48 }} />
           )
-          //iconName = 'globe';
         } else if (route.name === 'Profil') {
           iconName = 'user';
         } else if (route.name === 'Search') {
