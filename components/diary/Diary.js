@@ -38,7 +38,7 @@ export default function Diary({isDairyActive, setIsDairyActive}) {
                 {diary.map((diary, index) => {
                     return (
                         <View key={index} style={tw`w-full`}>
-                            <DiaryCard title={diary.title} content={diary.content} photos={diary.photos} />
+                            <DiaryCard title={diary.title} content={diary.content} photos={diary.photos} edit={edit} />
                         </View>
                     )
                 })}

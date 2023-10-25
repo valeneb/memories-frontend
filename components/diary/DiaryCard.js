@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Text, View, Image } from 'react-native';
 import tw from 'twrnc';
 
-export default function DiaryCard({ title, photos, content }) {
+export default function DiaryCard({ title, photos, content, edit }) {
   const [textHeight, setTextHeight] = useState(0);
   const textRef = useRef();
 
@@ -15,7 +15,7 @@ export default function DiaryCard({ title, photos, content }) {
   };
 
   return (
-    <View style={tw`bg-[#F2DDC2] w-full p-[.5rem]`}>
+    <View style={tw`${edit ? 'bg-white/40 rounded-[.5rem]' : 'bg-[#F2DDC2]'} w-full p-[.5rem] mb-[.5rem]`}>
       <Text style={tw`text-[1rem]`}>{title}</Text>
       <View style={tw`flex flex-row w-full items-start pt-[.5rem]`}>
         <View style={tw`w-[40%]`}>
@@ -29,13 +29,15 @@ export default function DiaryCard({ title, photos, content }) {
           {content}
         </Text>
       </View>
-      <View style={tw`flex flex-row items-center w-full pt-[.5rem]`}>
-        {photos.map((photo, index) => {
-          return (
-            <Image source={require('../../assets/favicon.png')} alt="photo" key={index} style={tw`rounded-[.5rem] w-[50%] mr-[.5rem]`} />
-          );
-        })}
-      </View>
+      {!edit && (
+        <View style={tw`flex flex-row items-center w-full pt-[.5rem]`}>
+            {photos.map((photo, index) => {
+            return (
+                <Image source={require('../../assets/favicon.png')} alt="photo" key={index} style={tw`rounded-[.5rem] w-[50%] mr-[.5rem]`} />
+            );
+            })}
+        </View>
+      )}
     </View>
   );
 }
