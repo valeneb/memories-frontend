@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
 
 export default function DiaryCard({ title, photos, content, edit }) {
@@ -16,6 +16,11 @@ export default function DiaryCard({ title, photos, content, edit }) {
 
   return (
     <View style={tw`${edit ? 'bg-white/40 rounded-[.5rem]' : 'bg-[#F2DDC2]'} w-full p-[.5rem] mb-[.5rem]`}>
+      {edit && (
+        <TouchableOpacity style={tw`w-full flex items-end`}>
+          <Text style={tw`font-bold text-[1rem]`}>x</Text>
+        </TouchableOpacity>
+      )}
       <Text style={tw`text-[1rem]`}>{title}</Text>
       <View style={tw`flex flex-row w-full items-start pt-[.5rem]`}>
         <View style={tw`w-[40%]`}>

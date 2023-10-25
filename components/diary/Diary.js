@@ -5,7 +5,7 @@ import DiaryCard from './DiaryCard';
 import Header from '../Header';
 import { useState } from 'react';
 
-export default function Diary({isDairyActive, setIsDairyActive}) {
+export default function Diary({isDairyActive, setIsDairyActive, travel}) {
   const diary = [
         {
             title: 'Jour 1 - Découverte de Rio', 
@@ -31,7 +31,7 @@ export default function Diary({isDairyActive, setIsDairyActive}) {
 
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full`}>
-        <Header title="Brazil" icon={`${edit ? "check" : "edit"}`} onClick={onClick} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
+        <Header title={travel.destination} icon={`${edit ? "check" : "edit"}`} onClick={onClick} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
         <ScrollView style={tw`bg-[#F2DDC2] w-full`}>
         {diary.length > 0 ? (
             <View style={tw`w-full h-full p-[.5rem]`}>

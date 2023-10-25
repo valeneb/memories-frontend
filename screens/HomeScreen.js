@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -43,14 +43,6 @@ export default function HomeScreen({ navigation }) {
     }).start();
   };
 
-  const handleClick = () => {
-    if (newTravel) {
-      console.log('create new travel');
-    } else {
-      setNewTravel(true);
-    }
-  }
-
   return (
     <View style={{ flex: 1 }}>
       <MapView
@@ -93,7 +85,13 @@ export default function HomeScreen({ navigation }) {
                 style={{ height: 48, width: 48 }}
               />
             </TouchableOpacity>
-            <LayoutHome children={newTravel ? <NewTravel /> : <TravelList />} type={`${newTravel ? 'new' : 'travel'}`} onClick={handleClick}/>
+            <LayoutHome 
+              children={
+                newTravel ? <NewTravel navigation={navigation} /> 
+                : <TravelList setNewTravel={setNewTravel} navigation={navigation} />
+              } 
+              type={`${newTravel ? 'new' : 'travel'}`}  
+            />
           </Animated.View>
         }
       </SafeAreaView>

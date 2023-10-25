@@ -9,19 +9,19 @@ import {
   ScrollView,
 } from 'react-native';
 
-export default function TravelCard({ title, image, departureDate, returnDate }) {
+export default function TravelCard({ title, image, departureDate, returnDate, navigation, id }) {
 
   const handleClick = () => {
-    onClick(title);
+    navigation.navigate('Travel', { travelId: id });
   };
 
   return (
     <TouchableOpacity
       style={styles.buttonTravelCard}
-      // onPress={() => handleClick()} COMPLETER LA FONCTIONNALITE
+      onPress={() => handleClick()}
     >
       <View style={styles.imageContainer}>
-        <Image source={image} style={styles.image} />
+        <Image source={require('../assets/favicon.png')} style={styles.image} />
       </View>
       <View style={styles.travelCardTextContainer}>
         <Text style={styles.travelCardDestination}>{title}</Text>
