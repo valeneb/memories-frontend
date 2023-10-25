@@ -8,7 +8,7 @@ import { connectUser } from '../../reducers/user';
 
 const ROUTE_BACK = "http://192.168.1.17:3000";
 
-export default function SignInUp({register, setRegister, setIsLogin, navigation}) {
+export default function SignInUp({register, setRegister, navigation}) {
  const dispatch = useDispatch();
 
  const [username, setUsername] = useState('');

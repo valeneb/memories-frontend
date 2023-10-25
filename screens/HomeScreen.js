@@ -14,7 +14,6 @@ import LayoutHome from '../components/homepage/LayoutHome';
 import TravelList from '../components/homepage/TravelList';
 import NewTravel from '../components/homepage/NewTravel';
 
-
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }) {
