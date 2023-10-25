@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 import Header from '../components/Header';
 import { useState } from 'react';
 import tw from 'twrnc';
+import Diary from '../components/diary/Diary';
 
 export default function TravelScreen() {
   const [isDairyActive, setIsDairyActive] = useState(false);
@@ -12,7 +13,11 @@ export default function TravelScreen() {
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full`}>
       <Header title="Brazil" icon="edit" onClick={onClick} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
-      <Text>Profile Screen</Text>
+      {isDairyActive ? (
+        <Diary />
+      ) : (
+        <Text>Program Screen</Text>
+      )}
     </View>
   );
 }
