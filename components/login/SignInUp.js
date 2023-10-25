@@ -3,10 +3,14 @@ import tw from 'twrnc';
 import Input from '../Input';
 import Button from '../Button';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { connectUser } from '../../reducers/user';
 
 const ROUTE_BACK = "http://192.168.1.17:3000";
 
 export default function SignInUp({register, setRegister, setIsLogin, navigation}) {
+ const dispatch = useDispatch();
+
  const [username, setUsername] = useState('');
  const [password, setPassword] = useState('');
  const [confirmPassword, setConfirmPassword] = useState('');
@@ -35,8 +39,10 @@ export default function SignInUp({register, setRegister, setIsLogin, navigation}
         })
         .then (response => response.json())
         .then(data => {
-            console.log('data', data);
-            navigation.navigate('TabNavigator');
+            if (data.user) {
+                dispatch(connectUser(data.user));
+                navigation.navigate('TabNavigator');
+            }
         })
     
 
@@ -56,8 +62,10 @@ export default function SignInUp({register, setRegister, setIsLogin, navigation}
         })
         .then (response => response.json())
         .then(data => {
-            console.log('data', data);
-            navigation.navigate('TabNavigator');
+            if (data.user) {
+                dispatch(connectUser(data.user));
+                navigation.navigate('TabNavigator');
+            }
         })
     } else {
         if (!checkEmail()) {
