@@ -1,33 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
   Animated,
-  Button,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView from 'react-native-maps';
 import mapStyle from '../components/homepage/mapStyle.json';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import LayoutHome from '../components/homepage/LayoutHome';
+import TravelList from '../components/homepage/TravelList';
+import NewTravel from '../components/homepage/NewTravel';
+
 
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [modalY] = useState(new Animated.Value(height - 120)); // affichage du bouton ok, quand fermé
+  const [modalY] = useState(new Animated.Value(height)); // affichage du bouton ok, quand fermé
+  const [newTravel, setNewTravel] = useState(false);
 
-  const handleButtonPress = () => {
+  const handleCompassPress = () => {
     setIsOpen(!isOpen);
+    setNewTravel(false);
     isOpen ? closeModal() : openModal();
   };
-
-  useEffect(() => {
-    console.log('====', modalY);
-  }, [modalY]);
 
   const openModal = () => {
     Animated.timing(modalY, {
@@ -40,18 +39,18 @@ export default function HomeScreen({ navigation }) {
   const closeModal = () => {
     Animated.timing(modalY, {
       duration: 300,
-      toValue: height - 120, // affichage du bouton ok, quand fermé
+      toValue: height + 10, // affichage du bouton ok, quand fermé
       useNativeDriver: true,
     }).start();
   };
 
-  const ButtonLarge = () => {
-    return (
-      <TouchableOpacity style={styles.buttonLarge}>
-        <Text>Mon Bouton</Text>
-      </TouchableOpacity>
-    );
-  }; // ajouter l'action
+  const handleClick = () => {
+    if (newTravel) {
+      console.log('create new travel');
+    } else {
+      setNewTravel(true);
+    }
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -71,21 +70,31 @@ export default function HomeScreen({ navigation }) {
           <Animated.View
             style={{
               ...styles.modal,
-              backgroundColor: 'pink',
+              backgroundColor: `${isOpen ? '#F2DDC2' : '#D8725B'}`,
               transform: [{ translateY: modalY }],
             }}
-            // visible={isOpen}
           >
+            {isOpen && (
+              <View
+                style={{
+                  backgroundColor: '#D8725B',
+                  height: 50,
+                  width: '100%',
+                }}
+              />
+            )}
             <TouchableOpacity
-              onPress={handleButtonPress}
+              onPress={handleCompassPress}
               style={styles.button}
               activeOpacity={0.8}
             >
-              <FontAwesome name="compass" size={50} color="#fff" />
+              <Image
+                source={require('../assets/compass.png')}
+                alt="compass"
+                style={{ height: 48, width: 48 }}
+              />
             </TouchableOpacity>
-            <Text style={styles.title}>Mes voyages</Text>
-            <View style={styles.line}></View>
-            <ButtonLarge />
+            <LayoutHome children={newTravel ? <NewTravel /> : <TravelList />} type={`${newTravel ? 'new' : 'travel'}`} onClick={handleClick}/>
           </Animated.View>
         }
       </SafeAreaView>
@@ -105,37 +114,23 @@ const styles = StyleSheet.create({
     border: 0,
   },
   button: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 5,
+    width: 70,
+    height: 70,
+    borderRadius: 60,
+    borderWidth: 10,
     borderColor: '#D8725B',
     backgroundColor: '#073141',
     justifyContent: 'center',
     alignItems: 'center',
+    top: -32,
   },
   modal: {
     width: width,
-    height: height - 120,
+    height: height - 15,
     alignItems: 'center',
     backgroundColor: '#F2DDC2',
     position: 'absolute',
     bottom: 60,
     left: 0,
   },
-  title: {
-    marginTop: 24,
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#073040',
-    textAlign: 'center',
-  },
-  line: {
-    width: width * 0.7,
-    height: 2,
-    backgroundColor: '#073040',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  buttonLarge: {},
 });
