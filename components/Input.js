@@ -14,11 +14,11 @@ export default function Input({
     switch (size) {
     default:
     case "normal":
-        return "h-[2.5rem] mb-[.6rem]";
+        return "h-[2.5rem]";
     case "small":
-        return "h-[2rem] mb-[.6rem]";
+        return "h-[2rem]";
     case "large":
-        return "h-[3rem] mb-[1.6rem]";
+        return "h-[3rem]";
     };
  };
 
@@ -32,7 +32,7 @@ export default function Input({
  };
 
  return (
-    <View style={tw`w-[80%]`}>
+    <View style={tw`w-[80%] ${size === "large" ? "mb-[1.6rem]" : "mb-[.6rem]"}`}>
         <TextInput
         style={tw`${border ? 'border border-black' : ''} ${size === "large" ? 'text-center' : 'pl-[.5rem]'} bg-[#D9D9D9] text-black rounded-[.625rem] ${inputHeight()}`}
         placeholder={placeholder}
@@ -45,7 +45,7 @@ export default function Input({
         value={value}
         secureTextEntry={placeholder === "Password" || placeholder === "Confirm Password"}
         />
-        {error && error === placeholder &&  <Text style={tw`text-red-700 pb-[.5rem]`}>*{errorMessages[error]}</Text>}
+        {error && error === placeholder &&  <Text style={tw`text-red-700 pb-[.5rem] font-bold`}>*{errorMessages[error]}</Text>}
     </View>
  );
 }

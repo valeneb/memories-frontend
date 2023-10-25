@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 export default function TravelCard({ title, image, departure, arrival }) {
+
   const handleClick = () => {
     onClick(title);
   };
@@ -28,8 +29,15 @@ export default function TravelCard({ title, image, departure, arrival }) {
           <Text style={styles.travelCardDate}>Du {departure}</Text>
           <Text style={styles.travelCardDate}>au {arrival}</Text>
         </View>
-      </View>
-    </TouchableOpacity>
+        <View style={styles.travelCardTextContainer}>
+          <Text style={styles.travelCardDestination}>{title}</Text>
+          <View style={styles.dateContainer}>
+            <Text style={styles.travelCardDate}>Du {departureDate}</Text>
+            <Text style={styles.travelCardDate}>au {returnDate}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 }
 
