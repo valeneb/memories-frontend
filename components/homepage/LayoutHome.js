@@ -13,7 +13,7 @@ export default function LayoutHome({children, type, onClick}) {
             <Text style={tw`text-[1.375rem] font-bold text-[#073040]`}>{title}</Text>
             <View style={tw`h-0.5 bg-[#073040] w-[80%] mt-[1rem]`} />
         </View>
-        <View style={tw`w-full h-[70%] flex items-center justify-between`}>
+        <View style={tw`w-full h-[75%] flex items-center justify-between`}>
             {children}
             <ButtonLarge title={buttonTitle} icon={icon} onClick={onClick}/>
         </View>

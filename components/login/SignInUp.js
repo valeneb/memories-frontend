@@ -36,7 +36,7 @@ export default function SignInUp({register, setRegister, setIsLogin, navigation}
         .then (response => response.json())
         .then(data => {
             console.log('data', data);
-                    //navigation.navigate('TabNavigator');
+            navigation.navigate('TabNavigator');
         })
     
 
@@ -57,7 +57,7 @@ export default function SignInUp({register, setRegister, setIsLogin, navigation}
         .then (response => response.json())
         .then(data => {
             console.log('data', data);
-                    //navigation.navigate('TabNavigator');
+            navigation.navigate('TabNavigator');
         })
     } else {
         if (!checkEmail()) {
