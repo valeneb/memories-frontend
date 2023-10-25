@@ -1,38 +1,18 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import tw from 'twrnc';
 
-export default function ButtonLarge({ title, icon, onClick }) {
+export default function ButtonLarge({ title, icon, onClick, image }) {
   const handleClick = () => {
     onClick(title);
   };
 
   return (
-    <TouchableOpacity style={styles.buttonLarge} onPress={() => handleClick()}>
-      {icon && <FontAwesome name={icon} style={styles.buttonIcon} />}
-      <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity style={tw`flex flex-row bg-[#073040] items-center justify-center rounded-[.625rem] ${image ? 'w-[80%] mt-[1rem] p-[.7rem]' : 'w-[90%] p-[1rem]'}`} onPress={() => handleClick()}>
+      {icon && <FontAwesome name={icon} color="#F2DCC2" size={16} />}
+      <Text style={tw`text-[1rem] text-[#F2DCC2] ${icon ? 'ml-[.5rem]' : ''}`}>{title}</Text>
     </TouchableOpacity>
   );
 }
 
-const { width, height } = Dimensions.get('window');
-
-const styles = StyleSheet.create({
-  buttonLarge: {
-    flexDirection: 'row',
-    backgroundColor: '#073040',
-    width: width * 0.8,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: '#F2DCC2',
-    fontSize: Math.min(width, height) * 0.04,
-    padding: 16,
-  },
-  buttonIcon: {
-    color: '#F2DCC2',
-    fontSize: Math.min(width, height) * 0.1,
-  },
-});

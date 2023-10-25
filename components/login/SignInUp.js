@@ -1,15 +1,17 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
 import Input from '../Input';
 import Button from '../Button';
 import { useState } from 'react';
 
-export default function SignInUp({register, setIsLogin}) {
+const ROUTE_BACK = "http://192.168.1.17:3000";
+
+export default function SignInUp({register, setRegister, setIsLogin, navigation}) {
  const [username, setUsername] = useState('');
  const [password, setPassword] = useState('');
  const [confirmPassword, setConfirmPassword] = useState('');
- const [firstName, setFirstName] = useState('');
- const [lastName, setLastName] = useState('');
+ const [firstname, setFirstname] = useState('');
+ const [lastname, setLastname] = useState('');
  const [email, setEmail] = useState('');
 
  const [error, setError] = useState('');
@@ -25,18 +27,38 @@ export default function SignInUp({register, setIsLogin}) {
 };
 
  const signIn = () => {
-    if (username && password) {
-        console.log('fetch connect');
+    if (checkEmail() && password) {
+        fetch(`${ROUTE_BACK}/user/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: password}),
+        })
+        .then (response => response.json())
+        .then(data => {
+            console.log('data', data);
+                    //navigation.navigate('TabNavigator');
+        })
+    
+
     } else {
-        setError(!email ? 'Email' : 'Password');
+        setError(!password ? 'Password' : 'Email');
     }
  };
 
- const registerInfosIsOk = checkEmail() && comparePasswords() && password && confirmPassword && lastName && firstName && username;
+ const registerInfosIsOk = checkEmail() && comparePasswords() && password && confirmPassword && lastname && firstname && username;
 
  const signUp = () => {
     if (registerInfosIsOk) {
-        console.log('fetch connect');
+        fetch(`${ROUTE_BACK}/user/signup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, username, firstname, lastname}),
+        })
+        .then (response => response.json())
+        .then(data => {
+            console.log('data', data);
+                    //navigation.navigate('TabNavigator');
+        })
     } else {
         if (!checkEmail()) {
             setError('Email');
@@ -75,8 +97,11 @@ export default function SignInUp({register, setIsLogin}) {
       <Image source={require('../../assets/logo-blanc-hd.png')} style={tw`w-[22rem] h-[22rem] opacity-70 relative`} />
       <View style={tw`absolute w-full h-full flex flex-col items-center justify-around`}>
         <View style={tw`flex flex-col w-full items-center h-[45%] justify-center`}>
-            <Input value={username} setValue={setUsername} placeholder="Username" size={register ? 'normal' : 'large'} border/>
-            <Input value={password} setValue={setPassword} placeholder="Password" size={register ? 'normal' : 'large'} border/>
+            <Input placeholder="Connect with Google" size={register ? 'normal' : 'large'} border/>
+            <Input placeholder="Connect with Facebook" size={register ? 'normal' : 'large'} border/>
+            <TouchableOpacity style={tw`p-[.5rem]`} onPress={() => setRegister(!register)}>
+                <Text>{register ? 'Déjà un compte ? Cliquez ici' : 'Pas encore de compte ? Cliquez ici'}</Text>
+            </TouchableOpacity>
         </View>
         <View style={tw`w-full flex flex-row items-center justify-center`}>
             <View style={tw`w-[45%] h-px bg-black`}/>
@@ -84,14 +109,14 @@ export default function SignInUp({register, setIsLogin}) {
             <View style={tw`w-[45%] h-px bg-black`} />
         </View>
         <View style={tw`flex flex-col w-full items-center justify-center h-[45%] pt-[1.6rem]`}>
-            <Input value={username} setValue={setUsername} placeholder="Username" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
             {register && (
                 <>
-                    <Input value={firstName} setValue={setFirstName} placeholder="Firstname" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
-                    <Input value={lastName} setValue={setLastName} placeholder="LastName" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
-                    <Input value={email} setValue={setEmail} placeholder="Email" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
+                    <Input value={username} setValue={setUsername} placeholder="Username" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
+                    <Input value={firstname} setValue={setFirstname} placeholder="Firstname" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
+                    <Input value={lastname} setValue={setLastname} placeholder="LastName" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
                 </>
             )}
+            <Input value={email} setValue={setEmail} placeholder="Email" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
             <Input value={password} setValue={setPassword} placeholder="Password" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
             {register && (
                 <Input value={confirmPassword} setValue={setConfirmPassword} placeholder="Confirm Password" size={register ? 'normal' : 'large'} border error={error} setError={setError}/>
