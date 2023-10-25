@@ -1,26 +1,33 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, Image, View, Dimensions } from 'react-native';
-import tw from 'twrnc';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Image,
+  View,
+  Dimensions,
+  ScrollView,
+} from 'react-native';
 
-export default function TarvelCard({
-  title,
-  image,
-  departureDate,
-  returnDate,
-  onClick,
-}) {
+export default function TravelCard({ title, image, departure, arrival }) {
+
   const handleClick = () => {
     onClick(title);
   };
 
   return (
-    <View style={tw`w-full flex flex-col items-center mt-[4rem]`}>
-      <TouchableOpacity
-        style={styles.buttonTravelCard}
-        onPress={() => handleClick()}
-      >
-        <View style={styles.imageContainer}>
-          <Image source={require(`../assets/favicon.png`)} style={styles.image} />
+    <TouchableOpacity
+      style={styles.buttonTravelCard}
+      // onPress={() => handleClick()} COMPLETER LA FONCTIONNALITE
+    >
+      <View style={styles.imageContainer}>
+        <Image source={image} style={styles.image} />
+      </View>
+      <View style={styles.travelCardTextContainer}>
+        <Text style={styles.travelCardDestination}>{title}</Text>
+        <View>
+          <Text style={styles.travelCardDate}>Du {departure}</Text>
+          <Text style={styles.travelCardDate}>au {arrival}</Text>
         </View>
         <View style={styles.travelCardTextContainer}>
           <Text style={styles.travelCardDestination}>{title}</Text>
@@ -37,6 +44,9 @@ export default function TarvelCard({
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  travelList: {
+    height: height * 0.7,
+  },
   buttonTravelCard: {
     flexDirection: 'row',
     backgroundColor: '#073040',
@@ -44,7 +54,7 @@ const styles = StyleSheet.create({
     height: height * 0.14,
     alignItems: 'center',
     borderRadius: 10,
-    margin: 10,
+    marginTop: 32,
   },
   imageContainer: {
     flexDirection: 'row',
