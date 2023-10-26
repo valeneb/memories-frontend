@@ -11,12 +11,19 @@ import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
 import Button from '../Button';
 import Header from '../Header';
+import SelectListing from './SelectListing';
+import Accomodation from './Accomodation';
+import CarLocation from './CarLocation';
+import Flights from './Flights';
+import Other from './Other';
+import ButtonUD from './ButtonUD';
 import { useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function Planning({ isDairyActive, setIsDairyActive }) {
   const [edit, setEdit] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [selected, setSelected] = useState('');
 
   const onClick = () => {
     setEdit(!edit);
@@ -25,13 +32,6 @@ export default function Planning({ isDairyActive, setIsDairyActive }) {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-  const options = [
-    "Billet d'avion",
-    'Location de voiture',
-    'Logement',
-    'Autre',
-  ];
 
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full`}>
@@ -43,33 +43,15 @@ export default function Planning({ isDairyActive, setIsDairyActive }) {
       <View
         style={tw`w-full h-full flex items-center justify-center items-center justify-center rounded-[.625rem] `}
       >
-        {isModalVisible ? (
-          <View style={tw`w-4/5 h-auto bg-[#f7ebda] rounded-[.625rem] p-3`}>
-            {/*modalContainer : gérer ici affichage de l'icon à gauche*/}
-            <FontAwesome
-              name="window-close"
-              color="#073040"
-              size={30}
-              onPress={toggleModal}
-              style={styles.icon}
-            />
-            <View style={tw`justify-center items-center`}>
-              {/** infosContainer */}
-              <Text
-                style={[tw`font-bold text-[1rem] p-3`, { color: '#073040' }]}
-              >
-                Ajouter des informations
-              </Text>
-              {/* list */}
-              <Button
-                title="Ajouter"
-                style={[tw`p-3`]} /*onPress={addInfos}*/
-              />
-            </View>
-          </View>
+        <Accomodation />
+        <ButtonUD />
+        {/* CONDITION SI LE PLANNING = 0 alors => s'affiche
+         {isModalVisible ? (
+          <SelectListing setSelected={setSelected} toggleModal={toggleModal} />
         ) : (
           <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
-        )}
+        )} 
+        SINON ON AFFICHE LES INFOS DÉJA PRESENTE ET LISTING APPARAIT AVEC LE BOUTON + */}
       </View>
     </View>
   );
