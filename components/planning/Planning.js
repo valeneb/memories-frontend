@@ -20,7 +20,7 @@ import ButtonUD from './ButtonUD';
 import { useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function Planning({ isDairyActive, setIsDairyActive }) {
+export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   const [edit, setEdit] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selected, setSelected] = useState('');
@@ -36,9 +36,10 @@ export default function Planning({ isDairyActive, setIsDairyActive }) {
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full`}>
       <Header
-        title="Brazil"
+        title={travel.destination}
         isDairyActive={isDairyActive}
         setIsDairyActive={setIsDairyActive}
+        id={travel._id}
       />
       <View
         style={tw`w-full h-full flex items-center justify-center items-center justify-center rounded-[.625rem] `}

@@ -23,7 +23,7 @@ export default function TravelScreen({ route }) {
       {isDairyActive ? (
         <Diary isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} travel={travelInfos}/>
       ) : (
-        <Planning />
+        <Planning isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} travel={travelInfos} />
       )}
     </View>
   );
