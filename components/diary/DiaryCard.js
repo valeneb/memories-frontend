@@ -1,17 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import { View, Image, TouchableOpacity, TextInput } from 'react-native';
 import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useDispatch } from 'react-redux';
+import { updateDiary, deleteDiary } from '../../reducers/diary';
 
 const ROUTE_BACK = "http://192.168.1.154:3000";
 
-export default function DiaryCard({ title, photos, content, travelId}) {
+export default function DiaryCard({ diary, photos, travelId}) {
+  const dispatch = useDispatch();
   const textRef = useRef();
-  const [edit, setEdit] = useState(title === '' && content === '' );
+  const [edit, setEdit] = useState(diary.title === '' && diary.description === '' );
   const [textHeight, setTextHeight] = useState(0);
 
-  const [editTitle, setEditTitle] = useState(title);
-  const [editContent, setEditContent] = useState(content);
+  const [editTitle, setEditTitle] = useState(diary.title);
+  const [editContent, setEditContent] = useState(diary.description);
 
   const updateTextHeight = () => {
     if (textRef.current) {
@@ -21,20 +24,45 @@ export default function DiaryCard({ title, photos, content, travelId}) {
     }
   };
 
-  const handleDelete = () => {
-    console.log('delete diary');
+  const updateInfos = (infos) => {
+    fetch(`${ROUTE_BACK}/diary`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(infos),
+    })
+    .then(response => response.json())
+    .then((data) => {
+      if(data.result) {
+        dispatch(updateDiary(data.diary));
+        setEdit(false);
+      }
+    });
   };
 
+
   const handleChange = () => {
-    fetch(`${ROUTE_BACK}/diary/newDiary`, {
-      method: 'POST',
+    let infos = {_id: diary._id};
+
+    if(diary.title !== editTitle) {
+      infos.title = editTitle;
+    }
+
+    if(diary.description !== editContent) {
+      infos.description = editContent;
+    }
+
+    updateInfos(infos);
+  };
+
+  const handleDelete = () => {
+    fetch(`${ROUTE_BACK}/diary/?_id=${diary._id}`, {
+      method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({title: editTitle, description: editContent, _id: travelId}),
     })
     .then (response => response.json())
     .then(data => {
+      dispatch(deleteDiary(diary._id))
       setEdit(false);
-      console.log('update change value', data);
     })
   };
 
@@ -64,9 +92,11 @@ export default function DiaryCard({ title, photos, content, travelId}) {
           )}
         </View>
         <View style={tw`flex flex-row w-full items-start pt-[.5rem]`}>
-          <View style={tw`w-[40%]`}>
-            <Image source={require('../../assets/favicon.png')} alt="photo" style={[tw`w-full rounded-[.5rem]`, { height: textHeight }]} />
-          </View>
+          {!edit && photos.length > 0 && (
+            <View style={tw`w-[40%]`}>
+              <Image source={require('../../assets/favicon.png')} alt="photo" style={[tw`w-full rounded-[.5rem]`, { height: textHeight }]} />
+            </View>
+          )}
           <TextInput
             placeholder='Description'
             onChangeText={(value) => setEditContent(value)}
@@ -74,19 +104,17 @@ export default function DiaryCard({ title, photos, content, travelId}) {
             editable={edit}
             ref={textRef}
             onLayout={updateTextHeight}
-            style={tw`w-[60%] ml-[.5rem] text-black ${edit ? 'h-[10rem] bg-white p-[.5rem]' : ''}`}
+            style={tw`${photos.length > 0 && !edit ? 'w-[60%] ml-[.5rem]' : 'w-full'} text-black ${edit ? 'h-[10rem] bg-white p-[.5rem]' : ''}`}
             textAlignVertical={`${edit ? 'top': 'middle'}`}
             value={editContent}
           />
         </View>
-        {!edit ? (
-          <View style={tw`flex flex-row items-center w-full pt-[.5rem]`}>
-              
-                  <Image source={require('../../assets/favicon.png')} alt="photo" style={tw`rounded-[.5rem] w-[50%] mr-[.5rem]`} />
-        
-              
+        {!edit && photos.length > 0 && (
+          <View style={tw`flex flex-row items-center w-full pt-[.5rem]`}>     
+            <Image source={require('../../assets/favicon.png')} alt="photo" style={tw`rounded-[.5rem] w-[50%] mr-[.5rem]`} />
           </View>
-        ) : (
+        )} 
+        {edit && (
           <View style={tw`flex items-end mt-[.5rem]`}>
             <TouchableOpacity style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`} onPress={handleChange}>
               <FontAwesome

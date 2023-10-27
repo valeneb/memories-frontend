@@ -3,7 +3,7 @@ import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
 import DiaryCard from './DiaryCard';
 import Header from '../Header';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { initDiary, addNewDiary } from '../../reducers/diary';
 
@@ -14,12 +14,17 @@ export default function Diary({isDairyActive, setIsDairyActive, travel}) {
   const diaries = useSelector((state) => state.diary.value);
 
   const handleNewDiary = () => {
-    const newDiary = {
-        title: '',
-        description: '',
-        travel: travel,
-    }
-    dispatch(addNewDiary(newDiary));
+    fetch(`${ROUTE_BACK}/diary/newDiary`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({title: '', description: '', _id: travel._id}),
+    })
+    .then (response => response.json())
+    .then(data => {
+        if(data.result) {
+            dispatch(addNewDiary(data.saved));
+        }
+    })
   };
 
   useEffect(() => {
@@ -39,7 +44,7 @@ export default function Diary({isDairyActive, setIsDairyActive, travel}) {
                     {diaries.map((diary, index) => {
                         return (
                             <View key={index} style={tw`w-full`}>
-                                <DiaryCard title={diary.title} content={diary.description} travelId={travel._id}/>
+                                <DiaryCard diary={diary} travelId={travel._id} photos={[]} />
                             </View>
                         )
                     })}
