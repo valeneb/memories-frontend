@@ -1,8 +1,9 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { useState, useEffect } from 'react';
 import tw from 'twrnc';
 import Diary from '../components/diary/Diary';
 import { useSelector } from 'react-redux';
+import Planning from '../components/planning/Planning';
 
 export default function TravelScreen({ route }) {
   const { travelId } = route.params;
