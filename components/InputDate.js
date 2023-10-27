@@ -25,11 +25,11 @@ export default function InputDate({
   const inputHeight = () => {
     switch (size) {
       default:
-      case 'normal':
-        return 'h-[2.5rem]';
-      case 'small':
-        return 'h-[2rem]';
-    }
+      case "normal":
+        return "h-[2.5rem]";
+      case "small":
+        return "h-[2rem]";
+    };
   };
 
   const [date, setDate] = useState();
@@ -54,21 +54,17 @@ export default function InputDate({
   };
 
   return (
-    <View
-      style={tw`${marginTop ? 'mt-[1rem]' : ''} ${
-        size === 'small' ? 'px-[.5rem]' : 'p-[.5rem]'
-      } bg-[#D9D9D9] text-black rounded-[.625rem] ${inputHeight()} w-[80%] flex items-center flex-row justify-between mb-[.6rem]`}
-    >
-      <TextInput
-        value={value}
-        placeholder={placeholder}
-        onFocus={handleOpenModal}
-      />
-      <TouchableOpacity
-        onPress={handleOpenModal}
-        style={tw`${size === 'small' ? 'p-[.5rem]' : 'p-[.2rem]'}`}
-      >
-        <FontAwesome name="calendar" size={16} />
+    <View style={tw`${marginTop ? 'mt-[1rem]' : ''} ${size === 'small' ? 'px-[.5rem]' : 'p-[.5rem]'} bg-[#D9D9D9] text-black rounded-[.625rem] mb-[.6rem] ${inputHeight()} w-[80%]`}>
+      <TouchableOpacity onPress={handleOpenModal} style={tw`p-[.2rem] flex items-center flex-row justify-between`}>
+        <TextInput
+          value={value}
+          placeholder={placeholder}
+          onFocus={handleOpenModal}
+        />
+        <FontAwesome
+          name="calendar"
+          size={16}
+        />
       </TouchableOpacity>
 
       <Modal transparent={true} animationType="slide" visible={showModal}>
