@@ -44,13 +44,13 @@ export default function Planning({ isDairyActive, setIsDairyActive }) {
         style={tw`w-full h-full flex items-center justify-center items-center justify-center rounded-[.625rem] `}
       >
         <Accomodation />
-        <ButtonUD />
+
         {/* CONDITION SI LE PLANNING = 0 alors => s'affiche
          {isModalVisible ? (
           <SelectListing setSelected={setSelected} toggleModal={toggleModal} />
         ) : (
           <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
-        )} 
+        )}
         SINON ON AFFICHE LES INFOS DÉJA PRESENTE ET LISTING APPARAIT AVEC LE BOUTON + */}
       </View>
     </View>
