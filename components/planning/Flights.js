@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import Input from '../Input';
 import InputDate from '../InputDate';
+import ButtonUD from './ButtonUD';
+
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
 
@@ -14,7 +16,7 @@ export default function Flights() {
         <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
           Billet d'avion
         </Text>
-        <FontAwesome name="navicon" color="#073040" size={24} />
+        <ButtonUD />
       </View>
       <View style={tw`flex-row mb-3 justify-start`}>
         <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Le :</Text>
