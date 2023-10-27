@@ -78,10 +78,10 @@ export default function SignInUp({register, setRegister, navigation}) {
         if(!password) {
             setError('Password');
         }
-        if(!firstName) {
+        if(!firstname) {
             setError('Firstname');
         }
-        if(!lastName) {
+        if(!lastname) {
             setError('Lastname');
         }
         if(!username) {
