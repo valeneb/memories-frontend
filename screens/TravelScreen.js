@@ -22,7 +22,7 @@ export default function TravelScreen({ route }) {
       {isDairyActive ? (
         <Diary isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} travel={travelInfos}/>
       ) : (
-        <Text>Program Screen</Text>
+        <Planning />
       )}
     </View>
   );
