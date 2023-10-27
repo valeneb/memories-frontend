@@ -13,12 +13,12 @@ import mapStyle from '../components/homepage/mapStyle.json';
 import LayoutHome from '../components/homepage/LayoutHome';
 import TravelList from '../components/homepage/TravelList';
 import NewTravel from '../components/homepage/NewTravel';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { initTravel } from '../reducers/travel';
 
 const { width, height } = Dimensions.get('window');
 
-const ROUTE_BACK = "http://192.168.1.154:3000";
+const ROUTE_BACK = 'http://192.168.1.13:3000';
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -58,30 +58,29 @@ export default function HomeScreen({ navigation }) {
     fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=fr`
     )
-    .then((response) => response.json())
-    .then((data) => {
-      const country = data.address.country;
-      setNewTravelName(country);
-      setNewTravel(true);
-      setIsOpen(true);
-      openModal();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-    
+      .then((response) => response.json())
+      .then((data) => {
+        const country = data.address.country;
+        setNewTravelName(country);
+        setNewTravel(true);
+        setIsOpen(true);
+        openModal();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handlePressMarker = (id) => {
-    navigation.navigate('Travel', {travelId: id});
-  }
+    navigation.navigate('Travel', { travelId: id });
+  };
 
   useEffect(() => {
     fetch(`${ROUTE_BACK}/travel?token=${user.token}`)
-    .then (response => response.json())
-    .then(data => {
-        dispatch(initTravel(data.trips))
-    })
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(initTravel(data.trips));
+      });
   }, [travels.length]);
 
   return (
@@ -97,21 +96,21 @@ export default function HomeScreen({ navigation }) {
         customMapStyle={mapStyle}
         onLongPress={(e) => handleLongPressMap(e)}
       >
-        {travels.length > 0 &&(
+        {travels.length > 0 && (
           <>
-            {
-              travels.map((data, i) => {
-                return (
-                  <Marker 
-                    key={i}
-                    coordinate={{ latitude: data.location.coordinates[0], longitude: data.location.coordinates[1] }} 
-                    title={data.name}
-                    onPress={() => handlePressMarker(data._id)}
-                  />
-                 
-                )
-              })
-            }
+            {travels.map((data, i) => {
+              return (
+                <Marker
+                  key={i}
+                  coordinate={{
+                    latitude: data.location.coordinates[0],
+                    longitude: data.location.coordinates[1],
+                  }}
+                  title={data.name}
+                  onPress={() => handlePressMarker(data._id)}
+                />
+              );
+            })}
           </>
         )}
       </MapView>
@@ -145,12 +144,21 @@ export default function HomeScreen({ navigation }) {
                 style={{ height: 48, width: 48 }}
               />
             </TouchableOpacity>
-            <LayoutHome 
+            <LayoutHome
               children={
-                newTravel ? <NewTravel navigation={navigation} newTravelName={newTravelName} /> 
-                : <TravelList setNewTravel={setNewTravel} navigation={navigation} />
-              } 
-              type={`${newTravel ? 'new' : 'travel'}`}  
+                newTravel ? (
+                  <NewTravel
+                    navigation={navigation}
+                    newTravelName={newTravelName}
+                  />
+                ) : (
+                  <TravelList
+                    setNewTravel={setNewTravel}
+                    navigation={navigation}
+                  />
+                )
+              }
+              type={`${newTravel ? 'new' : 'travel'}`}
             />
           </Animated.View>
         }

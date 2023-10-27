@@ -13,10 +13,11 @@ import Button from '../Button';
 import Header from '../Header';
 import SelectListing from './SelectListing';
 import Accomodation from './Accomodation';
-import CarLocation from './CarLocation';
 import Flights from './Flights';
+import CarLocation from './CarLocation';
 import Other from './Other';
 import ButtonUD from './ButtonUD';
+
 import { useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -44,6 +45,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
       <View
         style={tw`w-full h-full flex items-center justify-center items-center justify-center rounded-[.625rem] `}
       >
+        <Other />
         <Accomodation />
 
         {/* CONDITION SI LE PLANNING = 0 alors => s'affiche

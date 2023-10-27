@@ -5,9 +5,9 @@ import Login from '../components/login/Login';
 import SignInUp from '../components/login/SignInUp';
 import { useSelector } from 'react-redux';
 
-const ROUTE_BACK = "http://192.168.1.17:3000";
+const ROUTE_BACK = 'http://192.168.1.13:3000';
 
-export default function LoginScreen({navigation}) {
+export default function LoginScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
   const [register, setRegister] = useState(false);
@@ -31,7 +31,11 @@ export default function LoginScreen({navigation}) {
       {isLogin ? (
         <Login onClick={onClick} />
       ) : (
-        <SignInUp register={register} setRegister={setRegister} navigation={navigation} />
+        <SignInUp
+          register={register}
+          setRegister={setRegister}
+          navigation={navigation}
+        />
       )}
     </View>
   );
