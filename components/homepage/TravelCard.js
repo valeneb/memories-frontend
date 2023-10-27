@@ -13,12 +13,19 @@ import { useDispatch } from 'react-redux';
 import { deleteTravel } from '../../reducers/travel';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const ROUTE_BACK = "http://192.168.1.154:3000";
+const ROUTE_BACK = 'http://192.168.1.13:3000';
 
-export default function TravelCard({ title, image, departureDate, returnDate, navigation, id }) {
+export default function TravelCard({
+  title,
+  image,
+  departureDate,
+  returnDate,
+  navigation,
+  id,
+}) {
   const dispatch = useDispatch();
 
-  const [isDelete, setIsDelete] = useState(false); 
+  const [isDelete, setIsDelete] = useState(false);
 
   const handleClick = () => {
     navigation.navigate('Travel', { travelId: id });
@@ -28,15 +35,15 @@ export default function TravelCard({ title, image, departureDate, returnDate, na
     fetch(`${ROUTE_BACK}/travel/deleteTrip`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ _id: id}),
+      body: JSON.stringify({ _id: id }),
     })
-    .then (response => response.json())
-    .then(data => {
-      if(data.result) {
-        dispatch(deleteTravel(id));
-        setIsDelete(false);
-      }
-    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(deleteTravel(id));
+          setIsDelete(false);
+        }
+      });
   };
 
   return (
@@ -44,22 +51,24 @@ export default function TravelCard({ title, image, departureDate, returnDate, na
       <View style={tw`flex flex-col`}>
         {isDelete && (
           <View style={tw`flex items-end`}>
-            <TouchableOpacity style={tw`bg-[#073040] flex items-center p-[.3rem] rounded-[.5rem]`} onPress={handleDelete}>
-              <FontAwesome
-                name="times"
-                size={16}
-                color="#F2DCC2"
-              />
+            <TouchableOpacity
+              style={tw`bg-[#073040] flex items-center p-[.3rem] rounded-[.5rem]`}
+              onPress={handleDelete}
+            >
+              <FontAwesome name="times" size={16} color="#F2DCC2" />
             </TouchableOpacity>
           </View>
         )}
         <TouchableOpacity
-        style={styles.buttonTravelCard}
-        onPress={() => handleClick()}
-        onLongPress={() => setIsDelete(true)}
+          style={styles.buttonTravelCard}
+          onPress={() => handleClick()}
+          onLongPress={() => setIsDelete(true)}
         >
           <View style={styles.imageContainer}>
-            <Image source={require('../../assets/favicon.png')} style={styles.image} />
+            <Image
+              source={require('../../assets/favicon.png')}
+              style={styles.image}
+            />
           </View>
           <View style={styles.travelCardTextContainer}>
             <Text style={styles.travelCardDestination}>{title}</Text>
@@ -84,7 +93,7 @@ const styles = StyleSheet.create({
     height: height * 0.17, // Ajustez la hauteur pour englober toute l'image
     alignItems: 'center',
     paddingRight: 8,
-    marginBottom: 32
+    marginBottom: 32,
   },
   imageContainer: {
     flexDirection: 'row',
@@ -103,7 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#073040',
     width: width * 0.52,
     borderTopRightRadius: 10,
-    borderBottomRightRadius: 10
+    borderBottomRightRadius: 10,
   },
   travelCardDate: {
     color: '#F2DCC2',
