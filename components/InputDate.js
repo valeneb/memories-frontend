@@ -14,9 +14,9 @@ export default function InputDate({ size, placeholder, marginTop, value, setValu
     switch (size) {
       default:
       case "normal":
-        return "h-[2.5rem] mb-[.6rem]";
+        return "h-[2.5rem]";
       case "small":
-        return "h-[2rem] mb-[.6rem]";
+        return "h-[2rem]";
     };
   };
 
@@ -42,13 +42,13 @@ export default function InputDate({ size, placeholder, marginTop, value, setValu
   };
 
   return (
-    <View style={tw`${marginTop ? 'mt-[1rem]' : ''} p-[.5rem] bg-[#D9D9D9] text-black rounded-[.625rem] ${inputHeight()} w-[80%] flex items-center flex-row justify-between`}>
-      <TextInput
-        value={value}
-        placeholder={placeholder}
-        onFocus={handleOpenModal}
-      />
-      <TouchableOpacity onPress={handleOpenModal} style={tw`p-[.2rem]`}>
+    <View style={tw`${marginTop ? 'mt-[1rem]' : ''} ${size === 'small' ? 'px-[.5rem]' : 'p-[.5rem]'} bg-[#D9D9D9] text-black rounded-[.625rem] mb-[.6rem] ${inputHeight()} w-[80%]`}>
+      <TouchableOpacity onPress={handleOpenModal} style={tw`p-[.2rem] flex items-center flex-row justify-between`}>
+        <TextInput
+          value={value}
+          placeholder={placeholder}
+          onFocus={handleOpenModal}
+        />
         <FontAwesome
           name="calendar"
           size={16}
