@@ -20,8 +20,11 @@ export const diarySlice = createSlice({
             diary._id === updatedDiary._id ? updatedDiary : diary
         );
     },
+    deleteDiary: (state, action) => {
+        state.value = state.value.filter(diary => diary._id !== action.payload);
+    },
   },
 });
 
-export const { initDiary, addNewDiary, updateDiary } = diarySlice.actions;
+export const { initDiary, addNewDiary, updateDiary, deleteDiary } = diarySlice.actions;
 export default diarySlice.reducer;
