@@ -17,6 +17,7 @@ import Flights from './Flights';
 import CarLocation from './CarLocation';
 import Other from './Other';
 import ButtonUD from './ButtonUD';
+import InputHour from './InputHour';
 
 import { useState } from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -45,8 +46,8 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
       <View
         style={tw`w-full h-full flex items-center justify-center items-center justify-center rounded-[.625rem] `}
       >
-        <Other />
-        <Accomodation />
+        <Flights />
+        <InputHour />
 
         {/* CONDITION SI LE PLANNING = 0 alors => s'affiche
          {isModalVisible ? (
