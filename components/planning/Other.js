@@ -131,7 +131,7 @@ export default function Other() {
               Notes
             </Text>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.note}
+              {inputValues.notes}
             </Text>
           </View>
         </View>

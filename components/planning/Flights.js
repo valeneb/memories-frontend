@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import Input from '../Input';
+import InputHour from './InputHour';
 import InputDate from '../InputDate';
 import ButtonUD from './ButtonUD';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -71,15 +72,7 @@ export default function Flights() {
           </View>
           <View style={tw`flex-row justify-between items-center`}>
             <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
-            <Text
-              style={[tw`text-[1rem] p-2`, { color: '#073040' }]}
-              value={inputValues.hour}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, hour: text })
-              }
-            >
-              chercher comment faire l'heure
-            </Text>
+            <InputHour />
           </View>
 
           <View style={tw`flex-row justify-between items-center`}>
