@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Modal,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -31,7 +24,7 @@ export default function InputHour() {
           value={time}
           onChangeText={handleTimeChange}
           placeholder="HH:mm"
-          style={tw`mx-[.6rem]`}
+          style={tw`p-[.2rem] flex items-center flex-row justify-between mx-[.6rem]`}
         />
         <FontAwesome name="hourglass" size={16} style={tw`mx-[.6rem]`} />
       </TouchableOpacity>
