@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import Input from '../Input';
+import InputHour from './InputHour';
 import InputDate from '../InputDate';
-import ButtonUD from './ButtonUD';
+import ButtonUD from './ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
 
-export default function CarLocation() {
+export default function Flights() {
   const [isEditing, setIsEditing] = useState(true);
   const [inputValues, setInputValues] = useState({
-    start: '',
-    end: '',
-    agency: '',
+    departure: '',
+    hour: '',
+    seatNumber: '',
+    compagny: '',
     notes: '',
   });
 
@@ -34,7 +36,7 @@ export default function CarLocation() {
     <View style={tw`w-11/12 h-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
       <View style={tw`flex-row mb-3 items-center justify-between`}>
         <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
-          Location de voiture
+          Billet d'avion
         </Text>
         {isEditing ? (
           <FontAwesome
@@ -57,47 +59,53 @@ export default function CarLocation() {
         <View>
           <View style={tw`flex-row justify-between items-center`}>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Du
+              Le
             </Text>
             <InputDate
               size="small"
-              placeholder="Début"
-              value={inputValues.start}
+              placeholder="Departure"
+              value={inputValues.departure}
               onChangeText={(text) =>
-                setInputValues({ ...inputValues, start: text })
+                setInputValues({ ...inputValues, departure: text })
               }
             />
           </View>
-
           <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
-            <InputDate
-              size="small"
-              placeholder="Fin"
-              value={inputValues.end}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, end: text })
-              }
-            />
+            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
+            <InputHour />
           </View>
 
           <View style={tw`flex-row justify-between items-center`}>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Agence :
+              Siège
             </Text>
             <Input
               size="small"
-              placeholder="Nom de l'agence"
-              value={inputValues.agency}
+              placeholder="Siège"
+              value={inputValues.seatNumber}
               onChangeText={(text) =>
-                setInputValues({ ...inputValues, agency: text })
+                setInputValues({ ...inputValues, seatNumber: text })
               }
             />
           </View>
 
           <View style={tw`flex-row justify-between items-center`}>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes :
+              Vol
+            </Text>
+            <Input
+              size="small"
+              placeholder="Compagnie / Vol"
+              value={inputValues.compagny}
+              onChangeText={(text) =>
+                setInputValues({ ...inputValues, compagny: text })
+              }
+            />
+          </View>
+
+          <View style={tw`flex-row justify-between items-center`}>
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              Notes
             </Text>
             <Input
               size="small"
@@ -113,32 +121,41 @@ export default function CarLocation() {
         <View>
           <View style={tw`flex-row justify-between items-center`}>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Du
+              Le
             </Text>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.start}
-            </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.end}
+              {inputValues.departure}
             </Text>
           </View>
 
           <View style={tw`flex-row justify-between items-center`}>
+            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Agence :
-            </Text>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.agency}
+              {inputValues.hour}
             </Text>
           </View>
 
           <View style={tw`flex-row justify-between items-center`}>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes :
+              Siège
+            </Text>
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {inputValues.seatNumber}
+            </Text>
+          </View>
+
+          <View style={tw`flex-row justify-between items-center`}>
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              Vol
+            </Text>
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {inputValues.compagny}
+            </Text>
+          </View>
+
+          <View style={tw`flex-row justify-between items-center`}>
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              Notes
             </Text>
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {inputValues.notes}
