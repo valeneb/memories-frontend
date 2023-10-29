@@ -1,17 +1,22 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import { useState, useEffect } from 'react';
 import Button from '../Button';
 import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function SelectListing({ setSelected, toggleModal }) {
+export default function SelectListing({ addInfos, toggleModal }) {
+  const [selected, setSelected] = useState();
+
   const options = [
     { key: '1', value: 'Location de voiture' },
     { key: '2', value: "Billet d'avion" },
     { key: '3', value: 'Logement' },
     { key: '4', value: 'Autre' },
   ];
+
+  console.log('setSelected', addInfos);
 
   return (
     <View style={tw`w-4/5 h-auto bg-[#f7ebda] rounded-[.625rem] p-3`}>
@@ -51,7 +56,7 @@ export default function SelectListing({ setSelected, toggleModal }) {
             }}
           />
         </View>
-        <Button title="Ajouter" /*onPress={addInfos}*/ />
+        <Button title="Ajouter" onPress={() => addInfos(selected)} />
       </View>
     </View>
   );

@@ -1,31 +1,32 @@
 import {
   View,
   ScrollView,
-  Modal,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Picker,
 } from 'react-native';
 import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
-import Button from '../Button';
 import Header from '../Header';
-import SelectListing from './SelectListing';
-import Accomodation from './Accomodation';
-import Flights from './Flights';
-import CarLocation from './CarLocation';
-import Other from './Other';
-import ButtonUD from './ButtonUD';
+import SelectListing from './SelectListingModal';
+import Accomodation from './AccomodationCard';
+import Flights from './FlightCard';
+import CarLocation from './CarRentalCard';
+import Other from './OtherCard';
+import ButtonUD from './ButtonUpdateDelete';
 import InputHour from './InputHour';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { initPlanning, addPlanning } from '../../reducers/planning';
 
-import { useState } from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+const ROUTE_BACK = 'http://192.168.1.13:3000';
 
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   const [edit, setEdit] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selected, setSelected] = useState('');
+
+  const dispatch = useDispatch();
+  const planning = useSelector((state) => state.planning.value);
 
   const onClick = () => {
     setEdit(!edit);
@@ -35,27 +36,28 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     setModalVisible(!isModalVisible);
   };
 
+  const addInfos = (val) => {
+    dispatch(addPlanning({ category: val, data: [{}] }));
+    toggleModal();
+  };
+
+  console.log('planning', planning);
+
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full`}>
       <Header
         title={travel.destination}
+        id={travel._id}
         isDairyActive={isDairyActive}
         setIsDairyActive={setIsDairyActive}
-        id={travel._id}
       />
       <View
         style={tw`w-full h-full flex items-center justify-center items-center justify-center rounded-[.625rem] `}
       >
-        <Flights />
-        <InputHour />
-
-        {/* CONDITION SI LE PLANNING = 0 alors => s'affiche
-         {isModalVisible ? (
-          <SelectListing setSelected={setSelected} toggleModal={toggleModal} />
-        ) : (
-          <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
-        )}
-        SINON ON AFFICHE LES INFOS DÉJA PRESENTE ET LISTING APPARAIT AVEC LE BOUTON + */}
+        {planning.accomodations.map((item) => {
+          return <Text>{JSON.stringify(item)}</Text>;
+        })}
+        <SelectListing addInfos={addInfos} />
       </View>
     </View>
   );

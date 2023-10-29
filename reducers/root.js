@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux';
-import user from './user'; 
+import user from './user';
 import travel from './travel';
 import diary from './diary';
+import planning from './planning';
 
 const rootReducer = combineReducers({
-  user: user, 
+  user: user,
   travel: travel,
-  diary: diary
+  diary: diary,
+  planning: planning,
 });
 
 export default rootReducer;
