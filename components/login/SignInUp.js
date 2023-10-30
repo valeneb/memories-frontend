@@ -5,8 +5,7 @@ import Button from '../Button';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { connectUser } from '../../reducers/user';
-
-const ROUTE_BACK = "http://192.168.1.154:3000";
+import {API_KEY} from '@env'
 
 export default function SignInUp({register, setRegister, navigation}) {
  const dispatch = useDispatch();
@@ -32,7 +31,7 @@ export default function SignInUp({register, setRegister, navigation}) {
 
  const signIn = () => {
     if (checkEmail() && password) {
-        fetch(`${ROUTE_BACK}/user/login`, {
+        fetch(`${API_KEY}/user/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email, password: password}),
@@ -52,15 +51,15 @@ export default function SignInUp({register, setRegister, navigation}) {
  const registerInfosIsOk = checkEmail() && comparePasswords() && password && confirmPassword && lastname && firstname && username;
 
  const signUp = () => {
+    console.log('ici');
     if (registerInfosIsOk) {
-        fetch(`${ROUTE_BACK}/user/signup`, {
+        fetch(`${API_KEY}/user/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password, username, firstname, lastname}),
         })
         .then (response => response.json())
         .then(data => {
-            console.log('data', data);
             if (data.user) {
                 dispatch(connectUser(data.user));
                 navigation.navigate('TabNavigator');

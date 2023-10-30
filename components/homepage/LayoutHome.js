@@ -1,6 +1,5 @@
 import { View, Text } from 'react-native';
 import tw from 'twrnc';
-import ButtonLarge from '../ButtonLarge';
 
 export default function LayoutHome({children, type }) {
  const title = type === 'new' ? 'Nouveau voyage' : 'Mes voyages';
