@@ -27,47 +27,23 @@ export const planningSlice = createSlice({
         state.value[category].push(data);
       }
     },
-    // Si indentifiant existant pour chaque category on cherche par l'id
     updatePlanning: (state, action) => {
       const { category, updatedData } = action.payload;
-      if (category in state.value) {
-        state.value[category] = state.value[category].map((item) => {
-          if (item.id === updatedData.id) {
-            return { ...item, ...updatedData };
-          }
-          return item;
-        });
-      }
+
+      state.value[category] = state.value[category].map((item) =>
+        item._id === updatedData._id ? updatedData : item
+      );
     },
-    // Si pas d'identifiant, on le cherche par son index dans le tableau
-    updatePlanning2: (state, action) => {
-      const { category, updatedData, indexToUpdate } = action.payload;
-      if (category in state.value) {
-        state.value[category] = state.value[category].map((item, index) => {
-          if (index === indexToUpdate) {
-            return updatedData;
-          }
-          return item;
-        });
-      }
-    },
-    // En fonction de l'index
     deletePlanning: (state, action) => {
-      const { category, indexToDelete } = action.payload;
-      if (category in state.value) {
-        state.value[category] = state.value[category].filter(
-          (item, index) => index !== indexToDelete
-        );
-      }
+      const { category, idToDelete } = action.payload;
+
+      state.value[category] = state.value[category].filter(
+        (item) => item._id !== idToDelete
+      );
     },
   },
 });
 
-export const {
-  initPlanning,
-  addPlanning,
-  updatePlanning,
-  updatePlanning2,
-  deletePlanning,
-} = planningSlice.actions;
+export const { initPlanning, addPlanning, updatePlanning, deletePlanning } =
+  planningSlice.actions;
 export default planningSlice.reducer;
