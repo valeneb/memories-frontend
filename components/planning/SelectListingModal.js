@@ -16,8 +16,6 @@ export default function SelectListing({ addInfos, toggleModal }) {
     { key: '4', value: 'Autre' },
   ];
 
-  console.log('setSelected', addInfos);
-
   return (
     <View style={tw`w-4/5 h-auto bg-[#f7ebda] rounded-[.625rem] p-3`}>
       <View style={tw`flex-row-reverse mb-3`}>
@@ -25,7 +23,7 @@ export default function SelectListing({ addInfos, toggleModal }) {
           name="window-close"
           color="#073040"
           size={30}
-          onPress={toggleModal}
+          onPress={() => toggleModal()}
           style={tw`absolute`}
         />
       </View>
@@ -56,7 +54,7 @@ export default function SelectListing({ addInfos, toggleModal }) {
             }}
           />
         </View>
-        <Button title="Ajouter" onPress={() => addInfos(selected)} />
+        <Button title="Ajouter" onClick={() => addInfos(selected)} />
       </View>
     </View>
   );
