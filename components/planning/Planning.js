@@ -1,3 +1,11 @@
+/* READ ME POUR CHARLIE
+
+Le problème vient du style ButtonLarge (l.87)
+Lorsque le style est mis en commentaire, tout se passe bien, tu cliques dessus la modal apparait tu sélectionnes ton activité et visuellement elle s'ajoute. Même si je n'arrive pas à la centrer.
+Mais lorsque le style du Button est "actif", l'activité doit surement apparaitre mes hors écran.
+
+*/
+
 import {
   View,
   ScrollView,
@@ -18,7 +26,12 @@ import ButtonUD from './ButtonUpdateDelete';
 import InputHour from './InputHour';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { initPlanning, addPlanning } from '../../reducers/planning';
+import {
+  initPlanning,
+  addPlanning,
+  updatePlanning,
+  deletePlanning,
+} from '../../reducers/planning';
 
 const ROUTE_BACK = 'http://192.168.1.13:3000';
 
@@ -29,6 +42,16 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
 
   const dispatch = useDispatch();
   const planning = useSelector((state) => state.planning.value);
+
+  /*//Récupération des données
+    useEffect(() => {
+    fetch(METTRE LA BONNE ROUTE A FETCHER)
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(initPlanning(data));
+      });
+  }, [planning._id]);  // vérif si c'est bien planning en BDD
+  */
 
   const onClick = () => {
     setEdit(!edit);
@@ -56,9 +79,20 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
         isDairyActive={isDairyActive}
         setIsDairyActive={setIsDairyActive}
       />
-      <View /*style={tw`w-full h-[90%] flex items-center justify-center`}*/>
-        <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
-      </View>
+      {planning.length > 0 ? (
+        <ScrollView>
+          <Text>Insérer le mapping des données quand le fetch sera OK</Text>
+        </ScrollView>
+      ) : (
+        <View /*style={tw`w-full h-[90%] flex items-center justify-center`}*/>
+          {selectedOption ? null : (
+            <ButtonLarge
+              title="Commencer mon programme"
+              onClick={toggleModal}
+            />
+          )}
+        </View>
+      )}
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
         <View
           style={tw`flex h-full justify-center items-center bg-opacity-50 bg-black`}
@@ -66,10 +100,12 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
           <SelectListing addInfos={addInfos} toggleModal={toggleModal} />
         </View>
       </Modal>
-      {selectedOption === 'Location de voiture' && <CarRentalCard />}
-      {selectedOption === "Billet d'avion" && <FlightCard />}
-      {selectedOption === 'Logement' && <AccomodationCard />}
-      {selectedOption === 'Autre' && <OtherCard />}
+      <ScrollView style={tw`sticky bo`}>
+        {selectedOption === 'Location de voiture' && <CarRentalCard />}
+        {selectedOption === "Billet d'avion" && <FlightCard />}
+        {selectedOption === 'Logement' && <AccomodationCard />}
+        {selectedOption === 'Autre' && <OtherCard />}
+      </ScrollView>
     </View>
   );
 }
