@@ -3,11 +3,10 @@ import { View } from 'react-native';
 import tw from 'twrnc';
 import Login from '../components/login/Login';
 import SignInUp from '../components/login/SignInUp';
-import { useSelector } from 'react-redux';
-
-const ROUTE_BACK = "http://192.168.1.17:3000";
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function LoginScreen({navigation}) {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
   const [register, setRegister] = useState(false);
@@ -22,7 +21,7 @@ export default function LoginScreen({navigation}) {
     if (user && user.token) {
       navigation.navigate('TabNavigator');
     }
-  }, [user]);
+  }, []);
 
   return (
     <View
