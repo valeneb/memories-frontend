@@ -1,6 +1,6 @@
 /* READ ME POUR CHARLIE
 
-Le problème vient du style ButtonLarge (l.87)
+Le problème vient du style ButtonLarge (l.93)
 Lorsque le style est mis en commentaire, tout se passe bien, tu cliques dessus la modal apparait tu sélectionnes ton activité et visuellement elle s'ajoute. Même si je n'arrive pas à la centrer.
 Mais lorsque le style du Button est "actif", l'activité doit surement apparaitre mes hors écran.
 
@@ -82,6 +82,12 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
       {planning.length > 0 ? (
         <ScrollView>
           <Text>Insérer le mapping des données quand le fetch sera OK</Text>
+          <TouchableOpacity
+            style={tw`w-16 h-16 rounded-full bg-[#073040] items-center justify-center`}
+            onClick={toggleModal}
+          >
+            <Text style={tw`text-white text-4xl`}>+</Text>
+          </TouchableOpacity>
         </ScrollView>
       ) : (
         <View /*style={tw`w-full h-[90%] flex items-center justify-center`}*/>
@@ -110,4 +116,17 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  button: {
+    width: 80, // Ajustez la taille selon vos besoins
+    height: 80, // Ajustez la taille selon vos besoins
+    borderRadius: 40, // Un rayon de moitié de la largeur/hauteur rendra le bouton rond
+    backgroundColor: 'blue', // Couleur de fond du bouton
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  plus: {
+    fontSize: 24, // Ajustez la taille du symbole "+" selon vos besoins
+    color: 'white', // Couleur du symbole "+"
+  },
+});
