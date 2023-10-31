@@ -32,13 +32,11 @@ export default function TravelCard({ travel, navigation }) {
     .then (response => response.json())
     .then(data => {
      if(data.result) {
-        dispatch(deleteTravel(id));
+        dispatch(deleteTravel(travel._id));
         setIsDelete(false);
       }
     })
   };
-
-  console.log('travel', travel);
 
   return (
     <TouchableWithoutFeedback onPress={() => setIsDelete(false)}>
