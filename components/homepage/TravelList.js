@@ -5,7 +5,7 @@ import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
 import { useSelector } from 'react-redux';
 
-export default function TravelList({setNewTravel, navigation}) {
+export default function TravelList({setNewTravel, navigation, onClick}) {
   const travel = useSelector((state) => state.travel.value);
 
   const handleNewTravel = () => {
@@ -21,6 +21,7 @@ export default function TravelList({setNewTravel, navigation}) {
                 key={i}
                 navigation={navigation}
                 travel={data}
+                onClick={onClick}
               />
             ))}
         </ScrollView>

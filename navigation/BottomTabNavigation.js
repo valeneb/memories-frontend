@@ -4,6 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from '../screens/HomeScreen';
 import ProfilScreen from '../screens/ProfilScreen';
 import SearchScreen from '../screens/SearchScreen';
+import TravelScreen from '../screens/TravelScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,6 +53,13 @@ export default function BottomTabNavigation() {
         name="Search"
         component={SearchScreen}
         options={{ tabBarLabel: '' }}
+      />
+      <Tab.Screen
+        name="Travel"
+        component={TravelScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
       />
     </Tab.Navigator>
   );

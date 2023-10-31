@@ -73,7 +73,6 @@ export default function HomeScreen({ navigation }) {
   const handlePressMarker = (id) => {
     navigation.navigate('Travel', { travelId: id });
   };
-
   
   useEffect(() => {
     fetch(`${API_KEY}/travel?token=${user.token}`)
@@ -144,8 +143,8 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
           <LayoutHome 
             children={
-              newTravel ? <NewTravel navigation={navigation} newTravelName={newTravelName} /> 
-              : <TravelList setNewTravel={setNewTravel} navigation={navigation} />
+              newTravel ? <NewTravel navigation={navigation} newTravelName={newTravelName} onClick={handleCompassPress} /> 
+              : <TravelList setNewTravel={setNewTravel} navigation={navigation} onClick={handleCompassPress}/>
             } 
             type={`${newTravel ? 'new' : 'travel'}`}  
           />

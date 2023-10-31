@@ -117,11 +117,6 @@ export default function DiaryCard({ diary }) {
       dispatch(deleteDiary(diary._id))
       setEdit(false)
     })
-      .then((response) => response.json())
-      .then((data) => {
-        setEdit(false);
-        console.log('update change value', data);
-      });
   };
 
   useEffect(() => {
