@@ -9,13 +9,11 @@ import tw from 'twrnc';
 
 export default function Flights() {
   const [isEditing, setIsEditing] = useState(true);
-  const [inputValues, setInputValues] = useState({
-    departure: '',
-    hour: '',
-    seatNumber: '',
-    compagny: '',
-    notes: '',
-  });
+  const [departureFlight, setDepartureFlight] = useState('');
+  const [hourFlight, setHourFlight] = useState('');
+  const [seatNumberFlight, setSeatNumberFlight] = useState('');
+  const [compagnyFlight, setCompagnyFlight] = useState('');
+  const [notesFlight, setNotesFlight] = useState('');
 
   const handleValidation = () => {
     // à compléter
@@ -64,15 +62,13 @@ export default function Flights() {
             <InputDate
               size="small"
               placeholder="Departure"
-              value={inputValues.departure}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, departure: text })
-              }
+              value={departureFlight}
+              onChangeText={setDepartureFlight}
             />
           </View>
           <View style={tw`flex-row justify-between items-center`}>
             <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
-            <InputHour />
+            <InputHour value={hourFlight} onChangeText={setHourFlight} />
           </View>
 
           <View style={tw`flex-row justify-between items-center`}>
@@ -82,10 +78,8 @@ export default function Flights() {
             <Input
               size="small"
               placeholder="Siège"
-              value={inputValues.seatNumber}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, seatNumber: text })
-              }
+              value={seatNumberFlight}
+              onChangeText={setSeatNumberFlight}
             />
           </View>
 
@@ -96,10 +90,8 @@ export default function Flights() {
             <Input
               size="small"
               placeholder="Compagnie / Vol"
-              value={inputValues.compagny}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, compagny: text })
-              }
+              value={compagnyFlight}
+              onChangeText={setCompagnyFlight}
             />
           </View>
 
@@ -110,10 +102,8 @@ export default function Flights() {
             <Input
               size="small"
               placeholder="Commentaire"
-              value={inputValues.notes}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, notes: text })
-              }
+              value={notesFlight}
+              onChangeText={setNotesFlight}
             />
           </View>
         </View>

@@ -24,7 +24,7 @@ export const planningSlice = createSlice({
     addPlanning: (state, action) => {
       const { category, data } = action.payload;
       if (category in state.value) {
-        state.value[category].push(data);
+        state.value[category].push(...data);
       }
     },
     updatePlanning: (state, action) => {
