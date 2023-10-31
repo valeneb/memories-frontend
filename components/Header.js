@@ -150,9 +150,7 @@ export default function Header({ isDairyActive, setIsDairyActive, id }) {
                     </View>
                 )}
             </View>
-          )}
-        </View>
-      </TouchableHighlight>
+        </TouchableHighlight>
       <View style={tw`flex flex-row items-center`}>
         <TouchableOpacity
           style={tw`w-[50%] p-[.5rem] flex items-center ${

@@ -31,7 +31,7 @@ export default function Accomodation() {
   };
 
   return (
-    <View style={tw`w-11/12 h-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
+    <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
       <View style={tw`flex-row mb-3 items-center justify-between`}>
         <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
           Logement
@@ -53,12 +53,12 @@ export default function Accomodation() {
         )}
       </View>
 
-      {isEditing ? (
-        <View>
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Du
-            </Text>
+      <View>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Du
+          </Text>
+          {isEditing ? (
             <InputDate
               size="small"
               placeholder="Arrivée"
@@ -67,10 +67,17 @@ export default function Accomodation() {
                 setInputValues({ ...inputValues, arrival: text })
               }
             />
-          </View>
+          ) :(
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {inputValues.arrival}
+            </Text>
+          )}
+          
+        </View>
 
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
+          {isEditing ? (
             <InputDate
               size="small"
               placeholder="Départ"
@@ -79,12 +86,18 @@ export default function Accomodation() {
                 setInputValues({ ...inputValues, departure: text })
               }
             />
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Adresse
+              {inputValues.departure}
             </Text>
+          )}
+        </View>
+
+        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'} items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Adresse
+          </Text>
+          {isEditing ? (
             <Input
               size="small"
               placeholder="Adresse du logement"
@@ -93,12 +106,18 @@ export default function Accomodation() {
                 setInputValues({ ...inputValues, adress: text })
               }
             />
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes
+              {inputValues.address}
             </Text>
+          )}
+        </View>
+
+        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'}  items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Notes :
+          </Text>
+          {isEditing ? (
             <Input
               size="small"
               placeholder="Commentaire"
@@ -106,46 +125,15 @@ export default function Accomodation() {
               onChangeText={(text) =>
                 setInputValues({ ...inputValues, notes: text })
               }
+              multiline
             />
-          </View>
-        </View>
-      ) : (
-        <View>
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Du
-            </Text>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.arrival}
-            </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.departure}
-            </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Adresse
-            </Text>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.address}
-            </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes
-            </Text>
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {inputValues.notes}
             </Text>
-          </View>
+          )}
         </View>
-      )}
+      </View>
     </View>
   );
 }

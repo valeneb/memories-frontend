@@ -33,7 +33,7 @@ export default function Flights() {
   };
 
   return (
-    <View style={tw`w-11/12 h-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
+    <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
       <View style={tw`flex-row mb-3 items-center justify-between`}>
         <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
           Billet d'avion
@@ -54,115 +54,98 @@ export default function Flights() {
           />
         )}
       </View>
-
-      {isEditing ? (
-        <View>
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Le
-            </Text>
+      <View>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Le
+          </Text>
+          {isEditing ? (
             <InputDate
-              size="small"
-              placeholder="Departure"
-              value={inputValues.departure}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, departure: text })
-              }
+            size="small"
+            placeholder="Departure"
+            value={inputValues.departure}
+            onChangeText={(text) =>
+              setInputValues({ ...inputValues, departure: text })
+            }
             />
-          </View>
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
-            <InputHour />
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Siège
-            </Text>
-            <Input
-              size="small"
-              placeholder="Siège"
-              value={inputValues.seatNumber}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, seatNumber: text })
-              }
-            />
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Vol
-            </Text>
-            <Input
-              size="small"
-              placeholder="Compagnie / Vol"
-              value={inputValues.compagny}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, compagny: text })
-              }
-            />
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes
-            </Text>
-            <Input
-              size="small"
-              placeholder="Commentaire"
-              value={inputValues.notes}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, notes: text })
-              }
-            />
-          </View>
-        </View>
-      ) : (
-        <View>
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Le
-            </Text>
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {inputValues.departure}
             </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
+          )}
+        </View>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
+          {isEditing ? (
+            <InputHour />
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {inputValues.hour}
             </Text>
-          </View>
+          )}
+        </View>
 
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Siège
-            </Text>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Siège
+          </Text>
+          {isEditing ? (
+            <Input
+            size="small"
+            placeholder="Siège"
+            value={inputValues.seatNumber}
+            onChangeText={(text) =>
+              setInputValues({ ...inputValues, seatNumber: text })
+            }
+            />
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {inputValues.seatNumber}
             </Text>
-          </View>
+          )}
+        </View>
 
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Vol
-            </Text>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Vol
+          </Text>
+          {isEditing ? (
+            <Input
+            size="small"
+            placeholder="Compagnie / Vol"
+            value={inputValues.compagny}
+            onChangeText={(text) =>
+              setInputValues({ ...inputValues, compagny: text })
+            }
+            />
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {inputValues.compagny}
             </Text>
-          </View>
+          )}
+        </View>
 
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes
-            </Text>
+        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'}  items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Notes :
+          </Text>
+          {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {inputValues.notes}
             </Text>
-          </View>
+          ) : (
+            <Input
+            size="small"
+            placeholder="Commentaire"
+            value={inputValues.notes}
+            onChangeText={(text) =>
+              setInputValues({ ...inputValues, notes: text })
+            }
+            multiline
+            />
+          )}
         </View>
-      )}
+      </View>
     </View>
   );
 }
