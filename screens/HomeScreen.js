@@ -12,7 +12,7 @@ import mapStyle from '../components/homepage/mapStyle.json';
 import LayoutHome from '../components/homepage/LayoutHome';
 import TravelList from '../components/homepage/TravelList';
 import NewTravel from '../components/homepage/NewTravel';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { initTravel } from '../reducers/travel';
 import tw from 'twrnc';
 import {API_KEY} from '@env'
@@ -57,23 +57,22 @@ export default function HomeScreen({ navigation }) {
     fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=fr`
     )
-    .then((response) => response.json())
-    .then((data) => {
-      const country = data.address.country;
-      setNewTravelName(country);
-      setNewTravel(true);
-      setIsOpen(true);
-      openModal();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-    
+      .then((response) => response.json())
+      .then((data) => {
+        const country = data.address.country;
+        setNewTravelName(country);
+        setNewTravel(true);
+        setIsOpen(true);
+        openModal();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handlePressMarker = (id) => {
-    navigation.navigate('Travel', {travelId: id});
-  }
+    navigation.navigate('Travel', { travelId: id });
+  };
 
   
   useEffect(() => {
@@ -99,19 +98,19 @@ export default function HomeScreen({ navigation }) {
       >
         {travels && travels.length > 0 &&(
           <>
-            {
-              travels.map((data, i) => {
-                return (
-                  <Marker 
-                    key={i}
-                    coordinate={{ latitude: data.location.coordinates[0], longitude: data.location.coordinates[1] }} 
-                    title={data.name}
-                    onPress={() => handlePressMarker(data._id)}
-                  />
-                 
-                )
-              })
-            }
+            {travels.map((data, i) => {
+              return (
+                <Marker
+                  key={i}
+                  coordinate={{
+                    latitude: data.location.coordinates[0],
+                    longitude: data.location.coordinates[1],
+                  }}
+                  title={data.name}
+                  onPress={() => handlePressMarker(data._id)}
+                />
+              );
+            })}
           </>
         )}
       </MapView>

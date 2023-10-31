@@ -5,17 +5,17 @@ import { useState, useEffect } from 'react';
 import InputDate from './InputDate';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { reverseDate } from '../utils/functions';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateTravel } from '../reducers/travel';
 import {API_KEY} from '@env';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function Header({ isDairyActive, setIsDairyActive, id}) {
- const dispatch = useDispatch();
- const travels = useSelector((state) => state.travel.value);
+export default function Header({ isDairyActive, setIsDairyActive, id }) {
+  const dispatch = useDispatch();
+  const travels = useSelector((state) => state.travel.value);
 
- const [edit, setEdit] = useState(false);
- const [travel, setTravel] = useState();
+  const [edit, setEdit] = useState(false);
+  const [travel, setTravel] = useState();
 
  const [title, setTitle] = useState('');
  const [departureDate, setDepartureDate] = useState('');
@@ -28,13 +28,13 @@ export default function Header({ isDairyActive, setIsDairyActive, id}) {
         headers: { 'Content-Type': 'multipart/form-data' },
         body: infos,
     })
-    .then(response => response.json())
-    .then((data) => {
-        if(data.result) {
-            dispatch(updateTravel(data.trip))
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(updateTravel(data.trip));
         }
-    });
- };
+      });
+  };
 
  const handleChangeImage = async() => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -90,9 +90,9 @@ export default function Header({ isDairyActive, setIsDairyActive, id}) {
 
     await updateInfos(formData);
     setEdit(false);
- };
- 
- useEffect(() => {
+  };
+
+  useEffect(() => {
     let result = [];
     if (id) {
         result = travels.filter(travel => travel._id === id);
@@ -102,9 +102,9 @@ export default function Header({ isDairyActive, setIsDairyActive, id}) {
         setCoverImage(result[0].coverImage && result[0].coverImage.secure_url);
         setTravel(result[0]);
     }
- }, [id]);
+  }, [id]);
 
- return (
+  return (
     <View style={tw`w-full`}>
         <TouchableHighlight onLongPress={() => setEdit(true)}>
             <View style={tw`bg-[#D8725B] pt-[2.5rem] px-[1rem] pb-[1rem] flex ${edit ? 'flex-col' : 'flex-row items-center justify-between'}`}>
@@ -150,15 +150,31 @@ export default function Header({ isDairyActive, setIsDairyActive, id}) {
                     </View>
                 )}
             </View>
-        </TouchableHighlight>
-        <View style={tw`flex flex-row items-center`}>
-            <TouchableOpacity style={tw`w-[50%] p-[.5rem] flex items-center ${isDairyActive ? 'bg-[#D3C3AE] border-b border-r border-black rounded-br-[.5rem]' : 'bg-[#F2DDC2]'}`} onPress={() => setIsDairyActive(false)}>
-                <Text>Programme</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={tw`w-[50%] p-[.5rem] flex items-center ${isDairyActive ? 'bg-[#F2DDC2]' : 'bg-[#D3C3AE] border-b border-l border-black rounded-bl-[.5rem]'}`} onPress={() => setIsDairyActive(true)}>
-                <Text>Carnet de voyage</Text>
-            </TouchableOpacity>
+          )}
         </View>
+      </TouchableHighlight>
+      <View style={tw`flex flex-row items-center`}>
+        <TouchableOpacity
+          style={tw`w-[50%] p-[.5rem] flex items-center ${
+            isDairyActive
+              ? 'bg-[#D3C3AE] border-b border-r border-black rounded-br-[.5rem]'
+              : 'bg-[#F2DDC2]'
+          }`}
+          onPress={() => setIsDairyActive(false)}
+        >
+          <Text>Programme</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={tw`w-[50%] p-[.5rem] flex items-center ${
+            isDairyActive
+              ? 'bg-[#F2DDC2]'
+              : 'bg-[#D3C3AE] border-b border-l border-black rounded-bl-[.5rem]'
+          }`}
+          onPress={() => setIsDairyActive(true)}
+        >
+          <Text>Carnet de voyage</Text>
+        </TouchableOpacity>
+      </View>
     </View>
- );
+  );
 }

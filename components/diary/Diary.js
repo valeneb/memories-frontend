@@ -4,11 +4,11 @@ import ButtonLarge from '../ButtonLarge';
 import DiaryCard from './DiaryCard';
 import Header from '../Header';
 import { useEffect, useState } from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { initDiary, addNewDiary } from '../../reducers/diary';
 import {API_KEY} from '@env'
 
-export default function Diary({isDairyActive, setIsDairyActive, travel}) {
+export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
   const dispatch = useDispatch();
   const diaries = useSelector((state) => state.diary.value);
 

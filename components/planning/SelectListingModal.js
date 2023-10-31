@@ -1,11 +1,14 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import { useState, useEffect } from 'react';
 import Button from '../Button';
 import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function SelectListing({ setSelected, toggleModal }) {
+export default function SelectListing({ addInfos, toggleModal }) {
+  const [selected, setSelected] = useState();
+
   const options = [
     { key: '1', value: 'Location de voiture' },
     { key: '2', value: "Billet d'avion" },
@@ -20,7 +23,7 @@ export default function SelectListing({ setSelected, toggleModal }) {
           name="window-close"
           color="#073040"
           size={30}
-          onPress={toggleModal}
+          onPress={() => toggleModal()}
           style={tw`absolute`}
         />
       </View>
@@ -51,7 +54,7 @@ export default function SelectListing({ setSelected, toggleModal }) {
             }}
           />
         </View>
-        <Button title="Ajouter" /*onPress={addInfos}*/ />
+        <Button title="Ajouter" onClick={() => addInfos(selected)} />
       </View>
     </View>
   );
