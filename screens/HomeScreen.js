@@ -85,7 +85,7 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={tw`w-full h-full`}>
       <MapView
         initialRegion={{
           latitude: 30,
@@ -115,7 +115,7 @@ export default function HomeScreen({ navigation }) {
           </>
         )}
       </MapView>
-      <View style={tw`absolute bottom-0 left-0 right-0 items-center p-0 ${isOpen ? 'h-full' : ''}`}>
+      <View style={tw`items-center p-0 ${isOpen ? 'h-full' : ''}`}>
         <Animated.View
           style={{
             ...styles.modal,

@@ -10,7 +10,7 @@ export default function LayoutHome({children, type }) {
             <Text style={tw`text-[1.375rem] font-bold text-[#073040]`}>{title}</Text>
             <View style={tw`h-0.5 bg-[#073040] w-[80%] mt-[1rem]`} />
         </View>
-        <View style={tw`w-full h-[75%] flex items-center`}>
+        <View style={tw`w-full h-[75%] flex flex-col items-center`}>
             {children}
         </View>
     </View>

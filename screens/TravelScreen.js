@@ -4,6 +4,7 @@ import tw from 'twrnc';
 import Diary from '../components/diary/Diary';
 import { useSelector } from 'react-redux';
 import Planning from '../components/planning/Planning';
+import BottomTabNavigation from '../navigation/BottomTabNavigation';
 
 export default function TravelScreen({ route }) {
   const { travelId } = route.params;

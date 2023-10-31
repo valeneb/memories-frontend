@@ -1,8 +1,8 @@
-import { View, SafeAreaView, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { View, Image, TouchableOpacity, Keyboard } from 'react-native';
 import tw from 'twrnc';
 import Input from '../Input';
 import InputDate from '../InputDate';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ButtonLarge from '../ButtonLarge';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTravel } from '../../reducers/travel';
@@ -12,6 +12,8 @@ import {API_KEY} from '@env'
 export default function NewTravel({navigation, newTravelName}) {
  const dispatch = useDispatch();
  const user = useSelector((state) => state.user.value);
+
+ const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
  const [destination, setDestination] = useState(newTravelName ? newTravelName : '');
  const [departureDate, setDepartureDate] = useState('');
@@ -84,10 +86,24 @@ export default function NewTravel({navigation, newTravelName}) {
          }
       });
    } 
- }
+ };
+
+ useEffect(() => {
+   const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+     setKeyboardVisible(true);
+   });
+   const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+     setKeyboardVisible(false);
+   });
+
+   return () => {
+     keyboardDidShowListener.remove();
+     keyboardDidHideListener.remove();
+   };
+ }, []);
 
  return (
-   <View style={tw`w-full flex flex-col items-center justify-between h-full`}>
+   <View style={tw`w-full flex flex-col items-center justify-between h-full ${isKeyboardVisible ? 'absolute top-50' : ''}`}>
       <View style={tw`w-full flex flex-col items-center mt-[4rem]`}>
         <Input value={destination} setValue={setDestination} placeholder="Destination" size='normal' />
         <InputDate size="normal" placeholder="Date de départ" marginTop value={departureDate} setValue={setDepartureDate}/>

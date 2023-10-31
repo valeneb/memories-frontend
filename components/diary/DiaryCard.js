@@ -9,7 +9,7 @@ import ModalPhotos from './ModalPhotos';
 
 import {API_KEY} from '@env'
 
-export default function DiaryCard({ diary, setIsEditing }) {
+export default function DiaryCard({ diary }) {
   const dispatch = useDispatch();
   const textRef = useRef();
   const [edit, setEdit] = useState(diary.title === '' && diary.description === '' );
@@ -52,6 +52,22 @@ export default function DiaryCard({ diary, setIsEditing }) {
     setShowModal(true);
   };
 
+  const handleChangeImage = () => {
+    if (diary.moment_pictures.length === 0 && editPhotos.length > 0) {
+      return true;
+    }
+
+    if(diary.moment_pictures .length > 0) {
+      for (let i = 0; i < editPhotos.length; i += 1) {
+        if (diary.moment_pictures[i] !== editPhotos[i]) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   const updateInfos = (infos) => {
     fetch(`${API_KEY}/diary`, {
         method: 'PUT',
@@ -63,7 +79,6 @@ export default function DiaryCard({ diary, setIsEditing }) {
       if(data.result) {
         dispatch(updateDiary(data.diary));
         setEdit(false);
-        setIsEditing(false);
       }
     });
   };
@@ -82,7 +97,7 @@ export default function DiaryCard({ diary, setIsEditing }) {
       formData.append('description', editContent);
     }
 
-    if(diary.moment_pictures !== editPhotos) {
+    if(handleChangeImage()) {
       formData.append('picture', {
         uri: editPhotos[0],
         name: 'photo.jpg',
@@ -101,8 +116,7 @@ export default function DiaryCard({ diary, setIsEditing }) {
     .then (response => response.json())
     .then(data => {
       dispatch(deleteDiary(diary._id))
-      setEdit(false);
-      setIsEditing(false);
+      setEdit(false)
     })
   };
 
@@ -136,8 +150,7 @@ export default function DiaryCard({ diary, setIsEditing }) {
           {!edit && (
             <TouchableOpacity style={tw`py-[.5rem]`} onPress={() => {
               setEdit(true);
-              setIsEditing(true);
-            }}>
+                }}>
               <FontAwesome
                 name="edit"
                 size={16}
