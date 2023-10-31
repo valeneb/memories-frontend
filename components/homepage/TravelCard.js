@@ -12,30 +12,28 @@ import tw from 'twrnc';
 import { useDispatch } from 'react-redux';
 import { deleteTravel } from '../../reducers/travel';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { reverseDate } from '../../utils/functions';
+import {API_KEY} from '@env'
 
-const ROUTE_BACK = 'http://192.168.1.13:3000';
-
-export default function TravelCard({
-  title,
-  image,
-  departureDate,
-  returnDate,
-  navigation,
-  id,
-}) {
+export default function TravelCard({ travel, navigation }) {
   const dispatch = useDispatch();
 
   const [isDelete, setIsDelete] = useState(false);
 
   const handleClick = () => {
-    navigation.navigate('Travel', { travelId: id });
+    navigation.navigate('Travel', { travelId: travel._id });
   };
 
   const handleDelete = () => {
-    fetch(`${ROUTE_BACK}/travel/deleteTrip`, {
+    fetch(`${API_KEY}/travel/deleteTrip?_id=${travel._id}`, {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ _id: id }),
+    })
+    .then (response => response.json())
+    .then(data => {
+     if(data.result) {
+        dispatch(deleteTravel(id));
+        setIsDelete(false);
+      }
     })
       .then((response) => response.json())
       .then((data) => {
@@ -65,16 +63,17 @@ export default function TravelCard({
           onLongPress={() => setIsDelete(true)}
         >
           <View style={styles.imageContainer}>
-            <Image
-              source={require('../../assets/favicon.png')}
-              style={styles.image}
-            />
+            {travel.coverImage ? (
+              <Image source={{ uri: travel.coverImage.secure_url }} style={styles.image} />
+            ) : (
+              <Image source={require('../../assets/favicon.png')} style={styles.image} />
+            )}
           </View>
           <View style={styles.travelCardTextContainer}>
-            <Text style={styles.travelCardDestination}>{title}</Text>
+            <Text style={styles.travelCardDestination}>{travel.destination}</Text>
             <View style={styles.dateContainer}>
-              <Text style={styles.travelCardDate}>Du {departureDate}</Text>
-              <Text style={styles.travelCardDate}>au {returnDate}</Text>
+              <Text style={styles.travelCardDate}>Du {reverseDate(travel.departure)}</Text>
+              <Text style={styles.travelCardDate}>au {reverseDate(travel.return)}</Text>
             </View>
           </View>
         </TouchableOpacity>

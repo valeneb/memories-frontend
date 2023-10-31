@@ -11,8 +11,11 @@ export const userSlice = createSlice({
     connectUser: (state, action) => {
       state.value = action.payload;
     },
+    initUser: (state, action) => {
+      state.value = {};
+    },
   },
 });
 
-export const { connectUser } = userSlice.actions;
+export const { connectUser, initUser } = userSlice.actions;
 export default userSlice.reducer;

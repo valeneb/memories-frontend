@@ -1,39 +1,107 @@
-import React, { useState, useRef } from 'react';
-import { Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Image, TouchableOpacity, TextInput, Text, Modal, Button } from 'react-native';
 import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useDispatch } from 'react-redux';
+import { updateDiary, deleteDiary } from '../../reducers/diary';
+import * as ImagePicker from 'expo-image-picker';
+import ModalPhotos from './ModalPhotos';
+import {API_KEY} from '@env'
 
-const ROUTE_BACK = 'http://192.168.1.13:3000';
-
-export default function DiaryCard({ title, photos, content, travelId }) {
+export default function DiaryCard({ diary, setIsEditing }) {
+  const dispatch = useDispatch();
   const textRef = useRef();
-  const [edit, setEdit] = useState(title === '' && content === '');
+  const [edit, setEdit] = useState(diary.title === '' && diary.description === '' );
+  const [showModal, setShowModal] = useState(false);
   const [textHeight, setTextHeight] = useState(0);
 
-  const [editTitle, setEditTitle] = useState(title);
-  const [editContent, setEditContent] = useState(content);
+  const [editTitle, setEditTitle] = useState(diary.title);
+  const [editContent, setEditContent] = useState(diary.description);
+  const [editPhotos, setEditPhotos] = useState([]);
 
   const updateTextHeight = () => {
     if (textRef.current) {
-      textRef.current.measure((height) => {
+      textRef.current.measure((fx, fy, width, height, px, py) => {
         setTextHeight(height);
       });
     }
   };
 
-  const handleDelete = () => {
-    console.log('delete diary');
+  const handleAddImage = async() => {
+   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+   if (permissionResult.granted === false) {
+      alert('Permission d\'accès à la galerie requise');
+      return;
+   }
+
+   const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [9, 9],
+      quality: 1,
+   });
+
+   if (!result.canceled) {
+    setEditPhotos((prev) => [...prev, result.assets[0].uri]);
+   }
   };
 
+  const showAllImage = () => {
+    setShowModal(true);
+  };
+
+  const updateInfos = (infos) => {
+    fetch(`${API_KEY}/diary`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'multipart/form-data' },
+        body: infos,
+    })
+    .then(response => response.json())
+    .then((data) => {
+      if(data.result) {
+        dispatch(updateDiary(data.diary));
+        setEdit(false);
+        setIsEditing(false);
+      }
+    });
+  };
+
+
   const handleChange = () => {
-    fetch(`${ROUTE_BACK}/diary/newDiary`, {
-      method: 'POST',
+    const formData = new FormData();
+
+    formData.append('_id', diary._id);
+
+    if(diary.title !== editTitle) {
+      formData.append('title', editTitle);
+    }
+
+    if(diary.description !== editContent) {
+      formData.append('description', editContent);
+    }
+
+    if(diary.moment_pictures !== editPhotos) {
+      formData.append('picture', {
+        uri: editPhotos[0],
+        name: 'photo.jpg',
+        type: 'image/jpeg',
+      });
+    }
+
+    updateInfos(formData);
+  };
+
+  const handleDelete = () => {
+    fetch(`${API_KEY}/diary/?_id=${diary._id}`, {
+      method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: editTitle,
-        description: editContent,
-        _id: travelId,
-      }),
+    })
+    .then (response => response.json())
+    .then(data => {
+      dispatch(deleteDiary(diary._id))
+      setEdit(false);
+      setIsEditing(false);
     })
       .then((response) => response.json())
       .then((data) => {
@@ -41,6 +109,17 @@ export default function DiaryCard({ title, photos, content, travelId }) {
         console.log('update change value', data);
       });
   };
+
+  useEffect(() => {
+    if(diary.moment_pictures.length > 0) {
+      const array = [];
+      diary.moment_pictures.map(picture => {
+        array.push(picture.secure_url)
+      })
+      setEditPhotos(array);
+      updateTextHeight();
+    }
+  }, [diary]);
 
   return (
     <View>
@@ -70,22 +149,55 @@ export default function DiaryCard({ title, photos, content, travelId }) {
             value={editTitle}
           />
           {!edit && (
-            <TouchableOpacity
-              style={tw`py-[.5rem]`}
-              onPress={() => setEdit(true)}
-            >
-              <FontAwesome name="edit" size={16} />
+            <TouchableOpacity style={tw`py-[.5rem]`} onPress={() => {
+              setEdit(true);
+              setIsEditing(true);
+            }}>
+              <FontAwesome
+                name="edit"
+                size={16}
+              />
             </TouchableOpacity>
           )}
         </View>
-        <View style={tw`flex flex-row w-full items-start pt-[.5rem]`}>
-          <View style={tw`w-[40%]`}>
-            <Image
-              source={require('../../assets/favicon.png')}
-              alt="photo"
-              style={[tw`w-full rounded-[.5rem]`, { height: textHeight }]}
-            />
+        {edit && (
+          <View style={tw`w-full pt-[.5rem] flex flex-row items-center`}>
+            <TouchableOpacity onPress={handleAddImage} style={tw`bg-white h-[8rem] w-[8rem] rounded-[.5rem] flex items-center justify-center`}>
+                <FontAwesome
+                  name="image"
+                  size={98}
+                  style={tw`opacity-60`}
+                />
+                <FontAwesome
+                name="plus"
+                size={48}
+                style={tw`opacity-60 mr-[.5rem] absolute`}
+                />
+            </TouchableOpacity>
+            {editPhotos.length > 0 && (
+              <TouchableOpacity onPress={showAllImage} style={tw`h-[8rem] w-[8rem] rounded-[.5rem] ml-[.5rem] flex items-center justify-center`}>
+                <Image source={{ uri: editPhotos[editPhotos.length - 1] }} style={tw`w-full h-full rounded-[.5rem]`} resizeMode="cover" />
+                {editPhotos.length > 1 && (
+                  <View style={tw`flex flex-row absolute items-center`}>
+                    <FontAwesome
+                    name="plus"
+                    size={32}
+                    color="white"
+                    style={tw`opacity-60 mr-[.5rem]`}
+                    />
+                    <Text style={tw`text-white text-[2rem] opacity-60 font-bold`}>{editPhotos.length - 1}</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            )}
           </View>
+        )}
+        <View style={tw`flex flex-row w-full items-start pt-[.5rem]`}>
+          {!edit && editPhotos.length > 0 && (
+            <View style={[tw`w-[40%] rounded-[.5rem]`, { height: textHeight }]}>
+              <Image source={{ uri: editPhotos[0] }} alt="photo" style={[tw`w-full rounded-[.5rem]`, { height: textHeight }]} />
+            </View>
+          )}
           <TextInput
             placeholder="Description"
             onChangeText={(value) => setEditContent(value)}
@@ -93,22 +205,17 @@ export default function DiaryCard({ title, photos, content, travelId }) {
             editable={edit}
             ref={textRef}
             onLayout={updateTextHeight}
-            style={tw`w-[60%] ml-[.5rem] text-black ${
-              edit ? 'h-[10rem] bg-white p-[.5rem]' : ''
-            }`}
-            textAlignVertical={`${edit ? 'top' : 'middle'}`}
+            style={tw`text-black ${edit ? 'h-[10rem] bg-white p-[.5rem] w-full' : `${editPhotos.length > 0 ? 'w-[60%] ml-[.5rem]' : 'w-full'}`}`}
+            textAlignVertical={`${edit ? 'top': 'middle'}`}
             value={editContent}
           />
         </View>
-        {!edit ? (
-          <View style={tw`flex flex-row items-center w-full pt-[.5rem]`}>
-            <Image
-              source={require('../../assets/favicon.png')}
-              alt="photo"
-              style={tw`rounded-[.5rem] w-[50%] mr-[.5rem]`}
-            />
+        {!edit && editPhotos.length > 0 && (
+          <View style={tw`flex flex-row items-center w-full pt-[1rem]`}>     
+            <Image source={require('../../assets/favicon.png')} alt="photo" style={tw`rounded-[.5rem] w-[8rem] h-[8rem] mr-[.5rem]`} />
           </View>
-        ) : (
+        )} 
+        {edit && (
           <View style={tw`flex items-end mt-[.5rem]`}>
             <TouchableOpacity
               style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`}
@@ -119,6 +226,8 @@ export default function DiaryCard({ title, photos, content, travelId }) {
           </View>
         )}
       </View>
+
+      <ModalPhotos showModal={showModal} setShowModal={setShowModal} editPhotos={editPhotos} setEditPhotos={setEditPhotos} />
     </View>
   );
 }

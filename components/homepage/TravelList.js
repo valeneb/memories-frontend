@@ -14,18 +14,15 @@ export default function TravelList({setNewTravel, navigation}) {
 
   return (
     <View style={tw`w-full flex flex-col items-center justify-between h-full pt-[2rem]`}>
-      {travel.length > 0 && (
+      {travel && travel.length > 0 && (
         <ScrollView>
-          {travel.map((data, i) => (
-            <TravelCard
-              key={i}
-              title={data.destination}
-              departureDate={data.departure}
-              returnDate={data.return}
-              navigation={navigation}
-              id={data._id}
-            />
-          ))}
+            {travel.map((data, i) => (
+              <TravelCard
+                key={i}
+                navigation={navigation}
+                travel={data}
+              />
+            ))}
         </ScrollView>
       )}
       <ButtonLarge title="Ajouter un nouveau voyage" icon="plus" onClick={handleNewTravel}/>

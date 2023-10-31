@@ -7,7 +7,6 @@ import {
   Animated,
   Image,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Marker } from 'react-native-maps';
 import mapStyle from '../components/homepage/mapStyle.json';
 import LayoutHome from '../components/homepage/LayoutHome';
@@ -15,10 +14,10 @@ import TravelList from '../components/homepage/TravelList';
 import NewTravel from '../components/homepage/NewTravel';
 import { useSelector, useDispatch } from 'react-redux';
 import { initTravel } from '../reducers/travel';
+import tw from 'twrnc';
+import {API_KEY} from '@env'
 
 const { width, height } = Dimensions.get('window');
-
-const ROUTE_BACK = 'http://192.168.1.13:3000';
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -75,13 +74,14 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate('Travel', { travelId: id });
   };
 
+  
   useEffect(() => {
-    fetch(`${ROUTE_BACK}/travel?token=${user.token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch(initTravel(data.trips));
-      });
-  }, [travels.length]);
+    fetch(`${API_KEY}/travel?token=${user.token}`)
+    .then (response => response.json())
+    .then(data => {
+        dispatch(initTravel(data.trips))
+    })
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -96,7 +96,7 @@ export default function HomeScreen({ navigation }) {
         customMapStyle={mapStyle}
         onLongPress={(e) => handleLongPressMap(e)}
       >
-        {travels.length > 0 && (
+        {travels && travels.length > 0 &&(
           <>
             {travels.map((data, i) => {
               return (
@@ -114,55 +114,43 @@ export default function HomeScreen({ navigation }) {
           </>
         )}
       </MapView>
-
-      <SafeAreaView style={{ ...styles.menu }}>
-        {
-          <Animated.View
-            style={{
-              ...styles.modal,
-              backgroundColor: `${isOpen ? '#F2DDC2' : '#D8725B'}`,
-              transform: [{ translateY: modalY }],
-            }}
-          >
-            {isOpen && (
-              <View
-                style={{
-                  backgroundColor: '#D8725B',
-                  height: 50,
-                  width: '100%',
-                }}
-              />
-            )}
-            <TouchableOpacity
-              onPress={handleCompassPress}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Image
-                source={require('../assets/compass.png')}
-                alt="compass"
-                style={{ height: 48, width: 48 }}
-              />
-            </TouchableOpacity>
-            <LayoutHome
-              children={
-                newTravel ? (
-                  <NewTravel
-                    navigation={navigation}
-                    newTravelName={newTravelName}
-                  />
-                ) : (
-                  <TravelList
-                    setNewTravel={setNewTravel}
-                    navigation={navigation}
-                  />
-                )
-              }
-              type={`${newTravel ? 'new' : 'travel'}`}
+      <View style={tw`absolute bottom-0 left-0 right-0 items-center p-0 ${isOpen ? 'h-full' : ''}`}>
+        <Animated.View
+          style={{
+            ...styles.modal,
+            backgroundColor: `${isOpen ? '#F2DDC2' : '#D8725B'}`,
+            transform: [{ translateY: modalY }],
+          }}
+        >
+          {isOpen && (
+            <View
+              style={{
+                backgroundColor: '#D8725B',
+                height: 50,
+                width: '100%',
+              }}
             />
-          </Animated.View>
-        }
-      </SafeAreaView>
+          )}
+          <TouchableOpacity
+            onPress={handleCompassPress}
+            style={styles.button}
+            activeOpacity={0.8}
+          >
+            <Image
+              source={require('../assets/compass.png')}
+              alt="compass"
+              style={{ height: 48, width: 48 }}
+            />
+          </TouchableOpacity>
+          <LayoutHome 
+            children={
+              newTravel ? <NewTravel navigation={navigation} newTravelName={newTravelName} /> 
+              : <TravelList setNewTravel={setNewTravel} navigation={navigation} />
+            } 
+            type={`${newTravel ? 'new' : 'travel'}`}  
+          />
+        </Animated.View>
+      </View>
     </View>
   );
 }
@@ -177,6 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 0,
     border: 0,
+    height: '100%',
   },
   button: {
     width: 70,
