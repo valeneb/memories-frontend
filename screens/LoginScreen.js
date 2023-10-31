@@ -30,7 +30,11 @@ export default function LoginScreen({navigation}) {
       {isLogin ? (
         <Login onClick={onClick} />
       ) : (
-        <SignInUp register={register} setRegister={setRegister} navigation={navigation} />
+        <SignInUp
+          register={register}
+          setRegister={setRegister}
+          navigation={navigation}
+        />
       )}
     </View>
   );

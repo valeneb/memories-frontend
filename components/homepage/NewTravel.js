@@ -9,10 +9,9 @@ import { addTravel } from '../../reducers/travel';
 import * as ImagePicker from 'expo-image-picker';
 import {API_KEY} from '@env'
 
-export default function NewTravel({navigation, newTravelName}) {
- const dispatch = useDispatch();
- const user = useSelector((state) => state.user.value);
-
+export default function NewTravel({ navigation, newTravelName }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
  const [destination, setDestination] = useState(newTravelName ? newTravelName : '');
  const [departureDate, setDepartureDate] = useState('');
  const [returnDate, setReturnDate] = useState('');
