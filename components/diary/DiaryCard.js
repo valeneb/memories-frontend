@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { updateDiary, deleteDiary } from '../../reducers/diary';
 import * as ImagePicker from 'expo-image-picker';
 import ModalPhotos from './ModalPhotos';
-
 import {API_KEY} from '@env'
 
 export default function DiaryCard({ diary, setIsEditing }) {
@@ -104,6 +103,11 @@ export default function DiaryCard({ diary, setIsEditing }) {
       setEdit(false);
       setIsEditing(false);
     })
+      .then((response) => response.json())
+      .then((data) => {
+        setEdit(false);
+        console.log('update change value', data);
+      });
   };
 
   useEffect(() => {
@@ -121,18 +125,29 @@ export default function DiaryCard({ diary, setIsEditing }) {
     <View>
       {edit && (
         <View style={tw`flex items-end mb-[.3rem]`}>
-          <TouchableOpacity style={tw`bg-[#073040] flex items-center p-[.3rem] rounded-[.5rem]`} onPress={handleDelete}>
-            <FontAwesome
-              name="times"
-              size={16}
-              color="#F2DCC2"
-            />
+          <TouchableOpacity
+            style={tw`bg-[#073040] flex items-center p-[.3rem] rounded-[.5rem]`}
+            onPress={handleDelete}
+          >
+            <FontAwesome name="times" size={16} color="#F2DCC2" />
           </TouchableOpacity>
         </View>
       )}
-      <View style={tw`${edit ? 'bg-white/40 rounded-[.5rem]' : 'bg-[#F2DDC2]'} w-full p-[.5rem] mb-[.5rem]`}>
+      <View
+        style={tw`${
+          edit ? 'bg-white/40 rounded-[.5rem]' : 'bg-[#F2DDC2]'
+        } w-full p-[.5rem] mb-[.5rem]`}
+      >
         <View style={tw`flex flex-row items-center justify-between`}>
-          <TextInput placeholder='Titre' onChangeText={(value) => setEditTitle(value)} style={tw`text-[1rem] text-black ${edit ? 'bg-white p-[.5rem] w-[90%]' : ''}`} editable={edit} value={editTitle} />
+          <TextInput
+            placeholder="Titre"
+            onChangeText={(value) => setEditTitle(value)}
+            style={tw`text-[1rem] text-black ${
+              edit ? 'bg-white p-[.5rem] w-[90%]' : ''
+            }`}
+            editable={edit}
+            value={editTitle}
+          />
           {!edit && (
             <TouchableOpacity style={tw`py-[.5rem]`} onPress={() => {
               setEdit(true);
@@ -184,7 +199,7 @@ export default function DiaryCard({ diary, setIsEditing }) {
             </View>
           )}
           <TextInput
-            placeholder='Description'
+            placeholder="Description"
             onChangeText={(value) => setEditContent(value)}
             multiline={true}
             editable={edit}
@@ -202,12 +217,11 @@ export default function DiaryCard({ diary, setIsEditing }) {
         )} 
         {edit && (
           <View style={tw`flex items-end mt-[.5rem]`}>
-            <TouchableOpacity style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`} onPress={handleChange}>
-              <FontAwesome
-                name="check"
-                size={16}
-                color="#F2DCC2"
-              />
+            <TouchableOpacity
+              style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`}
+              onPress={handleChange}
+            >
+              <FontAwesome name="check" size={16} color="#F2DCC2" />
             </TouchableOpacity>
           </View>
         )}
@@ -217,4 +231,3 @@ export default function DiaryCard({ diary, setIsEditing }) {
     </View>
   );
 }
-

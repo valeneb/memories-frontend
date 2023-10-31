@@ -13,13 +13,12 @@ import { useDispatch } from 'react-redux';
 import { deleteTravel } from '../../reducers/travel';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { reverseDate } from '../../utils/functions';
-
 import {API_KEY} from '@env'
 
 export default function TravelCard({ travel, navigation }) {
   const dispatch = useDispatch();
 
-  const [isDelete, setIsDelete] = useState(false); 
+  const [isDelete, setIsDelete] = useState(false);
 
   const handleClick = () => {
     navigation.navigate('Travel', { travelId: travel._id });
@@ -36,28 +35,32 @@ export default function TravelCard({ travel, navigation }) {
         setIsDelete(false);
       }
     })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(deleteTravel(id));
+          setIsDelete(false);
+        }
+      });
   };
-
-  console.log('travel', travel);
 
   return (
     <TouchableWithoutFeedback onPress={() => setIsDelete(false)}>
       <View style={tw`flex flex-col`}>
         {isDelete && (
           <View style={tw`flex items-end`}>
-            <TouchableOpacity style={tw`bg-[#073040] flex items-center p-[.3rem] rounded-[.5rem]`} onPress={handleDelete}>
-              <FontAwesome
-                name="times"
-                size={16}
-                color="#F2DCC2"
-              />
+            <TouchableOpacity
+              style={tw`bg-[#073040] flex items-center p-[.3rem] rounded-[.5rem]`}
+              onPress={handleDelete}
+            >
+              <FontAwesome name="times" size={16} color="#F2DCC2" />
             </TouchableOpacity>
           </View>
         )}
         <TouchableOpacity
-        style={styles.buttonTravelCard}
-        onPress={() => handleClick()}
-        onLongPress={() => setIsDelete(true)}
+          style={styles.buttonTravelCard}
+          onPress={() => handleClick()}
+          onLongPress={() => setIsDelete(true)}
         >
           <View style={styles.imageContainer}>
             {travel.coverImage ? (
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
     height: height * 0.17, // Ajustez la hauteur pour englober toute l'image
     alignItems: 'center',
     paddingRight: 8,
-    marginBottom: 32
+    marginBottom: 32,
   },
   imageContainer: {
     flexDirection: 'row',
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#073040',
     width: width * 0.52,
     borderTopRightRadius: 10,
-    borderBottomRightRadius: 10
+    borderBottomRightRadius: 10,
   },
   travelCardDate: {
     color: '#F2DCC2',
