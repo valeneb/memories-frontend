@@ -15,12 +15,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { reverseDate } from '../../utils/functions';
 import {API_KEY} from '@env'
 
-export default function TravelCard({ travel, navigation }) {
+export default function TravelCard({ travel, navigation, onClick }) {
   const dispatch = useDispatch();
 
   const [isDelete, setIsDelete] = useState(false);
 
   const handleClick = () => {
+    onClick();
     navigation.navigate('Travel', { travelId: travel._id });
   };
 

@@ -52,7 +52,7 @@ export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
   }, []);
 
   return (
-    <View style={tw`bg-[#F2DDC2] w-full h-full`}>
+    <View style={tw`bg-[#F2DDC2] w-full h-[90%]`}>
         <Header title={travel.destination} id={travel._id} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
         {diaries && diaries.length > 0 ? (
             <ScrollView style={tw`bg-[#F2DDC2] w-full h-full`}>

@@ -9,7 +9,7 @@ import { addTravel } from '../../reducers/travel';
 import * as ImagePicker from 'expo-image-picker';
 import {API_KEY} from '@env'
 
-export default function NewTravel({navigation, newTravelName}) {
+export default function NewTravel({navigation, newTravelName, onClick}) {
  const dispatch = useDispatch();
  const user = useSelector((state) => state.user.value);
 
@@ -68,6 +68,7 @@ export default function NewTravel({navigation, newTravelName}) {
    .then((response) => response.json())
    .then((data) => {
    if (data.result) {
+      onClick();
       dispatch(addTravel(data.trip));
       navigation.navigate('Travel', { travelId: data.trip._id });
    }
