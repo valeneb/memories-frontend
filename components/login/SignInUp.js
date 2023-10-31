@@ -5,8 +5,7 @@ import Button from '../Button';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { connectUser } from '../../reducers/user';
-
-const ROUTE_BACK = 'http://192.168.1.13:3000';
+import {API_KEY} from '@env'
 
 export default function SignInUp({ register, setRegister, navigation }) {
   const dispatch = useDispatch();
@@ -32,18 +31,18 @@ export default function SignInUp({ register, setRegister, navigation }) {
 
   const signIn = () => {
     if (checkEmail() && password) {
-      fetch(`${ROUTE_BACK}/user/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, password: password }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.user) {
-            dispatch(connectUser(data.user));
-            navigation.navigate('TabNavigator');
-          }
-        });
+        fetch(`${API_KEY}/user/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: password}),
+        })
+        .then (response => response.json())
+        .then(data => {
+            if (data.user) {
+                dispatch(connectUser(data.user));
+                navigation.navigate('TabNavigator');
+            }
+        })
     } else {
       setError(!password ? 'Password' : 'Email');
     }
@@ -58,27 +57,20 @@ export default function SignInUp({ register, setRegister, navigation }) {
     firstname &&
     username;
 
-  const signUp = () => {
+ const signUp = () => {
     if (registerInfosIsOk) {
-      fetch(`${ROUTE_BACK}/user/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          password,
-          username,
-          firstname,
-          lastname,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.user) {
-            dispatch(connectUser(data.user));
-            console.log(data);
-            navigation.navigate('TabNavigator');
-          }
-        });
+        fetch(`${API_KEY}/user/signup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, username, firstname, lastname}),
+        })
+        .then (response => response.json())
+        .then(data => {
+            if (data.user) {
+                dispatch(connectUser(data.user));
+                navigation.navigate('TabNavigator');
+            }
+        })
     } else {
       if (!checkEmail()) {
         setError('Email');
