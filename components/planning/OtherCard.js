@@ -31,10 +31,9 @@ export default function Other() {
   };
 
   return (
-    <View style={tw`w-11/12 h-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
-      {isEditing ? (
-        <View>
-          <View style={tw`flex-row mb-3 items-center justify-between`}>
+    <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
+        <View style={tw`flex flex-row mb-3 items-center justify-between`}>
+          {isEditing ? (
             <Input
               size="small"
               style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}
@@ -44,19 +43,35 @@ export default function Other() {
                 setInputValues({ ...inputValues, activity: text })
               }
             />
-            <FontAwesome
-              name="check"
-              color="#073040"
-              size={24}
-              onPress={handleValidation}
+          ) : (
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {inputValues.activity}
+            </Text>
+          )}
+          {isEditing ? (
+            <View style={tw`flex items-center p-[.5rem]`}>
+              <FontAwesome
+                name="check"
+                color="#073040"
+                size={24}
+                onPress={handleValidation}
+                isEditing={isEditing}
+              />
+            </View>
+          ) : (
+            <ButtonUD
+              handleUpdate={handleUpdate}
+              handleDelete={handleDelete}
               isEditing={isEditing}
             />
-          </View>
+          )}
+        </View>
 
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Date
-            </Text>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Date
+          </Text>
+          {isEditing ? (
             <InputDate
               size="small"
               placeholder="Sélectionner une date"
@@ -65,12 +80,18 @@ export default function Other() {
                 setInputValues({ ...inputValues, date: text })
               }
             />
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Adresse
+              {inputValues.date}
             </Text>
+          )}
+        </View>
+
+        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'} items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Adresse
+          </Text>
+          {isEditing ? (
             <Input
               size="small"
               placeholder="Nom de l'agence"
@@ -79,12 +100,18 @@ export default function Other() {
                 setInputValues({ ...inputValues, address: text })
               }
             />
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes
+              {inputValues.address}
             </Text>
+          )}
+        </View>
+
+        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'}  items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Notes :
+          </Text>
+          {isEditing ? (
             <Input
               size="small"
               placeholder="Commentaire"
@@ -92,50 +119,14 @@ export default function Other() {
               onChangeText={(text) =>
                 setInputValues({ ...inputValues, notes: text })
               }
+              multiline
             />
-          </View>
-        </View>
-      ) : (
-        <View>
-          <View style={tw`flex-row mb-3 items-center justify-between`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.activity}
-            </Text>
-            <ButtonUD
-              handleUpdate={handleUpdate}
-              handleDelete={handleDelete}
-              isEditing={isEditing}
-            />
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Date
-            </Text>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.date}
-            </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Adresse
-            </Text>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.address}
-            </Text>
-          </View>
-
-          <View style={tw`flex-row justify-between items-center`}>
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes
-            </Text>
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {inputValues.notes}
             </Text>
-          </View>
+          )}
         </View>
-      )}
     </View>
   );
 }

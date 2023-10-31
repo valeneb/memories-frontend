@@ -18,20 +18,20 @@ export default function SelectListing({ addInfos, toggleModal }) {
 
   return (
     <View style={tw`w-4/5 h-auto bg-[#f7ebda] rounded-[.625rem] p-3`}>
-      <View style={tw`flex-row-reverse mb-3`}>
+      <View style={tw`flex-row-reverse mb-3 rounded-[.5rem] p-[.5rem]`}>
         <FontAwesome
           name="window-close"
           color="#073040"
-          size={30}
+          size={16}
           onPress={() => toggleModal()}
-          style={tw`absolute`}
+          style={tw`absolute rounded-[.5rem]`}
         />
       </View>
       <View style={tw`justify-center items-center`}>
-        <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
+        <Text style={[tw`font-bold text-[1rem] p-[1rem]`, { color: '#073040' }]}>
           Ajouter des informations
         </Text>
-        <View style={tw`mb-3 w-11/12`}>
+        <View style={tw`my-[1rem] w-11/12`}>
           <SelectList
             setSelected={(val) => setSelected(val)}
             data={options}
@@ -54,7 +54,9 @@ export default function SelectListing({ addInfos, toggleModal }) {
             }}
           />
         </View>
-        <Button title="Ajouter" onClick={() => addInfos(selected)} />
+        <View style={tw`my-[1rem] w-full flex items-center`}>
+          <Button title="Ajouter" onClick={() => addInfos(selected)} />
+        </View>
       </View>
     </View>
   );

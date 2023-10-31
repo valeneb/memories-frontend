@@ -33,7 +33,7 @@ import {
   deletePlanning,
 } from '../../reducers/planning';
 
-const ROUTE_BACK = 'http://192.168.1.13:3000';
+import {API_KEY} from '@env';
 
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   const [edit, setEdit] = useState(false);
@@ -72,7 +72,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   console.log('planning from planning', planning);
 
   return (
-    <View style={tw`bg-[#F2DDC2] w-full h-full`}>
+    <View style={tw`bg-[#F2DDC2] w-full h-full flex items-center`}>
       <Header
         title={travel.destination}
         id={travel._id}
@@ -90,15 +90,14 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
           </TouchableOpacity>
         </ScrollView>
       ) : (
-        <View /*style={tw`w-full h-[90%] flex items-center justify-center`}*/>
+        <>
           {selectedOption ? null : (
-            <ButtonLarge
-              title="Commencer mon programme"
-              onClick={toggleModal}
-            />
+            <View style={tw`w-full h-[90%] flex items-center justify-center`}>
+                <ButtonLarge title="Commencer mon programme" onClick={toggleModal}/>
+            </View>
           )}
-        </View>
-      )}
+        </>
+      )} 
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
         <View
           style={tw`flex h-full justify-center items-center bg-opacity-50 bg-black`}
@@ -106,11 +105,13 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
           <SelectListing addInfos={addInfos} toggleModal={toggleModal} />
         </View>
       </Modal>
-      <ScrollView style={tw`sticky bo`}>
-        {selectedOption === 'Location de voiture' && <CarRentalCard />}
-        {selectedOption === "Billet d'avion" && <FlightCard />}
-        {selectedOption === 'Logement' && <AccomodationCard />}
-        {selectedOption === 'Autre' && <OtherCard />}
+      <ScrollView style={tw`w-full h-full`}>
+        <View style={`flex flex-col items-center w-full`}>
+          {selectedOption === 'Location de voiture' && <CarRentalCard />}
+          {selectedOption === "Billet d'avion" && <FlightCard />}
+          {selectedOption === 'Logement' && <AccomodationCard />}
+          {selectedOption === 'Autre' && <OtherCard />}
+        </View>
       </ScrollView>
     </View>
   );

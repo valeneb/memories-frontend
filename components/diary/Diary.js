@@ -6,7 +6,7 @@ import Header from '../Header';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { initDiary, addNewDiary } from '../../reducers/diary';
-import {API_KEY} from '@env'
+import {API_KEY} from '@env';
 
 export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
   }, []);
 
   return (
-    <View style={tw`bg-[#F2DDC2] w-full h-[80%]`}>
+    <View style={tw`bg-[#F2DDC2] w-full h-full`}>
         <Header title={travel.destination} id={travel._id} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
         {diaries && diaries.length > 0 ? (
             <ScrollView style={tw`bg-[#F2DDC2] w-full h-full`}>
@@ -67,7 +67,7 @@ export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
                 </View>            
             </ScrollView>
         ) : (
-            <View style={tw`w-full h-[90%] flex items-center justify-center`}>
+            <View style={tw`w-full h-[80%] flex items-center justify-center`}>
                 <ButtonLarge title="Commencer mon carnet de voyage" onClick={handleNewDiary}/>
             </View>
         )}
