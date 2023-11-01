@@ -72,7 +72,6 @@ export default function ProfileScreen({ navigation }) {
 
     if (!result.cancelled) {
       setAvatar(result.uri);
-      handleUpdate();
     }
   };
 
@@ -128,9 +127,7 @@ export default function ProfileScreen({ navigation }) {
                   style={tw`w-24 h-28 rounded-full overflow-hidden`}
                 />
                 <View
-                  style={{
-                    ...tw`absolute w-25 h-30 rounded-full overflow-hidden bg-[#073040]/70 items-center justify-center`,
-                  }}
+                  style={tw`absolute w-25 h-30 rounded-full overflow-hidden bg-[#073040]/70 items-center justify-center`}
                 >
                   <FontAwesome name="edit" size={40} style={tw`text-white`} />
                 </View>
