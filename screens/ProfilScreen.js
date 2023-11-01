@@ -1,4 +1,11 @@
-import { View, TextInput, Image, TouchableOpacity, Text } from 'react-native';
+import {
+  View,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  Text,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { useState } from 'react';
 import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -105,7 +112,9 @@ export default function ProfileScreen({ navigation }) {
   console.log('user', user);
 
   return (
-    <View style={tw`w-full h-full bg-[#D8725B] pt-[4rem] flex items-center`}>
+    <KeyboardAvoidingView
+      style={tw`w-full h-full bg-[#D8725B] pt-[4rem] flex items-center`}
+    >
       <View style={tw`w-full flex flex-col items-center`}>
         <View>
           {isEdit ? (
@@ -271,6 +280,6 @@ export default function ProfileScreen({ navigation }) {
           <Text style={tw`text-black`}>Confirmer la suppression du compte</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
