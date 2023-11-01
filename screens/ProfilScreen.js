@@ -47,6 +47,28 @@ export default function ProfileScreen({ navigation }) {
     setIsEdit(!isEdit);
   };
 
+  const handleChooseImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission d'accès à la galerie requise");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setAvatar(result.uri);
+      handleUpdate();
+    }
+  };
+
   // check box for delete account
   const handleSelect = () => {
     setIsSelect(!isSelect);
@@ -77,28 +99,6 @@ export default function ProfileScreen({ navigation }) {
             error
           );
         });
-    }
-  };
-
-  const handleChooseImage = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (permissionResult.granted === false) {
-      alert("Permission d'accès à la galerie requise");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [3, 4],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      handleUpdate();
-      setAvatar(result.uri);
     }
   };
 
