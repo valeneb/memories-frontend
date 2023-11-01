@@ -15,6 +15,12 @@ export default function ProfileScreen() {
   const [email, setEmail] = useState(user.email);
 
   const handleUpdate = () => {
+    const updatedData = {
+      username,
+      firstname,
+      lastname,
+      email,
+    };
     setIsEdit(!isEdit);
   };
 
@@ -138,7 +144,7 @@ export default function ProfileScreen() {
           <TouchableOpacity
             onPress={() => handleSelect()}
             style={tw`flex items-center justify-center m-auto ${
-              isSelect ? 'bg-[#073040] text-white' : 'bg-[#D9D9D9] w-8 h-8' //peut-être revoir w & h, je te laisse voir Charlie
+              isSelect ? 'bg-[#073040] text-white' : 'bg-[#D9D9D9] w-8 h-8'
             } rounded-[.625rem] p-2`}
           >
             <FontAwesome
