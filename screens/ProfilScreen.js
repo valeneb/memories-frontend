@@ -4,7 +4,9 @@ import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '../components/Input';
-import { deleteUser } from '../reducers/user';
+import * as ImagePicker from 'expo-image-picker';
+
+import { updateUser, deleteUser } from '../reducers/user';
 import { API_KEY } from '@env';
 
 export default function ProfileScreen({ navigation }) {
@@ -15,6 +17,7 @@ export default function ProfileScreen({ navigation }) {
   const [firstname, setFirstname] = useState(user.firstname);
   const [lastname, setLastname] = useState(user.lastname);
   const [email, setEmail] = useState(user.email);
+  const [avatar, setAvatar] = useState(user.avatar);
   const dispatch = useDispatch();
 
   const handleUpdate = () => {
@@ -23,17 +26,35 @@ export default function ProfileScreen({ navigation }) {
       firstname,
       lastname,
       email,
+      avatar,
     };
+    fetch(`${API_KEY}/user/updateUser?token=${user.token}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify(updatedData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        dispatch(updateUser(updatedData));
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la mise à jour des données :', error);
+      });
     setIsEdit(!isEdit);
   };
 
+  // check box for delete account
   const handleSelect = () => {
     setIsSelect(!isSelect);
   };
 
   const handleDelete = () => {
     if (!isSelect) {
-      alert("La case n'est pas cochée");
+      alert('Veuillez cocher la case pour supprimer votre compte');
     } else {
       fetch(`${API_KEY}/user/deleteUser?token=${user.token}`, {
         method: 'DELETE',
@@ -59,16 +80,76 @@ export default function ProfileScreen({ navigation }) {
     }
   };
 
+  const handleChooseImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission d'accès à la galerie requise");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      handleUpdate();
+      setAvatar(result.uri);
+    }
+  };
+
   console.log('user', user);
 
   return (
-    <View style={tw`w-full h-full bg-[#D8725B] pt-[6rem] flex items-center`}>
+    <View style={tw`w-full h-full bg-[#D8725B] pt-[4rem] flex items-center`}>
       <View style={tw`w-full flex flex-col items-center`}>
-        <TouchableOpacity
-          style={tw`p-[2rem] bg-white/60 rounded-full flex items-center`}
-        >
-          <FontAwesome name="user" size={48} />
-        </TouchableOpacity>
+        <View>
+          {isEdit ? (
+            avatar ? (
+              <TouchableOpacity
+                onPress={() => handleChooseImage()}
+                style={tw`h-28 w-24 p-[0.25rem] items-center rounded-full`}
+              >
+                <Image
+                  source={{ uri: avatar }}
+                  style={tw`w-24 h-28 rounded-full overflow-hidden`}
+                />
+                <View
+                  style={{
+                    ...tw`absolute w-25 h-30 rounded-full overflow-hidden bg-[#073040]/70 items-center justify-center`,
+                  }}
+                >
+                  <FontAwesome name="edit" size={40} style={tw`text-white`} />
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => handleChooseImage()}
+                style={tw`p-[2rem] bg-white/60 rounded-full flex items-center`}
+              >
+                <FontAwesome name="user" size={48} />
+              </TouchableOpacity>
+            )
+          ) : avatar ? (
+            <View style={tw`h-28 w-24 p-[0.25rem] items-center rounded-full`}>
+              <Image
+                source={{ uri: avatar }}
+                style={tw`w-24 h-28 rounded-full overflow-hidden`}
+              />
+            </View>
+          ) : (
+            <View
+              style={tw`p-[2rem] bg-white/60 rounded-full flex items-center`}
+            >
+              <FontAwesome name="user" size={48} />
+            </View>
+          )}
+        </View>
+
         <TouchableOpacity style={tw`w-[70%] flex items-center`}>
           <TextInput
             style={tw`${
@@ -81,8 +162,8 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <View style={tw`mt-[1rem] w-full flex items-center flex-col`}>
-        <Text style={tw`text-[1.3rem] text-white mb-[1.25rem]`}>
+      <View style={tw`w-full flex items-center flex-col`}>
+        <Text style={tw`text-[1.3rem] text-white mb-[1rem]`}>
           Mes informations personnelles
         </Text>
         <View style={tw`w-[70%] flex flex-col items-center`}>
@@ -158,7 +239,7 @@ export default function ProfileScreen({ navigation }) {
       </View>
 
       <View style={tw`mt-[2rem] w-full flex items-center flex-col`}>
-        <Text style={tw`text-[1.3rem] text-white mb-[1.25rem]`}>
+        <Text style={tw`text-[1.3rem] text-white mb-[1rem]`}>
           Supprimer mon compte
         </Text>
         <View
