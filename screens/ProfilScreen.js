@@ -4,8 +4,10 @@ import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import Input from '../components/Input';
+import { deleteUser } from '../reducers/user';
+import { API_KEY } from '@env';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const [isEdit, setIsEdit] = useState(false);
   const [isSelect, setIsSelect] = useState(false);
@@ -13,6 +15,7 @@ export default function ProfileScreen() {
   const [firstname, setFirstname] = useState(user.firstname);
   const [lastname, setLastname] = useState(user.lastname);
   const [email, setEmail] = useState(user.email);
+  const dispatch = useDispatch();
 
   const handleUpdate = () => {
     const updatedData = {
@@ -32,7 +35,27 @@ export default function ProfileScreen() {
     if (!isSelect) {
       alert("La case n'est pas cochée");
     } else {
-      console.log('Gérer la suppression ici');
+      fetch(`${API_KEY}/user/deleteUser?token=${user.token}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            navigation.navigate('Login');
+            dispatch(deleteUser());
+          } else {
+            alert("Échec de la suppression de l'utilisateur.");
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de la suppression de l'utilisateur :",
+            error
+          );
+        });
     }
   };
 
