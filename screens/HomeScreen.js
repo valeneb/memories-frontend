@@ -17,7 +17,7 @@ import { initTravel } from '../reducers/travel';
 import tw from 'twrnc';
 //import {API_KEY} from '@env';
 
-const API_KEY='http://192.168.1.59:3000';
+const API_KEY = 'http://192.168.1.59:3000';
 
 const { width, height } = Dimensions.get('window');
 
@@ -75,14 +75,14 @@ export default function HomeScreen({ navigation }) {
   const handlePressMarker = (id) => {
     navigation.navigate('Travel', { travelId: id });
   };
-  
+
   useEffect(() => {
     fetch(`${API_KEY}/travel?token=${user.token}`)
-    .then (response => response.json())
-    .then(data => {
-        dispatch(initTravel(data.trips))
-    })
-  }, [travels.length]);
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(initTravel(data.trips));
+      });
+  }, []);
 
   return (
     <View style={tw`w-full h-full`}>
@@ -97,7 +97,7 @@ export default function HomeScreen({ navigation }) {
         customMapStyle={mapStyle}
         onLongPress={(e) => handleLongPressMap(e)}
       >
-        {travels && travels.length > 0 &&(
+        {travels && travels.length > 0 && (
           <>
             {travels.map((data, i) => {
               return (
@@ -143,12 +143,23 @@ export default function HomeScreen({ navigation }) {
               style={{ height: 48, width: 48 }}
             />
           </TouchableOpacity>
-          <LayoutHome 
+          <LayoutHome
             children={
-              newTravel ? <NewTravel navigation={navigation} newTravelName={newTravelName} onClick={handleCompassPress} /> 
-              : <TravelList setNewTravel={setNewTravel} navigation={navigation} onClick={handleCompassPress}/>
-            } 
-            type={`${newTravel ? 'new' : 'travel'}`}  
+              newTravel ? (
+                <NewTravel
+                  navigation={navigation}
+                  newTravelName={newTravelName}
+                  onClick={handleCompassPress}
+                />
+              ) : (
+                <TravelList
+                  setNewTravel={setNewTravel}
+                  navigation={navigation}
+                  onClick={handleCompassPress}
+                />
+              )
+            }
+            type={`${newTravel ? 'new' : 'travel'}`}
           />
         </Animated.View>
       </View>
