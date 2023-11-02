@@ -6,25 +6,31 @@ import ButtonUD from '../ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
 import { formattedDate } from '../../utils/functions';
-//import {API_KEY} from '@env';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
+//import {API_KEY} from '@env';
 
-const API_KEY='http://192.168.1.59:3000';
+const API_KEY = 'http://192.168.1.13:3000';
 
-export default function Accomodation({infos, travelId}) {
+export default function Accomodation({ infos, travelId }) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
 
   const [hotelName, setHotelName] = useState(infos.hotelName || '');
   const [address, setAddress] = useState(infos.address || '');
-  const [checkInDate, setCheckInDate] = useState(infos.checkInDate ? formattedDate(infos.checkInDate) : '');
-  const [checkOutDate, setCheckOutDate] = useState(infos.checkOutDate ? formattedDate(infos.checkOutDate) : '');
+  const [checkInDate, setCheckInDate] = useState(
+    infos.checkInDate ? formattedDate(infos.checkInDate) : ''
+  );
+  const [checkOutDate, setCheckOutDate] = useState(
+    infos.checkOutDate ? formattedDate(infos.checkOutDate) : ''
+  );
   const [notes, setNotes] = useState(infos.comments || '');
 
   const sendInfos = (infosToSend) => {
-    let route = infos._id ? `update?travelId=${travelId}&accommodationId=${infos._id}` : `newAccomodation?_id=${travelId}`;
+    let route = infos._id
+      ? `update?travelId=${travelId}&accommodationId=${infos._id}`
+      : `newAccomodation?_id=${travelId}`;
     let method = infos._id ? 'PUT' : 'POST';
 
     fetch(`${API_KEY}/accomodation/${route}`, {
@@ -34,13 +40,18 @@ export default function Accomodation({infos, travelId}) {
       },
       body: infosToSend,
     })
-    .then(response => response.json())
-    .then(data => {
-      if(data.result) {
-        setIsEditing(false);
-        dispatch(updatePlanning({category: "accommodations", updatedData: data.accommodation}))
-      }
-    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          setIsEditing(false);
+          dispatch(
+            updatePlanning({
+              category: 'accommodations',
+              updatedData: data.accommodation,
+            })
+          );
+        }
+      });
   };
 
   const handleValidation = () => {
@@ -49,7 +60,7 @@ export default function Accomodation({infos, travelId}) {
     if (hotelName !== infos.hotelName) {
       formData.append('hotelName', hotelName);
     }
-    
+
     if (address !== infos.address) {
       formData.append('address', address);
     }
@@ -74,14 +85,19 @@ export default function Accomodation({infos, travelId}) {
   };
 
   const handleDelete = () => {
-    fetch(`${API_KEY}/accomodation/deleteAccommodation?travelId=${travelId}&accommodationId=${infos._id}`, {
-      method: 'DELETE',
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      dispatch(deletePlanning({ category: "accommodations", idToDelete: infos._id }));
-    })
+    fetch(
+      `${API_KEY}/accomodation/deleteAccommodation?travelId=${travelId}&accommodationId=${infos._id}`,
+      {
+        method: 'DELETE',
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        dispatch(
+          deletePlanning({ category: 'accommodations', idToDelete: infos._id })
+        );
+      });
   };
 
   return (
@@ -110,9 +126,7 @@ export default function Accomodation({infos, travelId}) {
 
       <View>
         <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            Du
-          </Text>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Du</Text>
           {isEditing ? (
             <InputDate
               size="small"
@@ -120,18 +134,15 @@ export default function Accomodation({infos, travelId}) {
               value={checkInDate}
               setValue={setCheckInDate}
             />
-          ) :(
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {checkInDate}
             </Text>
           )}
-          
         </View>
 
         <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>
-            Au
-          </Text>
+          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>Au</Text>
           {isEditing ? (
             <InputDate
               size="small"
@@ -145,7 +156,11 @@ export default function Accomodation({infos, travelId}) {
             </Text>
           )}
         </View>
-        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'} items-start`}>
+        <View
+          style={tw`flex-row ${
+            isEditing ? 'justify-around' : 'justify-between'
+          } items-start`}
+        >
           <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
             Hôtel
           </Text>
@@ -162,7 +177,11 @@ export default function Accomodation({infos, travelId}) {
             </Text>
           )}
         </View>
-        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'} items-start`}>
+        <View
+          style={tw`flex-row ${
+            isEditing ? 'justify-around' : 'justify-between'
+          } items-start`}
+        >
           <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
             Adresse
           </Text>
@@ -180,7 +199,11 @@ export default function Accomodation({infos, travelId}) {
           )}
         </View>
 
-        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'}  items-start`}>
+        <View
+          style={tw`flex-row ${
+            isEditing ? 'justify-around' : 'justify-between'
+          }  items-start`}
+        >
           <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
             Notes :
           </Text>

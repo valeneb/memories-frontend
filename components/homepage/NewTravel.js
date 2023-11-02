@@ -7,9 +7,9 @@ import ButtonLarge from '../ButtonLarge';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTravel } from '../../reducers/travel';
 import * as ImagePicker from 'expo-image-picker';
-//import { API_KEY } from '@env';
+//import {API_KEY} from '@env';
 
-const API_KEY='http://192.168.1.59:3000';
+const API_KEY = 'http://192.168.1.13:3000';
 
 export default function NewTravel({ navigation, newTravelName, onClick }) {
   const dispatch = useDispatch();
