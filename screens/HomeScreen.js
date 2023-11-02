@@ -15,7 +15,9 @@ import NewTravel from '../components/homepage/NewTravel';
 import { useSelector, useDispatch } from 'react-redux';
 import { initTravel } from '../reducers/travel';
 import tw from 'twrnc';
-import {API_KEY} from '@env'
+//import {API_KEY} from '@env';
+
+const API_KEY='http://192.168.1.59:3000';
 
 const { width, height } = Dimensions.get('window');
 
@@ -80,7 +82,7 @@ export default function HomeScreen({ navigation }) {
     .then(data => {
         dispatch(initTravel(data.trips))
     })
-  }, []);
+  }, [travels.length]);
 
   return (
     <View style={tw`w-full h-full`}>

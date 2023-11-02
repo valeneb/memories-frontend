@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import Input from '../Input';
 import InputDate from '../InputDate';
-import ButtonUD from './ButtonUpdateDelete';
+import ButtonUD from '../ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
 import { formattedDate } from '../../utils/functions';
