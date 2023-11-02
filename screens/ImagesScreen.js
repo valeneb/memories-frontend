@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'twrnc';
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,24 +30,28 @@ export default function ImagesScreen() {
     setShowModal(!showModal);
   };
 
-  useEffect(() => {
-    fetch(`${API_KEY}/allPictures`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          setAvatarUrl(data.avatarUrl);
-          dispatch(initAllImages(data.allImages));
-        }
+  useFocusEffect(
+    useCallback(() => {
+      const getImages = fetch(`${API_KEY}/allPictures`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            setAvatarUrl(data.avatarUrl);
+            dispatch(initAllImages(data.allImages));
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      return () => getImages;
+    }, [])
+  );
 
   return (
     <SafeAreaView style={tw`items-center bg-[#F2DDC2] flex-1 w-full h-full`}>

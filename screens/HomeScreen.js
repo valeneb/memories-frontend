@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -15,6 +15,7 @@ import NewTravel from '../components/homepage/NewTravel';
 import { useSelector, useDispatch } from 'react-redux';
 import { initTravel } from '../reducers/travel';
 import tw from 'twrnc';
+import { useFocusEffect } from '@react-navigation/native';
 //import {API_KEY} from '@env';
 
 const API_KEY = 'http://192.168.1.59:3000';
@@ -76,13 +77,20 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate('Travel', { travelId: id });
   };
 
-  useEffect(() => {
-    fetch(`${API_KEY}/travel?token=${user.token}`)
+  useFocusEffect(
+    useCallback(() => {
+      const getTravels = fetch(`${API_KEY}/travel?token=${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         dispatch(initTravel(data.trips));
+      })
+      .catch((error) => {
+        console.error(error);
       });
-  }, []);
+
+      return () => getTravels;
+    }, [])
+  );
 
   return (
     <View style={tw`w-full h-full`}>
