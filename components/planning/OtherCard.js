@@ -33,7 +33,6 @@ export default function Other({infos, travelId}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('data', data);
       if(data.result) {
         setIsEditing(false);
         dispatch(updatePlanning({category: "others", updatedData: data.other}))
@@ -73,7 +72,6 @@ export default function Other({infos, travelId}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       dispatch(deletePlanning({ category: "others", idToDelete: infos._id }));
     })
   };

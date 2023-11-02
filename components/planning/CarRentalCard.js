@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
 export default function CarLocation({infos, travelId}) {
+  console.log("infos", infos);
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
@@ -32,6 +33,7 @@ export default function CarLocation({infos, travelId}) {
     })
     .then(response => response.json())
     .then(data => {
+      console.log('data');
       if(data.result) {
         setIsEditing(false);
         dispatch(updatePlanning({category: "carRentals", updatedData: data.travel}))

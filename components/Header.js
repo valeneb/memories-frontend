@@ -98,7 +98,7 @@ export default function Header({ isDairyActive, setIsDairyActive, id }) {
         setTitle(result[0].destination);
         setDepartureDate(reverseDate(result[0].departure));
         setReturnDate(reverseDate(result[0].return));
-        setCoverImage(result[0].coverImage && result[0].coverImage.secure_url);
+        setCoverImage(result[0].coverImage && result[0].coverImage);
         setTravel(result[0]);
     }
   }, [id]);

@@ -34,6 +34,7 @@ export default function Accomodation({infos, travelId}) {
     })
     .then(response => response.json())
     .then(data => {
+      console.log('data', data);
       if(data.result) {
         setIsEditing(false);
         dispatch(updatePlanning({category: "accommodations", updatedData: data.accommodation}))

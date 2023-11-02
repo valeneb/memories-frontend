@@ -59,7 +59,7 @@ export default function TravelCard({ travel, navigation, onClick }) {
         >
           <View style={styles.imageContainer}>
             {travel.coverImage ? (
-              <Image source={{ uri: travel.coverImage.secure_url }} style={styles.image} />
+              <Image source={{ uri: travel.coverImage }} style={styles.image} />
             ) : (
               <Image source={require('../../assets/favicon.png')} style={styles.image} />
             )}
