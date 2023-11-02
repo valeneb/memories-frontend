@@ -9,10 +9,9 @@ Mais lorsque le style du Button est "actif", l'activité doit surement apparaitr
 import {
   View,
   ScrollView,
-  Text,
-  TouchableOpacity,
   StyleSheet,
   Modal,
+  Keyboard,
 } from 'react-native';
 import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
@@ -22,40 +21,23 @@ import AccomodationCard from './AccomodationCard';
 import FlightCard from './FlightCard';
 import CarRentalCard from './CarRentalCard';
 import OtherCard from './OtherCard';
-import ButtonUD from './ButtonUpdateDelete';
-import InputHour from './InputHour';
+import AddButton from '../AddButton';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   initPlanning,
   addPlanning,
-  updatePlanning,
-  deletePlanning,
 } from '../../reducers/planning';
 
-import {API_KEY} from '@env';
 
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
-  const [edit, setEdit] = useState(false);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(''); // récupérer l'option validé de la modal
 
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  const travels = useSelector((state) => state.travel.value);
   const planning = useSelector((state) => state.planning.value);
-
-  /*//Récupération des données
-    useEffect(() => {
-    fetch(METTRE LA BONNE ROUTE A FETCHER)
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch(initPlanning(data));
-      });
-  }, [planning._id]);  // vérif si c'est bien planning en BDD
-  */
-
-  const onClick = () => {
-    setEdit(!edit);
-  };
 
   // affichage de la modal
   const toggleModal = () => {
@@ -64,55 +46,101 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
 
   // ajout d'une nouvelle info voyage
   const addInfos = (val) => {
-    dispatch(addPlanning({ category: val, data: [{}] }));
-    setSelectedOption(val);
+    dispatch(addPlanning({ category: val, data: {comments: ''} }));
     toggleModal();
   };
 
-  console.log('planning from planning', planning);
+  const isTravelPlanningEmpty = () => {
+   if(planning.accommodations.length > 0 || 
+      planning.carRentals.length > 0 || 
+      planning.flights.length > 0 ||
+      planning.others.length > 0
+    ) {
+      return false;
+    }
 
+    return true;
+  }
+
+  const displayTravelPlanningElements = () => {
+    const result = [];
+
+    for (const key in planning) {
+      if (planning[key].length > 0) {
+        planning[key].map((element, index) => {
+          switch(key) {
+            case 'accommodations':
+              result.push(
+                <AccomodationCard infos={element} key={`index_${key}`} travelId={travel._id}/>
+              );
+              break;
+            case 'flights':
+              result.push(
+                <FlightCard infos={element} key={`index_${key}`} travelId={travel._id}/>
+              );
+              break;
+            case 'others':
+              result.push(
+                <OtherCard infos={element} key={`index_${key}`} travelId={travel._id}/>
+              );
+              break;
+            case 'carRentals':
+              result.push(
+                <CarRentalCard infos={element} key={`index_${key}`} travelId={travel._id}/>
+              );
+              break;
+            default:
+              break;
+          }
+        });
+      }
+    }
+
+    return result;
+  }
+
+  useEffect(() => {
+    dispatch(initPlanning(travel.travelPlanning));
+  }, [travel]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+ 
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  console.log('travel', travel.travelPlanning);
   return (
-    <View style={tw`bg-[#F2DDC2] w-full h-full flex items-center`}>
-      <Header
-        title={travel.destination}
-        id={travel._id}
-        isDairyActive={isDairyActive}
-        setIsDairyActive={setIsDairyActive}
-      />
-      {planning.length > 0 ? (
-        <ScrollView>
-          <Text>Insérer le mapping des données quand le fetch sera OK</Text>
-          <TouchableOpacity
-            style={tw`w-16 h-16 rounded-full bg-[#073040] items-center justify-center`}
-            onClick={toggleModal}
-          >
-            <Text style={tw`text-white text-4xl`}>+</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      ) : (
-        <>
-          {selectedOption ? null : (
-            <View style={tw`w-full h-[90%] flex items-center justify-center`}>
-                <ButtonLarge title="Commencer mon programme" onClick={toggleModal}/>
+    <View style={tw`bg-[#F2DDC2] w-full h-full flex justify-between`}>
+        <Header title={travel.destination} id={travel._id} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
+        {!isTravelPlanningEmpty() ? (
+          <ScrollView style={tw`w-full h-full`}>
+            <View style={tw`w-full`}>
+              {displayTravelPlanningElements()}
             </View>
-          )}
-        </>
+          </ScrollView>
+      ) : (
+        <View style={tw`w-full h-[90%] flex items-center justify-center`}>
+            <ButtonLarge title="Commencer mon programme" onClick={toggleModal}/>
+        </View>
       )} 
-      <Modal visible={isModalVisible} animationType="slide" transparent={true}>
-        <View
-          style={tw`flex h-full justify-center items-center bg-opacity-50 bg-black`}
-        >
-          <SelectListing addInfos={addInfos} toggleModal={toggleModal} />
-        </View>
-      </Modal>
-      <ScrollView style={tw`w-full h-full`}>
-        <View style={`flex flex-col items-center w-full`}>
-          {selectedOption === 'Location de voiture' && <CarRentalCard />}
-          {selectedOption === "Billet d'avion" && <FlightCard />}
-          {selectedOption === 'Logement' && <AccomodationCard />}
-          {selectedOption === 'Autre' && <OtherCard />}
-        </View>
-      </ScrollView>
+        {!isTravelPlanningEmpty() && !isKeyboardVisible && (
+          <AddButton onClick={toggleModal} />
+        )}
+        <Modal visible={isModalVisible} animationType="slide" transparent={true}>
+          <View
+            style={tw`flex h-full justify-center items-center bg-opacity-50 bg-black`}
+          >
+            <SelectListing addInfos={addInfos} toggleModal={toggleModal} />
+          </View>
+        </Modal>
     </View>
   );
 }
