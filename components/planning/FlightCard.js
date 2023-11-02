@@ -35,9 +35,10 @@ export default function Flights({infos, travelId}) {
     })
     .then(response => response.json())
     .then(data => {
+      console.log('data', data);
       if(data.result) {
         setIsEditing(false);
-        dispatch(updatePlanning({category: "flights", updatedData: data.flights}))
+        dispatch(updatePlanning({category: "flights", updatedData: data.travel}))
       }
     })
   };

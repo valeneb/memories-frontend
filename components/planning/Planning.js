@@ -1,11 +1,3 @@
-/* READ ME POUR CHARLIE
-
-Le problème vient du style ButtonLarge (l.93)
-Lorsque le style est mis en commentaire, tout se passe bien, tu cliques dessus la modal apparait tu sélectionnes ton activité et visuellement elle s'ajoute. Même si je n'arrive pas à la centrer.
-Mais lorsque le style du Button est "actif", l'activité doit surement apparaitre mes hors écran.
-
-*/
-
 import {
   View,
   ScrollView,
@@ -28,6 +20,7 @@ import {
   initPlanning,
   addPlanning,
 } from '../../reducers/planning';
+import {API_KEY} from '@env';
 
 
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
@@ -36,7 +29,6 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  const travels = useSelector((state) => state.travel.value);
   const planning = useSelector((state) => state.planning.value);
 
   // affichage de la modal
@@ -71,22 +63,22 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
           switch(key) {
             case 'accommodations':
               result.push(
-                <AccomodationCard infos={element} key={`index_${key}`} travelId={travel._id}/>
+                <AccomodationCard infos={element} key={`${index}_${key}`} travelId={travel._id}/>
               );
               break;
             case 'flights':
               result.push(
-                <FlightCard infos={element} key={`index_${key}`} travelId={travel._id}/>
+                <FlightCard infos={element} key={`${index}_${key}`} travelId={travel._id}/>
               );
               break;
             case 'others':
               result.push(
-                <OtherCard infos={element} key={`index_${key}`} travelId={travel._id}/>
+                <OtherCard infos={element} key={`${index}_${key}`} travelId={travel._id}/>
               );
               break;
             case 'carRentals':
               result.push(
-                <CarRentalCard infos={element} key={`index_${key}`} travelId={travel._id}/>
+                <CarRentalCard infos={element} key={`${index}_${key}`} travelId={travel._id}/>
               );
               break;
             default:
@@ -100,7 +92,14 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   }
 
   useEffect(() => {
-    dispatch(initPlanning(travel.travelPlanning));
+    fetch(`${API_KEY}/travel/planning?travelId=${travel._id}&userId=${travel.user}`)
+    .then (response => response.json())
+    .then(data => {
+        if(data.result) {
+          dispatch(initPlanning(data.planning));
+        }
+        console.log('data', data);
+    })
   }, [travel]);
 
   useEffect(() => {
@@ -116,7 +115,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
       keyboardDidHideListener.remove();
     };
   }, []);
-  console.log('travel', travel.travelPlanning);
+
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full flex justify-between`}>
         <Header title={travel.destination} id={travel._id} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />

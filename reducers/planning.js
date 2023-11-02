@@ -6,7 +6,7 @@ updatedData -> les nouvelles informations pour l'élément à mettre à jour.*/
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: [],
+  value: {},
 };
 
 export const planningSlice = createSlice({
@@ -18,17 +18,13 @@ export const planningSlice = createSlice({
     },
     addPlanning: (state, action) => {
       const { category, data } = action.payload;
-      console.log('category', category, 'data', data);
+
       if (category in state.value) {
         state.value[category].push(data);
       }
-      console.log('reducers', state.value);
     },
     updatePlanning: (state, action) => {
       const { category, updatedData } = action.payload;
-
-      console.log('category', category, 'updatedData', updatedData);
-      console.log('find', state.value[category]);
 
       state.value[category] = state.value[category].map((item) =>
         item._id === updatedData._id ? updatedData : item
