@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux';
 import { updateDiary, deleteDiary } from '../../reducers/diary';
 import * as ImagePicker from 'expo-image-picker';
 import ModalPhotos from './ModalPhotos';
-import ButtonUD from '../planning/ButtonUpdateDelete';
+import Loader from '../loaders/Loader';
+import ButtonUD from '../ButtonUpdateDelete';
 //import {API_KEY} from '@env';
 
 const API_KEY = 'http://192.168.1.13:3000';
@@ -19,6 +20,7 @@ export default function DiaryCard({ diary, travelId, setIsLoading }) {
   const [edit, setEdit] = useState(
     diary.title === '' && diary.description === ''
   );
+  
   const [showModal, setShowModal] = useState(false);
 
   const [editTitle, setEditTitle] = useState(diary.title);

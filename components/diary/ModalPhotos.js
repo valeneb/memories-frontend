@@ -27,7 +27,7 @@ export default function ModalPhotos({ showModal, setShowModal, editPhotos, setEd
             <View style={tw`w-full flex flex-row flex-wrap`}>
                 {editPhotos.map((photo, index) => {
                 return (
-                    <View style={tw`w-full p-[1rem]`}>
+                    <View style={tw`w-full p-[1rem]`} key={`${index}_photos`}>
                         {photo && photo.startsWith('file') && (
                             <FontAwesome
                                 name="window-close"

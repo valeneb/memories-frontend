@@ -1,8 +1,3 @@
-/* READ ME
-category -> la catégorie à mettre à jour
-    utilisation dans l'app : dispatch(addPlanning({ category: 'accomodations', data: yourAccomodationData }));
-updatedData -> les nouvelles informations pour l'élément à mettre à jour.*/
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
