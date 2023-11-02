@@ -25,7 +25,7 @@ export default function BottomTabNavigation() {
           } else if (route.name === 'Profil') {
             iconName = 'user';
           } else if (route.name === 'Search') {
-            iconName = 'search';
+            iconName = 'photo';
           }
 
           return (
