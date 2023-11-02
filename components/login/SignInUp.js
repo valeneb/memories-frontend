@@ -5,7 +5,7 @@ import Button from '../Button';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { connectUser } from '../../reducers/user';
-import {API_KEY} from '@env'
+import { API_KEY } from '@env';
 
 export default function SignInUp({ register, setRegister, navigation }) {
   const dispatch = useDispatch();
@@ -31,18 +31,18 @@ export default function SignInUp({ register, setRegister, navigation }) {
 
   const signIn = () => {
     if (checkEmail() && password) {
-        fetch(`${API_KEY}/user/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password}),
-        })
-        .then (response => response.json())
-        .then(data => {
-            if (data.user) {
-                dispatch(connectUser(data.user));
-                navigation.navigate('TabNavigator');
-            }
-        })
+      fetch(`${API_KEY}/user/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: password }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.user) {
+            dispatch(connectUser(data.user));
+            navigation.navigate('TabNavigator');
+          }
+        });
     } else {
       setError(!password ? 'Password' : 'Email');
     }
@@ -57,20 +57,26 @@ export default function SignInUp({ register, setRegister, navigation }) {
     firstname &&
     username;
 
- const signUp = () => {
+  const signUp = () => {
     if (registerInfosIsOk) {
-        fetch(`${API_KEY}/user/signup`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, username, firstname, lastname}),
-        })
-        .then (response => response.json())
-        .then(data => {
-            if (data.user) {
-                dispatch(connectUser(data.user));
-                navigation.navigate('TabNavigator');
-            }
-        })
+      fetch(`${API_KEY}/user/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          username,
+          firstname,
+          lastname,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.user) {
+            dispatch(connectUser(data.user));
+            navigation.navigate('TabNavigator');
+          }
+        });
     } else {
       if (!checkEmail()) {
         setError('Email');
@@ -113,40 +119,25 @@ export default function SignInUp({ register, setRegister, navigation }) {
         style={tw`w-[22rem] h-[22rem] opacity-70 relative`}
       />
       <View
-        style={tw`absolute w-full h-full flex flex-col items-center justify-around`}
+        style={tw`absolute w-full h-full flex flex-col items-center justify-evenly`}
       >
-        <View
-          style={tw`flex flex-col w-full items-center h-[45%] justify-center`}
-        >
-          <Input
-            placeholder="Connect with Google"
-            size={register ? 'normal' : 'large'}
-            border
-          />
-          <Input
-            placeholder="Connect with Facebook"
-            size={register ? 'normal' : 'large'}
-            border
-          />
+        <View style={tw`flex w-full items-center justify-center`}>
           <TouchableOpacity
             style={tw`p-[.5rem]`}
             onPress={() => setRegister(!register)}
           >
-            <Text>
+            <Text style={tw`font-bold text-white`}>
               {register
                 ? 'Déjà un compte ? Cliquez ici'
                 : 'Pas encore de compte ? Cliquez ici'}
             </Text>
           </TouchableOpacity>
+          <View style={tw`w-full flex flex-row items-center justify-center`}>
+            <View style={tw`w-[45%] h-px bg-white`} />
+          </View>
         </View>
-        <View style={tw`w-full flex flex-row items-center justify-center`}>
-          <View style={tw`w-[45%] h-px bg-black`} />
-          <Text style={tw`px-[1rem] text-[1.25rem]`}>OU</Text>
-          <View style={tw`w-[45%] h-px bg-black`} />
-        </View>
-        <View
-          style={tw`flex flex-col w-full items-center justify-center h-[45%] pt-[1.6rem]`}
-        >
+
+        <View style={tw`flex w-full items-center justify-center pt-[1.6rem]`}>
           {register && (
             <>
               <Input
