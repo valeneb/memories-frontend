@@ -35,10 +35,11 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
 
   const isTravelPlanningEmpty = () => {
     if (
-      planning.accommodations.length > 0 ||
-      planning.carRentals.length > 0 ||
-      planning.flights.length > 0 ||
-      planning.others.length > 0
+      Object.values(planning).some((e) => e.length > 0)
+      // planning?.accommodations.length > 0 ||
+      // planning?.carRentals.length > 0 ||
+      // planning?.flights.length > 0 ||
+      // planning?.others.length > 0
     ) {
       return false;
     }
@@ -50,6 +51,9 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     const result = [];
 
     for (const key in planning) {
+      if (!planning[key]) {
+        break;
+      }
       if (planning[key].length > 0) {
         planning[key].map((element, index) => {
           switch (key) {
@@ -99,6 +103,8 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     return result;
   };
 
+  console.log(planning);
+
   useEffect(() => {
     fetch(
       `${API_KEY}/travel/planning?travelId=${travel._id}&userId=${travel.user}`
@@ -139,16 +145,16 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
         isDairyActive={isDairyActive}
         setIsDairyActive={setIsDairyActive}
       />
-      {!isTravelPlanningEmpty() ? (
+      {planning && !isTravelPlanningEmpty() ? (
         <ScrollView style={tw`w-full h-full`}>
-          <View style={tw`w-full`}>{displayTravelPlanningElements()}</View>
+          {/* <View style={tw`w-full`}>{displayTravelPlanningElements()}</View> */}
         </ScrollView>
       ) : (
         <View style={tw`w-full h-[90%] flex items-center justify-center`}>
           <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
         </View>
       )}
-      {!isTravelPlanningEmpty() && !isKeyboardVisible && (
+      {planning && !isTravelPlanningEmpty() && !isKeyboardVisible && (
         <AddButton onClick={toggleModal} />
       )}
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
