@@ -7,45 +7,56 @@ import ButtonUD from './ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
 import { formattedDate } from '../../utils/functions';
-//import {API_KEY} from '@env';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
-const API_KEY='http://192.168.1.59:3000';
+//import {API_KEY} from '@env';
 
-export default function Flights({infos, travelId}) {
+const API_KEY = 'http://192.168.1.13:3000';
+
+export default function Flights({ infos, travelId }) {
   const dispatch = useDispatch();
-  
+
   const [isEditing, setIsEditing] = useState(!infos._id);
 
-  const [departureAirport, setDepartureAirport] = useState(infos.departureAirport || '');
-  const [arrivalAirport, setArrivalAirport] = useState(infos.arrivalAirport || '');
-  const [departureDate, setDepartureDate] = useState(infos.departureDate ? formattedDate(infos.departureDate) : '');
+  const [departureAirport, setDepartureAirport] = useState(
+    infos.departureAirport || ''
+  );
+  const [arrivalAirport, setArrivalAirport] = useState(
+    infos.arrivalAirport || ''
+  );
+  const [departureDate, setDepartureDate] = useState(
+    infos.departureDate ? formattedDate(infos.departureDate) : ''
+  );
   const [departureTime, setDepartureTime] = useState(infos.departureTime || '');
   const [flightNumber, setFlightNumber] = useState(infos.flightNumber || '');
   const [notes, setNotes] = useState(infos.comments || '');
 
   function formatTimeFromISOString(dateString) {
     const date = new Date(dateString);
-    
+
     // Obtenez l'heure et les minutes de la date
     const hours = date.getUTCHours();
     const minutes = date.getUTCMinutes();
-  
+
     // Formate l'heure en "hh:mm"
-    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-  
+    const formattedTime = `${String(hours).padStart(2, '0')}:${String(
+      minutes
+    ).padStart(2, '0')}`;
+
     return formattedTime;
   }
-  
+
   // Exemple d'utilisation
   const isoString = infos.departureTime;
   const formattedTime = formatTimeFromISOString(isoString);
-  
+
   //console.log(formattedTime);
 
   const sendInfos = (infosToSend) => {
-    let route = infos._id ? `updateFlight?travelId=${travelId}&flightId=${infos._id}` : `newFlight?_id=${travelId}`;
+    let route = infos._id
+      ? `updateFlight?travelId=${travelId}&flightId=${infos._id}`
+      : `newFlight?_id=${travelId}`;
     let method = infos._id ? 'PUT' : 'POST';
 
     fetch(`${API_KEY}/flight/${route}`, {
@@ -55,13 +66,15 @@ export default function Flights({infos, travelId}) {
       },
       body: infosToSend,
     })
-    .then(response => response.json())
-    .then(data => {
-      if(data.result) {
-        setIsEditing(false);
-        dispatch(updatePlanning({category: "flights", updatedData: data.flight}))
-      }
-    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          setIsEditing(false);
+          dispatch(
+            updatePlanning({ category: 'flights', updatedData: data.flight })
+          );
+        }
+      });
   };
 
   const handleValidation = () => {
@@ -70,7 +83,7 @@ export default function Flights({infos, travelId}) {
     if (departureAirport !== infos.departureAirport) {
       formData.append('departureAirport', departureAirport);
     }
-    
+
     if (arrivalAirport !== infos.arrivalAirport) {
       formData.append('arrivalAirport', arrivalAirport);
     }
@@ -99,15 +112,20 @@ export default function Flights({infos, travelId}) {
   };
 
   const handleDelete = () => {
-    fetch(`${API_KEY}/flight/deleteFlight?travelId=${travelId}&flightId=${infos._id}`, {
-      method: 'DELETE',
-    })
-    .then(response => response.json())
-    .then(data => {
-      dispatch(deletePlanning({ category: "flights", idToDelete: infos._id }));
-    })
+    fetch(
+      `${API_KEY}/flight/deleteFlight?travelId=${travelId}&flightId=${infos._id}`,
+      {
+        method: 'DELETE',
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(
+          deletePlanning({ category: 'flights', idToDelete: infos._id })
+        );
+      });
   };
-  
+
   return (
     <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
       <View style={tw`flex-row mb-3 items-center justify-between`}>
@@ -133,15 +151,13 @@ export default function Flights({infos, travelId}) {
       </View>
       <View>
         <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            De
-          </Text>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>De</Text>
           {isEditing ? (
             <Input
-            size="small"
-            placeholder="Aéroport de départ"
-            value={departureAirport}
-            setValue={setDepartureAirport}
+              size="small"
+              placeholder="Aéroport de départ"
+              value={departureAirport}
+              setValue={setDepartureAirport}
             />
           ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
@@ -150,15 +166,13 @@ export default function Flights({infos, travelId}) {
           )}
         </View>
         <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            À
-          </Text>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>À</Text>
           {isEditing ? (
             <Input
-            size="small"
-            placeholder="Aéroport d'arrivée"
-            value={arrivalAirport}
-            setValue={setArrivalAirport}
+              size="small"
+              placeholder="Aéroport d'arrivée"
+              value={arrivalAirport}
+              setValue={setArrivalAirport}
             />
           ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
@@ -167,15 +181,13 @@ export default function Flights({infos, travelId}) {
           )}
         </View>
         <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            Le
-          </Text>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Le</Text>
           {isEditing ? (
             <InputDate
-            size="small"
-            placeholder="Departure"
-            value={departureDate}
-            setValue={setDepartureDate}
+              size="small"
+              placeholder="Departure"
+              value={departureDate}
+              setValue={setDepartureDate}
             />
           ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
@@ -186,7 +198,7 @@ export default function Flights({infos, travelId}) {
         <View style={tw`flex-row justify-between items-start`}>
           <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
           {isEditing ? (
-            <InputHour value={departureTime} setValue={setDepartureTime}/>
+            <InputHour value={departureTime} setValue={setDepartureTime} />
           ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {departureTime}
@@ -195,15 +207,13 @@ export default function Flights({infos, travelId}) {
         </View>
 
         <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            Vol
-          </Text>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Vol</Text>
           {isEditing ? (
             <Input
-            size="small"
-            placeholder="Numéro de vol"
-            value={flightNumber}
-            setValue={setFlightNumber}
+              size="small"
+              placeholder="Numéro de vol"
+              value={flightNumber}
+              setValue={setFlightNumber}
             />
           ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
@@ -212,7 +222,11 @@ export default function Flights({infos, travelId}) {
           )}
         </View>
 
-        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'}  items-start`}>
+        <View
+          style={tw`flex-row ${
+            isEditing ? 'justify-around' : 'justify-between'
+          }  items-start`}
+        >
           <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
             Notes :
           </Text>
@@ -222,11 +236,11 @@ export default function Flights({infos, travelId}) {
             </Text>
           ) : (
             <Input
-            size="small"
-            placeholder="Commentaire"
-            value={notes}
-            setValue={setNotes}
-            multiline
+              size="small"
+              placeholder="Commentaire"
+              value={notes}
+              setValue={setNotes}
+              multiline
             />
           )}
         </View>

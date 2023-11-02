@@ -1,10 +1,4 @@
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Modal,
-  Keyboard,
-} from 'react-native';
+import { View, ScrollView, StyleSheet, Modal, Keyboard } from 'react-native';
 import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
 import Header from '../Header';
@@ -16,13 +10,10 @@ import OtherCard from './OtherCard';
 import AddButton from '../AddButton';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  initPlanning,
-  addPlanning,
-} from '../../reducers/planning';
+import { initPlanning, addPlanning } from '../../reducers/planning';
 //import {API_KEY} from '@env';
 
-const API_KEY='http://192.168.1.59:3000';
+const API_KEY = 'http://192.168.1.13:3000';
 
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
@@ -38,13 +29,14 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
 
   // ajout d'une nouvelle info voyage
   const addInfos = (val) => {
-    dispatch(addPlanning({ category: val, data: {temporaryId: "1"} }));
+    dispatch(addPlanning({ category: val, data: { temporaryId: '1' } }));
     toggleModal();
   };
 
   const isTravelPlanningEmpty = () => {
-   if(planning.accommodations.length > 0 || 
-      planning.carRentals.length > 0 || 
+    if (
+      planning.accommodations.length > 0 ||
+      planning.carRentals.length > 0 ||
       planning.flights.length > 0 ||
       planning.others.length > 0
     ) {
@@ -52,7 +44,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     }
 
     return true;
-  }
+  };
 
   const displayTravelPlanningElements = () => {
     const result = [];
@@ -60,25 +52,41 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     for (const key in planning) {
       if (planning[key].length > 0) {
         planning[key].map((element, index) => {
-          switch(key) {
+          switch (key) {
             case 'accommodations':
               result.push(
-                <AccomodationCard infos={element} key={`${index}_${key}`} travelId={travel._id}/>
+                <AccomodationCard
+                  infos={element}
+                  key={`${index}_${key}`}
+                  travelId={travel._id}
+                />
               );
               break;
             case 'flights':
               result.push(
-                <FlightCard infos={element} key={`${index}_${key}`} travelId={travel._id}/>
+                <FlightCard
+                  infos={element}
+                  key={`${index}_${key}`}
+                  travelId={travel._id}
+                />
               );
               break;
             case 'others':
               result.push(
-                <OtherCard infos={element} key={`${index}_${key}`} travelId={travel._id}/>
+                <OtherCard
+                  infos={element}
+                  key={`${index}_${key}`}
+                  travelId={travel._id}
+                />
               );
               break;
             case 'carRentals':
               result.push(
-                <CarRentalCard infos={element} key={`${index}_${key}`} travelId={travel._id}/>
+                <CarRentalCard
+                  infos={element}
+                  key={`${index}_${key}`}
+                  travelId={travel._id}
+                />
               );
               break;
             default:
@@ -89,26 +97,34 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     }
 
     return result;
-  }
+  };
 
   useEffect(() => {
-    fetch(`${API_KEY}/travel/planning?travelId=${travel._id}&userId=${travel.user}`)
-    .then (response => response.json())
-    .then(data => {
-        if(data.result) {
+    fetch(
+      `${API_KEY}/travel/planning?travelId=${travel._id}&userId=${travel.user}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
           dispatch(initPlanning(data.planning));
         }
-    })
+      });
   }, [travel._id]);
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardVisible(true);
-    });
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardVisible(false);
-    });
- 
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
@@ -117,28 +133,31 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
 
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full flex justify-between`}>
-        <Header title={travel.destination} id={travel._id} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
-        {!isTravelPlanningEmpty() ? (
-          <ScrollView style={tw`w-full h-full`}>
-            <View style={tw`w-full`}>
-            {displayTravelPlanningElements()}
-            </View>
-          </ScrollView>
+      <Header
+        title={travel.destination}
+        id={travel._id}
+        isDairyActive={isDairyActive}
+        setIsDairyActive={setIsDairyActive}
+      />
+      {!isTravelPlanningEmpty() ? (
+        <ScrollView style={tw`w-full h-full`}>
+          <View style={tw`w-full`}>{displayTravelPlanningElements()}</View>
+        </ScrollView>
       ) : (
         <View style={tw`w-full h-[90%] flex items-center justify-center`}>
-            <ButtonLarge title="Commencer mon programme" onClick={toggleModal}/>
+          <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
         </View>
-      )} 
-        {!isTravelPlanningEmpty() && !isKeyboardVisible && (
-          <AddButton onClick={toggleModal} />
-        )}
-        <Modal visible={isModalVisible} animationType="slide" transparent={true}>
-          <View
-            style={tw`flex h-full justify-center items-center bg-opacity-50 bg-black`}
-          >
-            <SelectListing addInfos={addInfos} toggleModal={toggleModal} />
-          </View>
-        </Modal>
+      )}
+      {!isTravelPlanningEmpty() && !isKeyboardVisible && (
+        <AddButton onClick={toggleModal} />
+      )}
+      <Modal visible={isModalVisible} animationType="slide" transparent={true}>
+        <View
+          style={tw`flex h-full justify-center items-center bg-opacity-50 bg-black`}
+        >
+          <SelectListing addInfos={addInfos} toggleModal={toggleModal} />
+        </View>
+      </Modal>
     </View>
   );
 }
