@@ -37,7 +37,7 @@ export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
     .then(data => {
         dispatch(initDiary(data.diaries));
     })
-  }, [])
+  }, [travel._id])
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {

@@ -38,7 +38,11 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
 
   // ajout d'une nouvelle info voyage
   const addInfos = (val) => {
+<<<<<<< HEAD
     dispatch(addPlanning({ category: val, data: {} }));
+=======
+    dispatch(addPlanning({ category: val, data: {comments: ''} }));
+>>>>>>> d23a4d04aee76634aa0de3dfaa311869605d85ed
     toggleModal();
   };
 
@@ -100,7 +104,11 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
         }
         console.log('data', data);
     })
+<<<<<<< HEAD
   }, []);
+=======
+  }, [travel]);
+>>>>>>> d23a4d04aee76634aa0de3dfaa311869605d85ed
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {

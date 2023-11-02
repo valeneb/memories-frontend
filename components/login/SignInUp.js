@@ -31,13 +31,15 @@ export default function SignInUp({ register, setRegister, navigation }) {
 
   const signIn = () => {
     if (checkEmail() && password) {
-      console.log('ici');
       fetch(`${API_KEY}/user/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, password: password }),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
         .then((data) => {
           if (data.user) {
             dispatch(connectUser(data.user));
