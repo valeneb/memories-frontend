@@ -5,21 +5,23 @@ import InputDate from '../InputDate';
 import ButtonUD from './ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
-import {API_KEY} from '@env';
+import { formattedDate } from '../../utils/functions';
+//import {API_KEY} from '@env';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
+const API_KEY='http://192.168.1.59:3000';
 
 export default function Accomodation({infos, travelId}) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
 
-  const [hotelName, setHotelName] = useState(infos.hotelName);
-  const [address, setAddress] = useState(infos.address);
-  const [checkInDate, setCheckInDate] = useState(infos.checkInDate);
-  const [checkOutDate, setCheckOutDate] = useState(infos.checkOutDate);
-  const [notes, setNotes] = useState(infos.comments);
+  const [hotelName, setHotelName] = useState(infos.hotelName || '');
+  const [address, setAddress] = useState(infos.address || '');
+  const [checkInDate, setCheckInDate] = useState(infos.checkInDate ? formattedDate(infos.checkInDate) : '');
+  const [checkOutDate, setCheckOutDate] = useState(infos.checkOutDate ? formattedDate(infos.checkOutDate) : '');
+  const [notes, setNotes] = useState(infos.comments || '');
 
   const sendInfos = (infosToSend) => {
     let route = infos._id ? `update?travelId=${travelId}&accommodationId=${infos._id}` : `newAccomodation?_id=${travelId}`;
@@ -34,7 +36,6 @@ export default function Accomodation({infos, travelId}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('data', data);
       if(data.result) {
         setIsEditing(false);
         dispatch(updatePlanning({category: "accommodations", updatedData: data.accommodation}))
@@ -83,7 +84,6 @@ export default function Accomodation({infos, travelId}) {
     })
   };
 
-  console.log('infos', infos);
   return (
     <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
       <View style={tw`flex-row mb-3 items-center justify-between`}>

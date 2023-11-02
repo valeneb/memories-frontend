@@ -6,21 +6,43 @@ import InputDate from '../InputDate';
 import ButtonUD from './ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
-import {API_KEY} from '@env';
+import { formattedDate } from '../../utils/functions';
+//import {API_KEY} from '@env';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
+const API_KEY='http://192.168.1.59:3000';
+
 export default function Flights({infos, travelId}) {
   const dispatch = useDispatch();
-
+  
   const [isEditing, setIsEditing] = useState(!infos._id);
 
-  const [departureAirport, setDepartureAirport] = useState(infos.departureAirport);
-  const [arrivalAirport, setArrivalAirport] = useState(infos.arrivalAirport);
-  const [departureDate, setDepartureDate] = useState(infos.departureDate);
-  const [departureTime, setDepartureTime] = useState(infos.departureTime);
-  const [flightNumber, setFlightNumber] = useState(infos.flightNumber);
-  const [notes, setNotes] = useState(infos.comments);
+  const [departureAirport, setDepartureAirport] = useState(infos.departureAirport || '');
+  const [arrivalAirport, setArrivalAirport] = useState(infos.arrivalAirport || '');
+  const [departureDate, setDepartureDate] = useState(infos.departureDate ? formattedDate(infos.departureDate) : '');
+  const [departureTime, setDepartureTime] = useState(infos.departureTime || '');
+  const [flightNumber, setFlightNumber] = useState(infos.flightNumber || '');
+  const [notes, setNotes] = useState(infos.comments || '');
+
+  function formatTimeFromISOString(dateString) {
+    const date = new Date(dateString);
+    
+    // Obtenez l'heure et les minutes de la date
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+  
+    // Formate l'heure en "hh:mm"
+    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  
+    return formattedTime;
+  }
+  
+  // Exemple d'utilisation
+  const isoString = infos.departureTime;
+  const formattedTime = formatTimeFromISOString(isoString);
+  
+  //console.log(formattedTime);
 
   const sendInfos = (infosToSend) => {
     let route = infos._id ? `updateFlight?travelId=${travelId}&flightId=${infos._id}` : `newFlight?_id=${travelId}`;
@@ -35,10 +57,9 @@ export default function Flights({infos, travelId}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('data', data);
       if(data.result) {
         setIsEditing(false);
-        dispatch(updatePlanning({category: "flights", updatedData: data.travel}))
+        dispatch(updatePlanning({category: "flights", updatedData: data.flight}))
       }
     })
   };
@@ -86,6 +107,7 @@ export default function Flights({infos, travelId}) {
       dispatch(deletePlanning({ category: "flights", idToDelete: infos._id }));
     })
   };
+  
   return (
     <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
       <View style={tw`flex-row mb-3 items-center justify-between`}>

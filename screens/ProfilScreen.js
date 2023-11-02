@@ -172,7 +172,7 @@ export default function ProfileScreen({ navigation }) {
         <Text style={tw`text-[1.3rem] text-white mb-[1rem]`}>
           Mes informations personnelles
         </Text>
-        <View style={tw`w-[70%] flex flex-col items-center`}>
+        <View style={tw`w-[90%] flex flex-col items-center`}>
           {isEdit ? (
             <Input
               value={firstname}

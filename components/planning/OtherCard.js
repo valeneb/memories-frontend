@@ -6,19 +6,22 @@ import ButtonUD from './ButtonUpdateDelete';
 import InputHour from './InputHour';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
-import {API_KEY} from '@env';
+import { formattedDate } from '../../utils/functions';
+//import {API_KEY} from '@env';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
+
+const API_KEY='http://192.168.1.59:3000';
 
 export default function Other({infos, travelId}) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
   
-  const [title, setTitle] = useState(infos.title);
-  const [activityDate, setActivityDate] = useState(infos.date);
-  const [activityHour, setActivityHour] = useState(infos.hour);
-  const [notes, setNotes] = useState(infos.comments);
+  const [title, setTitle] = useState(infos.title || '');
+  const [activityDate, setActivityDate] = useState(infos.date ? formattedDate(infos.date) : '');
+  const [activityHour, setActivityHour] = useState(infos.hour || '');
+  const [notes, setNotes] = useState(infos.comments || '');
 
   const sendInfos = (infosToSend) => {
     let route = infos._id ? `updateOther?travelId=${travelId}&otherId=${infos._id}` : `newOther?travelId=${travelId}`;

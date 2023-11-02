@@ -1,23 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text} from 'react-native';
-import AnimatedLoader from 'react-native-animated-loader';
+import {StyleSheet, Text, View} from 'react-native';
+import tw from 'twrnc';
 
 export default function Loader() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    setInterval(() => {
-      setVisible(!visible);
-    }, 2000);
-  }, []);
-
   return (
-    <AnimatedLoader
-      visible={visible}
-      overlayColor="rgba(255,255,255,0.75)"
-      animationStyle={styles.lottie}
-      speed={3}>
-      <Text>Doing something...</Text>
-    </AnimatedLoader>
+    <View style={tw`w-full h-full`}>
+      <Text style={tw`text-[3rem] text-black`}>Doing something...</Text>
+    </View>
   );
 }
 const styles = StyleSheet.create({

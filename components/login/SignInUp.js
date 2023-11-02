@@ -5,7 +5,9 @@ import Button from '../Button';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { connectUser } from '../../reducers/user';
-import { API_KEY } from '@env';
+//import { API_KEY } from '@env';
+
+const API_KEY = 'http://192.168.1.13:3000';
 
 export default function SignInUp({ register, setRegister, navigation }) {
   const dispatch = useDispatch();
@@ -31,7 +33,7 @@ export default function SignInUp({ register, setRegister, navigation }) {
 
   const signIn = () => {
     if (checkEmail() && password) {
-      fetch(`${API_KEY}/user/login`, {
+      fetch(`http://192.168.1.13:3000/user/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, password: password }),
@@ -59,7 +61,7 @@ export default function SignInUp({ register, setRegister, navigation }) {
 
   const signUp = () => {
     if (registerInfosIsOk) {
-      fetch(`${API_KEY}/user/signup`, {
+      fetch(`http://192.168.1.13:3000/user/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
