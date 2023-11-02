@@ -16,7 +16,11 @@ export default function BottomTabNavigation() {
           let iconName = '';
           if (route.name === 'Home') {
             return (
-              <Image source={require('../assets/logo-blanc-hd.png')} alt="home" style={{ marginBottom: -16, height: 48, width: 48 }} />
+              <Image
+                source={require('../assets/logo-blanc-hd.png')}
+                alt="home"
+                style={{ marginBottom: -16, height: 48, width: 48 }}
+              />
             );
           } else if (route.name === 'Profil') {
             iconName = 'user';
@@ -35,7 +39,13 @@ export default function BottomTabNavigation() {
         },
         tabBarActiveTintColor: '#fff',
         tabBarInactiveTintColor: 'rgba(255,255,255,1)',
-        tabBarStyle: { backgroundColor: '#D8725B', borderColor: 'transparent', shadowOpacity: 0, borderWidth: 0, elevation: 0 },
+        tabBarStyle: {
+          backgroundColor: '#D8725B',
+          borderColor: 'transparent',
+          shadowOpacity: 0,
+          borderWidth: 0,
+          elevation: 0,
+        },
         headerShown: false,
       })}
     >
@@ -63,4 +73,4 @@ export default function BottomTabNavigation() {
       />
     </Tab.Navigator>
   );
-};
+}
