@@ -1,35 +1,88 @@
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import Input from '../Input';
 import InputDate from '../InputDate';
 import ButtonUD from './ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
+import {API_KEY} from '@env';
+import { useDispatch } from 'react-redux';
+import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
-export default function Accomodation() {
-  const [isEditing, setIsEditing] = useState(true);
-  const [inputValues, setInputValues] = useState({
-    arrival: '',
-    departure: '',
-    address: '',
-    notes: '',
-  });
+
+export default function Accomodation({infos, travelId}) {
+  const dispatch = useDispatch();
+
+  const [isEditing, setIsEditing] = useState(!infos._id);
+
+  const [hotelName, setHotelName] = useState(infos.hotelName);
+  const [address, setAddress] = useState(infos.address);
+  const [checkInDate, setCheckInDate] = useState(infos.checkInDate);
+  const [checkOutDate, setCheckOutDate] = useState(infos.checkOutDate);
+  const [notes, setNotes] = useState(infos.comments);
+
+  const sendInfos = (infosToSend) => {
+    let route = infos._id ? `update?travelId=${travelId}&accommodationId=${infos._id}` : `newAccomodation?_id=${travelId}`;
+    let method = infos._id ? 'PUT' : 'POST';
+
+    fetch(`${API_KEY}/accomodation/${route}`, {
+      method: method,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: infosToSend,
+    })
+    .then(response => response.json())
+    .then(data => {
+      if(data.result) {
+        setIsEditing(false);
+        dispatch(updatePlanning({category: "accommodations", updatedData: data.accommodation}))
+      }
+    })
+  };
 
   const handleValidation = () => {
-    // à compléter
-    setIsEditing(!isEditing);
+    const formData = new FormData();
+
+    if (hotelName !== infos.hotelName) {
+      formData.append('hotelName', hotelName);
+    }
+    
+    if (address !== infos.address) {
+      formData.append('address', address);
+    }
+
+    if (checkInDate !== infos.checkInDate) {
+      formData.append('checkInDate', checkInDate);
+    }
+
+    if (checkOutDate !== infos.checkOutDate) {
+      formData.append('checkOutDate', checkOutDate);
+    }
+
+    if (notes !== infos.comments) {
+      formData.append('comments', notes);
+    }
+
+    sendInfos(formData);
   };
 
   const handleUpdate = () => {
     setIsEditing(!isEditing);
-    // à compléter pour l'envois d'infos
   };
 
   const handleDelete = () => {
-    alert('Delete Action');
-    // Mettez en place la logique de suppression ici
+    fetch(`${API_KEY}/accomodation/deleteAccommodation?travelId=${travelId}&accommodationId=${infos._id}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      dispatch(deletePlanning({ category: "accommodations", idToDelete: infos._id }));
+    })
   };
 
+  console.log('infos', infos);
   return (
     <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
       <View style={tw`flex-row mb-3 items-center justify-between`}>
@@ -37,13 +90,14 @@ export default function Accomodation() {
           Logement
         </Text>
         {isEditing ? (
-          <FontAwesome
-            name="check"
-            color="#073040"
-            size={24}
-            onPress={handleValidation}
-            isEditing={isEditing}
-          />
+          <View style={tw`flex items-end mt-[.5rem]`}>
+            <TouchableOpacity
+              style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`}
+              onPress={handleValidation}
+            >
+              <FontAwesome name="check" size={16} color="#F2DCC2" />
+            </TouchableOpacity>
+          </View>
         ) : (
           <ButtonUD
             handleUpdate={handleUpdate}
@@ -62,37 +116,51 @@ export default function Accomodation() {
             <InputDate
               size="small"
               placeholder="Arrivée"
-              value={inputValues.arrival}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, arrival: text })
-              }
+              value={checkInDate}
+              setValue={setCheckInDate}
             />
           ) :(
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.arrival}
+              {checkInDate}
             </Text>
           )}
           
         </View>
 
         <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
+          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>
+            Au
+          </Text>
           {isEditing ? (
             <InputDate
               size="small"
               placeholder="Départ"
-              value={inputValues.departure}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, departure: text })
-              }
+              value={checkOutDate}
+              setValue={setCheckOutDate}
             />
           ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.departure}
+              {checkOutDate}
             </Text>
           )}
         </View>
-
+        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'} items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Hôtel
+          </Text>
+          {isEditing ? (
+            <Input
+              size="small"
+              placeholder="Nom de l'hôtel"
+              value={hotelName}
+              setValue={setHotelName}
+            />
+          ) : (
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {hotelName}
+            </Text>
+          )}
+        </View>
         <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'} items-start`}>
           <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
             Adresse
@@ -101,14 +169,12 @@ export default function Accomodation() {
             <Input
               size="small"
               placeholder="Adresse du logement"
-              value={inputValues.address}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, adress: text })
-              }
+              value={address}
+              setValue={setAddress}
             />
           ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.address}
+              {address}
             </Text>
           )}
         </View>
@@ -121,15 +187,13 @@ export default function Accomodation() {
             <Input
               size="small"
               placeholder="Commentaire"
-              value={inputValues.notes}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, notes: text })
-              }
+              value={notes}
+              setValue={setNotes}
               multiline
             />
           ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.notes}
+              {notes}
             </Text>
           )}
         </View>

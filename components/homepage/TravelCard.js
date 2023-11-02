@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import tw from 'twrnc';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteTravel } from '../../reducers/travel';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { reverseDate } from '../../utils/functions';
@@ -17,6 +17,7 @@ import {API_KEY} from '@env'
 
 export default function TravelCard({ travel, navigation, onClick }) {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
 
   const [isDelete, setIsDelete] = useState(false);
 
@@ -26,7 +27,7 @@ export default function TravelCard({ travel, navigation, onClick }) {
   };
 
   const handleDelete = () => {
-    fetch(`${API_KEY}/travel/deleteTrip?_id=${travel._id}`, {
+    fetch(`${API_KEY}/travel/deleteTrip?travelId=${travel._id}&userId=${user._id}`, {
       method: 'DELETE',
     })
     .then (response => response.json())
@@ -36,13 +37,6 @@ export default function TravelCard({ travel, navigation, onClick }) {
         setIsDelete(false);
       }
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(deleteTravel(id));
-          setIsDelete(false);
-        }
-      });
   };
 
   return (

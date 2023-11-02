@@ -3,10 +3,9 @@ import { View } from 'react-native';
 import tw from 'twrnc';
 import Login from '../components/login/Login';
 import SignInUp from '../components/login/SignInUp';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function LoginScreen({navigation}) {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
   const [register, setRegister] = useState(false);
