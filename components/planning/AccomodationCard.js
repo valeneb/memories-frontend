@@ -12,7 +12,7 @@ import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
 const API_KEY = 'http://192.168.1.13:3000';
 
-export default function Accomodation({ infos, travelId }) {
+export default function Accomodation({ infos, travelId, setIsLoading }) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
@@ -28,6 +28,7 @@ export default function Accomodation({ infos, travelId }) {
   const [notes, setNotes] = useState(infos.comments || '');
 
   const sendInfos = (infosToSend) => {
+    setIsLoading(true);
     let route = infos._id
       ? `update?travelId=${travelId}&accommodationId=${infos._id}`
       : `newAccomodation?_id=${travelId}`;
@@ -51,6 +52,7 @@ export default function Accomodation({ infos, travelId }) {
             })
           );
         }
+        setIsLoading(false);
       });
   };
 
@@ -85,6 +87,7 @@ export default function Accomodation({ infos, travelId }) {
   };
 
   const handleDelete = () => {
+    setIsLoading(true);
     fetch(
       `${API_KEY}/accomodation/deleteAccommodation?travelId=${travelId}&accommodationId=${infos._id}`,
       {
@@ -97,6 +100,7 @@ export default function Accomodation({ infos, travelId }) {
         dispatch(
           deletePlanning({ category: 'accommodations', idToDelete: infos._id })
         );
+        setIsLoading(false);
       });
   };
 

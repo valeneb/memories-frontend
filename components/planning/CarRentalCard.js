@@ -12,7 +12,7 @@ import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
 const API_KEY = 'http://192.168.1.13:3000';
 
-export default function CarLocation({ infos, travelId }) {
+export default function CarRental({ infos, travelId, setIsLoading }) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
@@ -27,6 +27,7 @@ export default function CarLocation({ infos, travelId }) {
   const [notes, setNotes] = useState(infos.comments || '');
 
   const sendInfos = (infosToSend) => {
+    setIsLoading(true);
     let route = infos._id
       ? `updateCarRental?travelId=${travelId}&carRentalId=${infos._id}`
       : `newCar?_id=${travelId}`;
@@ -46,6 +47,7 @@ export default function CarLocation({ infos, travelId }) {
           dispatch(
             updatePlanning({ category: 'carRentals', updatedData: data.travel })
           );
+          setIsLoading(false);
         }
       });
 
@@ -76,6 +78,7 @@ export default function CarLocation({ infos, travelId }) {
     };
 
     const handleDelete = () => {
+      setIsLoading(true);
       fetch(
         `${API_KEY}/car/deleteCarRental?travelId=${travelId}&carRentalId=${infos._id}`,
         {
@@ -87,6 +90,7 @@ export default function CarLocation({ infos, travelId }) {
           dispatch(
             deletePlanning({ category: 'carRentals', idToDelete: infos._id })
           );
+          setIsLoading(false);
         });
     };
 

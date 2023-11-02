@@ -14,7 +14,7 @@ import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
 const API_KEY = 'http://192.168.1.13:3000';
 
-export default function Flights({ infos, travelId }) {
+export default function Flights({ infos, travelId, setIsLoading }) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
@@ -54,6 +54,7 @@ export default function Flights({ infos, travelId }) {
   //console.log(formattedTime);
 
   const sendInfos = (infosToSend) => {
+    setIsLoading(true);
     let route = infos._id
       ? `updateFlight?travelId=${travelId}&flightId=${infos._id}`
       : `newFlight?_id=${travelId}`;
@@ -74,6 +75,7 @@ export default function Flights({ infos, travelId }) {
             updatePlanning({ category: 'flights', updatedData: data.flight })
           );
         }
+        setIsLoading(false);
       });
   };
 
@@ -112,6 +114,7 @@ export default function Flights({ infos, travelId }) {
   };
 
   const handleDelete = () => {
+    setIsLoading(true);
     fetch(
       `${API_KEY}/flight/deleteFlight?travelId=${travelId}&flightId=${infos._id}`,
       {
@@ -123,6 +126,7 @@ export default function Flights({ infos, travelId }) {
         dispatch(
           deletePlanning({ category: 'flights', idToDelete: infos._id })
         );
+        setIsLoading(false);
       });
   };
 
@@ -149,6 +153,7 @@ export default function Flights({ infos, travelId }) {
           />
         )}
       </View>
+
       <View>
         <View style={tw`flex-row justify-between items-start`}>
           <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>De</Text>

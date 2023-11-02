@@ -14,7 +14,7 @@ import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
 const API_KEY = 'http://192.168.1.13:3000';
 
-export default function Other({ infos, travelId }) {
+export default function Other({ infos, travelId, setIsLoading }) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
@@ -27,6 +27,7 @@ export default function Other({ infos, travelId }) {
   const [notes, setNotes] = useState(infos.comments || '');
 
   const sendInfos = (infosToSend) => {
+    setIsLoading(true);
     let route = infos._id
       ? `updateOther?travelId=${travelId}&otherId=${infos._id}`
       : `newOther?travelId=${travelId}`;
@@ -47,6 +48,7 @@ export default function Other({ infos, travelId }) {
             updatePlanning({ category: 'others', updatedData: data.other })
           );
         }
+        setIsLoading(false);
       });
   };
 
@@ -77,6 +79,7 @@ export default function Other({ infos, travelId }) {
   };
 
   const handleDelete = () => {
+    setIsLoading(true);
     fetch(
       `${API_KEY}/other/deleteOther?travelId=${travelId}&otherId=${infos._id}`,
       {
@@ -86,6 +89,7 @@ export default function Other({ infos, travelId }) {
       .then((response) => response.json())
       .then((data) => {
         dispatch(deletePlanning({ category: 'others', idToDelete: infos._id }));
+        setIsLoading(false);
       });
   };
 

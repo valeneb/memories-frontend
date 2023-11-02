@@ -8,6 +8,7 @@ import FlightCard from './FlightCard';
 import CarRentalCard from './CarRentalCard';
 import OtherCard from './OtherCard';
 import AddButton from '../AddButton';
+import Loader from '../loaders/Loader';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { initPlanning, addPlanning } from '../../reducers/planning';
@@ -18,6 +19,7 @@ const API_KEY = 'http://192.168.1.13:3000';
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
   const planning = useSelector((state) => state.planning.value);
@@ -63,6 +65,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
                   infos={element}
                   key={`${index}_${key}`}
                   travelId={travel._id}
+                  setIsLoading={setIsLoading}
                 />
               );
               break;
@@ -72,6 +75,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
                   infos={element}
                   key={`${index}_${key}`}
                   travelId={travel._id}
+                  setIsLoading={setIsLoading}
                 />
               );
               break;
@@ -81,6 +85,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
                   infos={element}
                   key={`${index}_${key}`}
                   travelId={travel._id}
+                  setIsLoading={setIsLoading}
                 />
               );
               break;
@@ -90,6 +95,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
                   infos={element}
                   key={`${index}_${key}`}
                   travelId={travel._id}
+                  setIsLoading={setIsLoading}
                 />
               );
               break;
@@ -113,6 +119,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
       .then((data) => {
         if (data.result) {
           dispatch(initPlanning(data.planning));
+          setIsLoading(false);
         }
       });
   }, [travel._id]);
@@ -145,15 +152,25 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
         isDairyActive={isDairyActive}
         setIsDairyActive={setIsDairyActive}
       />
-      {planning && !isTravelPlanningEmpty() ? (
-        <ScrollView style={tw`w-full h-full`}>
-          {/* <View style={tw`w-full`}>{displayTravelPlanningElements()}</View> */}
-        </ScrollView>
+      {isLoading ? (
+        <Loader />
       ) : (
-        <View style={tw`w-full h-[90%] flex items-center justify-center`}>
-          <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
-        </View>
+        <>
+          {planning && !isTravelPlanningEmpty() ? (
+            <ScrollView style={tw`w-full h-full`}>
+              <View style={tw`w-full`}>{displayTravelPlanningElements()}</View>
+            </ScrollView>
+          ) : (
+            <View style={tw`w-full h-[90%] flex items-center justify-center`}>
+              <ButtonLarge
+                title="Commencer mon programme"
+                onClick={toggleModal}
+              />
+            </View>
+          )}
+        </>
       )}
+
       {planning && !isTravelPlanningEmpty() && !isKeyboardVisible && (
         <AddButton onClick={toggleModal} />
       )}
