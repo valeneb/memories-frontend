@@ -50,155 +50,153 @@ export default function CarRental({ infos, travelId, setIsLoading }) {
           setIsLoading(false);
         }
       });
+  };
 
-    const handleValidation = () => {
-      const formData = new FormData();
+  const handleValidation = () => {
+    const formData = new FormData();
 
-      if (startDate !== infos.rentalStart) {
-        formData.append('rentalStart', startDate);
+    if (startDate !== infos.rentalStart) {
+      formData.append('rentalStart', startDate);
+    }
+
+    if (endDate !== infos.rentalEnd) {
+      formData.append('rentalEnd', endDate);
+    }
+
+    if (agency !== infos.rentalCompany) {
+      formData.append('rentalCompany', agency);
+    }
+
+    if (notes !== infos.comments) {
+      formData.append('comments', notes);
+    }
+
+    sendInfos(formData);
+  };
+
+  const handleUpdate = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleDelete = () => {
+    setIsLoading(true);
+    fetch(
+      `${API_KEY}/car/deleteCarRental?travelId=${travelId}&carRentalId=${infos._id}`,
+      {
+        method: 'DELETE',
       }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(
+          deletePlanning({ category: 'carRentals', idToDelete: infos._id })
+        );
+        setIsLoading(false);
+      });
+  };
 
-      if (endDate !== infos.rentalEnd) {
-        formData.append('rentalEnd', endDate);
-      }
+  return (
+    <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
+      <View style={tw`flex-row mb-3 items-center justify-between`}>
+        <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
+          Location de voiture
+        </Text>
+        {isEditing ? (
+          <View style={tw`flex items-end mt-[.5rem]`}>
+            <TouchableOpacity
+              style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`}
+              onPress={handleValidation}
+            >
+              <FontAwesome name="check" size={16} color="#F2DCC2" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <ButtonUD
+            handleUpdate={handleUpdate}
+            handleDelete={handleDelete}
+            isEditing={isEditing}
+          />
+        )}
+      </View>
 
-      if (agency !== infos.rentalCompany) {
-        formData.append('rentalCompany', agency);
-      }
-
-      if (notes !== infos.comments) {
-        formData.append('comments', notes);
-      }
-
-      sendInfos(formData);
-    };
-
-    const handleUpdate = () => {
-      setIsEditing(!isEditing);
-    };
-
-    const handleDelete = () => {
-      setIsLoading(true);
-      fetch(
-        `${API_KEY}/car/deleteCarRental?travelId=${travelId}&carRentalId=${infos._id}`,
-        {
-          method: 'DELETE',
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          dispatch(
-            deletePlanning({ category: 'carRentals', idToDelete: infos._id })
-          );
-          setIsLoading(false);
-        });
-    };
-
-    return (
-      <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
-        <View style={tw`flex-row mb-3 items-center justify-between`}>
-          <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
-            Location de voiture
-          </Text>
-          {isEditing ? (
-            <View style={tw`flex items-end mt-[.5rem]`}>
-              <TouchableOpacity
-                style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`}
-                onPress={handleValidation}
-              >
-                <FontAwesome name="check" size={16} color="#F2DCC2" />
-              </TouchableOpacity>
-            </View>
+      <View>
+        <View style={tw`flex flex-row justify-between items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Du</Text>
+          {!isEditing ? (
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {startDate}
+            </Text>
           ) : (
-            <ButtonUD
-              handleUpdate={handleUpdate}
-              handleDelete={handleDelete}
-              isEditing={isEditing}
+            <InputDate
+              size="small"
+              placeholder="Début"
+              value={startDate}
+              setValue={setStartDate}
             />
           )}
         </View>
 
-        <View>
-          <View style={tw`flex flex-row justify-between items-start`}>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
+          {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Du
+              {endDate}
             </Text>
-            {!isEditing ? (
-              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-                {startDate}
-              </Text>
-            ) : (
-              <InputDate
-                size="small"
-                placeholder="Début"
-                value={startDate}
-                setValue={setStartDate}
-              />
-            )}
-          </View>
+          ) : (
+            <InputDate
+              size="small"
+              placeholder="Fin"
+              value={endDate}
+              setValue={setEndDate}
+            />
+          )}
+        </View>
 
-          <View style={tw`flex-row justify-between items-start`}>
-            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
-            {!isEditing ? (
-              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-                {endDate}
-              </Text>
-            ) : (
-              <InputDate
-                size="small"
-                placeholder="Fin"
-                value={endDate}
-                setValue={setEndDate}
-              />
-            )}
-          </View>
-
-          <View
-            style={tw`flex flex-row ${
-              isEditing ? 'justify-around' : 'justify-between'
-            } items-start`}
-          >
+        <View
+          style={tw`flex flex-row ${
+            isEditing ? 'justify-around' : 'justify-between'
+          } items-start`}
+        >
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Agence :
+          </Text>
+          {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Agence :
+              {agency}
             </Text>
-            {!isEditing ? (
-              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-                {agency}
-              </Text>
-            ) : (
-              <Input
-                size="small"
-                placeholder="Nom de l'agence"
-                value={agency}
-                setValue={setAgency}
-              />
-            )}
-          </View>
+          ) : (
+            <Input
+              size="small"
+              placeholder="Nom de l'agence"
+              value={agency}
+              setValue={setAgency}
+            />
+          )}
+        </View>
 
-          <View
-            style={tw`flex-row ${
-              isEditing ? 'justify-around' : 'justify-between'
-            }  items-start`}
-          >
+        <View
+          style={tw`flex-row ${
+            isEditing ? 'justify-around' : 'justify-between'
+          }  items-start`}
+        >
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Notes :
+          </Text>
+          {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes :
+              {notes}
             </Text>
-            {!isEditing ? (
-              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-                {notes}
-              </Text>
-            ) : (
-              <Input
-                size="small"
-                placeholder="Commentaire"
-                value={notes}
-                setValue={setNotes}
-                multiline
-              />
-            )}
-          </View>
+          ) : (
+            <Input
+              size="small"
+              placeholder="Commentaire"
+              value={notes}
+              setValue={setNotes}
+              multiline
+            />
+          )}
         </View>
       </View>
-    );
-  };
+    </View>
+  );
 }
