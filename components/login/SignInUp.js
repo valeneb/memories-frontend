@@ -31,6 +31,7 @@ export default function SignInUp({ register, setRegister, navigation }) {
 
   const signIn = () => {
     if (checkEmail() && password) {
+      console.log('ici');
       fetch(`${API_KEY}/user/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
