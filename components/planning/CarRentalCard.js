@@ -5,20 +5,22 @@ import InputDate from '../InputDate';
 import ButtonUD from './ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
-import {API_KEY} from '@env';
+import { formattedDate } from '../../utils/functions';
+//import {API_KEY} from '@env';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
+const API_KEY='http://192.168.1.59:3000';
+
 export default function CarLocation({infos, travelId}) {
-  console.log("infos", infos);
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
 
-  const [startDate, setStartDate] = useState(infos.rentalStart);
-  const [endDate, setEndDate] = useState(infos.rentalEnd);
-  const [agency, setAgency] = useState(infos.rentalCompany);
-  const [notes, setNotes] = useState(infos.comments);
+  const [startDate, setStartDate] = useState(infos.rentalStart ? formattedDate(infos.rentalStart) : '');
+  const [endDate, setEndDate] = useState(infos.rentalEnd ? formattedDate(infos.rentalEnd) : '');
+  const [agency, setAgency] = useState(infos.rentalCompany || '');
+  const [notes, setNotes] = useState(infos.comments || '');
 
   const sendInfos = (infosToSend) => {
     let route = infos._id ? `updateCarRental?travelId=${travelId}&carRentalId=${infos._id}` : `newCar?_id=${travelId}`;
@@ -33,7 +35,6 @@ export default function CarLocation({infos, travelId}) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('data');
       if(data.result) {
         setIsEditing(false);
         dispatch(updatePlanning({category: "carRentals", updatedData: data.travel}))

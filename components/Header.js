@@ -7,7 +7,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { reverseDate } from '../utils/functions';
 import { useDispatch } from 'react-redux';
 import { updateTravel } from '../reducers/travel';
-import {API_KEY} from '@env';
+//import {API_KEY} from '@env';
+
+const API_KEY='http://192.168.1.59:3000';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function Header({ isDairyActive, setIsDairyActive, id }) {
@@ -150,26 +152,18 @@ export default function Header({ isDairyActive, setIsDairyActive, id }) {
                 )}
             </View>
         </TouchableHighlight>
-      <View style={tw`flex flex-row items-center`}>
+      <View style={tw`flex flex-row items-center justify-between px-[.5rem] pt-[.5rem] w-full`}>
         <TouchableOpacity
-          style={tw`w-[50%] p-[.5rem] flex items-center ${
-            isDairyActive
-              ? 'bg-[#D3C3AE] border-b border-r border-black rounded-br-[.5rem]'
-              : 'bg-[#F2DDC2]'
-          }`}
+          style={tw`w-[48%] p-[.5rem] flex items-center rounded-[.5rem] ${isDairyActive ? 'bg-transparent border border-[#073040]' : 'bg-[#073040]'}`}
           onPress={() => setIsDairyActive(false)}
         >
-          <Text>Programme</Text>
+          <Text style={tw`${isDairyActive ? 'text-[#073040]' : 'text-[#F2DDC2]'}`}>Programme</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={tw`w-[50%] p-[.5rem] flex items-center ${
-            isDairyActive
-              ? 'bg-[#F2DDC2]'
-              : 'bg-[#D3C3AE] border-b border-l border-black rounded-bl-[.5rem]'
-          }`}
+          style={tw`w-[48%] p-[.5rem] flex items-center rounded-[.5rem] ${isDairyActive ? 'bg-[#073040]' : 'bg-transparent border border-[#073040]'}`}
           onPress={() => setIsDairyActive(true)}
         >
-          <Text>Carnet de voyage</Text>
+          <Text style={tw`${isDairyActive ? 'text-[#F2DDC2]' : 'text-[#073040]'}`}>Carnet de voyage</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -8,14 +8,16 @@ import * as ImagePicker from 'expo-image-picker';
 import ModalPhotos from './ModalPhotos';
 import Loader from '../loaders/Loader';
 import ButtonUD from '../planning/ButtonUpdateDelete';
-import {API_KEY} from '@env';
+//import {API_KEY} from '@env';
+
+const API_KEY='http://192.168.1.59:3000';
 
 export default function DiaryCard({ diary, travelId }) {
   const dispatch = useDispatch();
   const textRef = useRef();
   const [textHeight, setTextHeight] = useState(0);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [edit, setEdit] = useState(diary.title === '' && diary.description === '' );
   const [showModal, setShowModal] = useState(false);
 
@@ -84,7 +86,7 @@ export default function DiaryCard({ diary, travelId }) {
       if(data.result) {
         dispatch(updateDiary(data.diary));
         setEdit(false);
-        setIsLoading(false);
+        
       }
     });
   };

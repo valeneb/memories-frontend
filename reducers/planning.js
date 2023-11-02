@@ -27,7 +27,7 @@ export const planningSlice = createSlice({
       const { category, updatedData } = action.payload;
 
       state.value[category] = state.value[category].map((item) =>
-        item._id === updatedData._id ? updatedData : item
+        item._id === updatedData._id || item.temporaryId === "1"  ? updatedData : item
       );
     },
     deletePlanning: (state, action) => {

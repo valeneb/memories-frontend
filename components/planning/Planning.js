@@ -20,15 +20,15 @@ import {
   initPlanning,
   addPlanning,
 } from '../../reducers/planning';
-import {API_KEY} from '@env';
+//import {API_KEY} from '@env';
 
+const API_KEY='http://192.168.1.59:3000';
 
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
   const planning = useSelector((state) => state.planning.value);
 
   // affichage de la modal
@@ -38,7 +38,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
 
   // ajout d'une nouvelle info voyage
   const addInfos = (val) => {
-    dispatch(addPlanning({ category: val, data: {} }));
+    dispatch(addPlanning({ category: val, data: {temporaryId: "1"} }));
     toggleModal();
   };
 
@@ -98,9 +98,8 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
         if(data.result) {
           dispatch(initPlanning(data.planning));
         }
-        console.log('data', data);
     })
-  }, []);
+  }, [travel._id]);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -122,7 +121,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
         {!isTravelPlanningEmpty() ? (
           <ScrollView style={tw`w-full h-full`}>
             <View style={tw`w-full`}>
-              {displayTravelPlanningElements()}
+            {displayTravelPlanningElements()}
             </View>
           </ScrollView>
       ) : (
