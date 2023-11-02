@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Button from '../Button';
 import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function SelectListing({ addInfos, toggleModal }) {
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState('');
 
   const options = [
     { key: '1', value: 'Location de voiture' },
@@ -15,6 +15,26 @@ export default function SelectListing({ addInfos, toggleModal }) {
     { key: '3', value: 'Logement' },
     { key: '4', value: 'Autre' },
   ];
+
+  const updateSelectedValue = (value) => {
+    switch (value) {
+      case 'Location de voiture':
+        setSelected('carRentals');
+        break;
+      case "Billet d'avion":
+        setSelected('flights');
+        break;
+      case 'Autre':
+        setSelected('others');
+        break;
+      case 'Logement':
+        setSelected('accommodations');
+        break;
+      default:
+        setSelected('');
+        break;
+    }
+  }
 
   return (
     <View style={tw`w-4/5 h-auto bg-[#f7ebda] rounded-[.625rem] p-3`}>
@@ -33,7 +53,7 @@ export default function SelectListing({ addInfos, toggleModal }) {
         </Text>
         <View style={tw`my-[1rem] w-11/12`}>
           <SelectList
-            setSelected={(val) => setSelected(val)}
+            setSelected={(val) => updateSelectedValue(val)}
             data={options}
             save="value"
             placeholder="Sélectionnez une activité"

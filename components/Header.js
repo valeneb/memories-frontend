@@ -23,7 +23,7 @@ export default function Header({ isDairyActive, setIsDairyActive, id }) {
  const [coverImage, setCoverImage] = useState();
 
  const updateInfos = (infos) => {
-    fetch(`${API_KEY}/travel/update`, {
+    fetch(`${API_KEY}/travel/update?_id=${travel._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'multipart/form-data' },
         body: infos,
@@ -59,14 +59,13 @@ export default function Header({ isDairyActive, setIsDairyActive, id }) {
  const handleChange = async() => {
     const formData = new FormData();
 
-    formData.append('_id', travel._id);
-
     if(title !== travel.destination) {
         await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${title}&limit=1`)
         .then(response => response.json())
         .then(data => {
-            formData.append('latitude', data[0].lat);
-            formData.append('longitude', data[0].lng);
+          console.log('update', data);
+            formData.append('latitude', parseFloat(data[0].lat));
+            formData.append('longitude', parseFloat(data[0].lon));
             formData.append('destination', title);
         })
         
@@ -88,7 +87,7 @@ export default function Header({ isDairyActive, setIsDairyActive, id }) {
         });
     }
 
-    await updateInfos(formData);
+    updateInfos(formData);
     setEdit(false);
   };
 
@@ -99,7 +98,7 @@ export default function Header({ isDairyActive, setIsDairyActive, id }) {
         setTitle(result[0].destination);
         setDepartureDate(reverseDate(result[0].departure));
         setReturnDate(reverseDate(result[0].return));
-        setCoverImage(result[0].coverImage && result[0].coverImage.secure_url);
+        setCoverImage(result[0].coverImage && result[0].coverImage);
         setTravel(result[0]);
     }
   }, [id]);

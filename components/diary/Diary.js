@@ -3,6 +3,7 @@ import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
 import DiaryCard from './DiaryCard';
 import Header from '../Header';
+import AddButton from '../AddButton';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { initDiary, addNewDiary } from '../../reducers/diary';
@@ -13,13 +14,12 @@ export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
   const diaries = useSelector((state) => state.diary.value);
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
 
   const handleNewDiary = () => {
-    fetch(`${API_KEY}/diary/newDiary`, {
+    fetch(`${API_KEY}/diary/newDiary?travelId=${travel._id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({title: '', description: '', _id: travel._id}),
+        body: JSON.stringify({title: '', description: ''}),
     })
     .then (response => response.json())
     .then(data => {
@@ -52,16 +52,16 @@ export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
   }, []);
 
   return (
-    <View style={tw`bg-[#F2DDC2] w-full h-[90%]`}>
+    <View style={tw`bg-[#F2DDC2] w-full h-full flex justify-between`}>
         <Header title={travel.destination} id={travel._id} isDairyActive={isDairyActive} setIsDairyActive={setIsDairyActive} />
         {diaries && diaries.length > 0 ? (
             <ScrollView style={tw`bg-[#F2DDC2] w-full h-full`}>
                 <View style={tw`w-full h-full p-[.5rem]`}>
                     {diaries.map((diary, index) => {
                         return (
-                            <View key={index} style={tw`w-full`}>
-                                <DiaryCard diary={diary} travelId={travel._id} photos={[]} />
-                            </View>
+                          <View key={index} style={tw`w-full`}>
+                              <DiaryCard diary={diary} travelId={travel._id} />
+                          </View>
                         )
                     })}
                 </View>            
@@ -72,9 +72,7 @@ export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
             </View>
         )}
         {diaries && diaries.length > 0 && !isKeyboardVisible  && (
-            <TouchableOpacity onPress={handleNewDiary} style={tw`p-[1rem] bg-white rounded-[.5rem] w-[30%] m-[1rem]`}>
-                <Text>Add</Text>
-            </TouchableOpacity>
+          <AddButton onClick={handleNewDiary} />
         )}
     </View>
   );

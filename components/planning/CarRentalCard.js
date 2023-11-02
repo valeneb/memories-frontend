@@ -1,33 +1,80 @@
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import Input from '../Input';
 import InputDate from '../InputDate';
 import ButtonUD from './ButtonUpdateDelete';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
+import {API_KEY} from '@env';
+import { useDispatch } from 'react-redux';
+import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
-export default function CarLocation() {
-  const [isEditing, setIsEditing] = useState(true);
-  const [inputValues, setInputValues] = useState({
-    start: '',
-    end: '',
-    agency: '',
-    notes: '',
-  });
+export default function CarLocation({infos, travelId}) {
+  console.log("infos", infos);
+  const dispatch = useDispatch();
+
+  const [isEditing, setIsEditing] = useState(!infos._id);
+
+  const [startDate, setStartDate] = useState(infos.rentalStart);
+  const [endDate, setEndDate] = useState(infos.rentalEnd);
+  const [agency, setAgency] = useState(infos.rentalCompany);
+  const [notes, setNotes] = useState(infos.comments);
+
+  const sendInfos = (infosToSend) => {
+    let route = infos._id ? `updateCarRental?travelId=${travelId}&carRentalId=${infos._id}` : `newCar?_id=${travelId}`;
+    let method = infos._id ? 'PUT' : 'POST';
+
+    fetch(`${API_KEY}/car/${route}`, {
+      method: method,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: infosToSend,
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('data');
+      if(data.result) {
+        setIsEditing(false);
+        dispatch(updatePlanning({category: "carRentals", updatedData: data.travel}))
+      }
+    })
+  };
 
   const handleValidation = () => {
-    // à compléter
-    setIsEditing(!isEditing);
+    const formData = new FormData();
+
+    if (startDate !== infos.rentalStart) {
+      formData.append('rentalStart', startDate);
+    }
+    
+    if (endDate !== infos.rentalEnd) {
+      formData.append('rentalEnd', endDate);
+    }
+
+    if (agency !== infos.rentalCompany) {
+      formData.append('rentalCompany', agency);
+    }
+
+    if (notes !== infos.comments) {
+      formData.append('comments', notes);
+    }
+
+    sendInfos(formData);
   };
 
   const handleUpdate = () => {
     setIsEditing(!isEditing);
-    // à compléter pour l'envois d'infos
   };
 
   const handleDelete = () => {
-    alert('Delete Action');
-    // Mettez en place la logique de suppression ici
+    fetch(`${API_KEY}/car/deleteCarRental?travelId=${travelId}&carRentalId=${infos._id}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+      dispatch(deletePlanning({ category: "carRentals", idToDelete: infos._id }));
+    })
   };
 
   return (
@@ -37,13 +84,14 @@ export default function CarLocation() {
           Location de voiture
         </Text>
         {isEditing ? (
-          <FontAwesome
-            name="check"
-            color="#073040"
-            size={24}
-            onPress={handleValidation}
-            isEditing={isEditing}
-          />
+           <View style={tw`flex items-end mt-[.5rem]`}>
+            <TouchableOpacity
+              style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`}
+              onPress={handleValidation}
+            >
+              <FontAwesome name="check" size={16} color="#F2DCC2" />
+            </TouchableOpacity>
+          </View>
         ) : (
           <ButtonUD
             handleUpdate={handleUpdate}
@@ -60,16 +108,14 @@ export default function CarLocation() {
           </Text>
           {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.start}
+              {startDate}
             </Text>
           ) : (
             <InputDate
             size="small"
             placeholder="Début"
-            value={inputValues.start}
-            onChangeText={(text) =>
-              setInputValues({ ...inputValues, start: text })
-            }
+            value={startDate}
+            setValue={setStartDate}
             />
           )}
         </View>
@@ -78,16 +124,14 @@ export default function CarLocation() {
           <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
           {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.end}
+              {endDate}
             </Text>
           ) : (
             <InputDate
             size="small"
             placeholder="Fin"
-            value={inputValues.end}
-            onChangeText={(text) =>
-              setInputValues({ ...inputValues, end: text })
-            }
+            value={endDate}
+            setValue={setEndDate}
             />
           )}
         </View>
@@ -98,16 +142,14 @@ export default function CarLocation() {
           </Text>
           {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.agency}
+              {agency}
             </Text>
           ) : (
             <Input
               size="small"
               placeholder="Nom de l'agence"
-              value={inputValues.agency}
-              onChangeText={(text) =>
-                setInputValues({ ...inputValues, agency: text })
-              }
+              value={agency}
+              setValue={setAgency}
             />
           )}
         </View>
@@ -118,16 +160,14 @@ export default function CarLocation() {
           </Text>
           {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {inputValues.notes}
+              {notes}
             </Text>
           ) : (
             <Input
             size="small"
             placeholder="Commentaire"
-            value={inputValues.notes}
-            onChangeText={(text) =>
-              setInputValues({ ...inputValues, notes: text })
-            }
+            value={notes}
+            setValue={setNotes}
             multiline
             />
           )}
