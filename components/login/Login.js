@@ -2,7 +2,7 @@ import { View, Image } from 'react-native';
 import tw from 'twrnc';
 import Button from '../Button';
 
-export default function LoginScreen({ onClick }) {
+export default function Login({ onClick }) {
   return (
     <>
       <View style={tw`h-[60%] w-full flex items-center justify-center`}>

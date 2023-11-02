@@ -7,7 +7,9 @@ import AddButton from '../AddButton';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { initDiary, addNewDiary } from '../../reducers/diary';
-import {API_KEY} from '@env';
+//import {API_KEY} from '@env';
+
+const API_KEY='http://192.168.1.59:3000';
 
 export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
   const dispatch = useDispatch();
@@ -59,7 +61,7 @@ export default function Diary({ isDairyActive, setIsDairyActive, travel }) {
                 <View style={tw`w-full h-full p-[.5rem]`}>
                     {diaries.map((diary, index) => {
                         return (
-                          <View key={index} style={tw`w-full`}>
+                          <View key={`${index}_card`} style={tw`w-full`}>
                               <DiaryCard diary={diary} travelId={travel._id} />
                           </View>
                         )
