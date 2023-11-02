@@ -30,7 +30,6 @@ export default function ImagesScreen() {
   };
 
   useEffect(() => {
-    console.log('ici');
     fetch(`${API_KEY}/allPictures`, {
       method: 'GET',
       headers: {

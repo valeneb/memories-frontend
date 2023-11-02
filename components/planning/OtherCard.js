@@ -12,7 +12,7 @@ import { deletePlanning, updatePlanning } from '../../reducers/planning';
 
 //import {API_KEY} from '@env';
 
-const API_KEY = 'http://192.168.1.13:3000';
+const API_KEY = 'http://192.168.1.59:3000';
 
 export default function Other({ infos, travelId }) {
   const dispatch = useDispatch();

@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { initPlanning, addPlanning } from '../../reducers/planning';
 //import {API_KEY} from '@env';
 
-const API_KEY = 'http://192.168.1.13:3000';
+const API_KEY = 'http://192.168.1.59:3000';
 
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);

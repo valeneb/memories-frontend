@@ -82,7 +82,7 @@ export default function HomeScreen({ navigation }) {
     .then(data => {
         dispatch(initTravel(data.trips))
     })
-  }, [travels.length]);
+  }, []);
 
   return (
     <View style={tw`w-full h-full`}>
