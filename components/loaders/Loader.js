@@ -4,7 +4,7 @@ import tw from 'twrnc';
 export default function Loader() {
   return (
     <View style={tw`w-full h-full items-center flex justify-center`}>
-      <View style={tw`w-ful h-[40%]`}>
+      <View style={tw`h-[40%]`}>
         <ActivityIndicator
           overlayColor="rgba(255,255,255,0.5)"
           size="large"

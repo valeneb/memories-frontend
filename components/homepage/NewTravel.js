@@ -7,6 +7,7 @@ import ButtonLarge from '../ButtonLarge';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTravel } from '../../reducers/travel';
 import * as ImagePicker from 'expo-image-picker';
+import Loader from '../loaders/Loader';
 //import {API_KEY} from '@env';
 
 const API_KEY = 'http://192.168.1.59:3000';
@@ -15,6 +16,7 @@ export default function NewTravel({ navigation, newTravelName, onClick }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   const [destination, setDestination] = useState(
@@ -66,7 +68,7 @@ export default function NewTravel({ navigation, newTravelName, onClick }) {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${user.token}`,
+        'Authorization': `Bearer ${user.token}`,
       },
       body: formData,
     })
@@ -78,12 +80,15 @@ export default function NewTravel({ navigation, newTravelName, onClick }) {
           onClick();
           dispatch(addTravel(data.trip));
           navigation.navigate('Travel', { travelId: data.trip._id });
+          setIsLoading(false);
         }
       });
   };
 
   const handleCreateNewTravel = () => {
     if (destination && departureDate && returnDate) {
+      setIsLoading(true);
+
       fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${destination}&limit=1`
       )
@@ -124,52 +129,58 @@ export default function NewTravel({ navigation, newTravelName, onClick }) {
         isKeyboardVisible ? 'absolute top-50' : ''
       }`}
     >
-      <View style={tw`w-full flex flex-col items-center mt-[4rem]`}>
-        <Input
-          value={destination}
-          setValue={setDestination}
-          placeholder="Destination"
-          size="normal"
-        />
-        <InputDate
-          size="normal"
-          placeholder="Date de départ"
-          marginTop
-          value={departureDate}
-          setValue={setDepartureDate}
-        />
-        <InputDate
-          size="normal"
-          placeholder="Date de retour"
-          marginTop
-          value={returnDate}
-          setValue={setReturnDate}
-        />
-        {selectedImageUri ? (
-          <TouchableOpacity
-            onPress={handleAddImage}
-            style={tw`w-[80%] h-[50%] mt-[1rem] rounded-[.5rem]`}
-          >
-            <Image
-              source={{ uri: selectedImageUri }}
-              style={tw`w-full h-full rounded-[.5rem]`}
-              resizeMode="cover"
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <View style={tw`w-full flex flex-col items-center mt-[4rem]`}>
+            <Input
+              value={destination}
+              setValue={setDestination}
+              placeholder="Destination"
+              size="normal"
             />
-          </TouchableOpacity>
-        ) : (
+            <InputDate
+              size="normal"
+              placeholder="Date de départ"
+              marginTop
+              value={departureDate}
+              setValue={setDepartureDate}
+            />
+            <InputDate
+              size="normal"
+              placeholder="Date de retour"
+              marginTop
+              value={returnDate}
+              setValue={setReturnDate}
+            />
+            {selectedImageUri ? (
+              <TouchableOpacity
+                onPress={handleAddImage}
+                style={tw`w-[80%] h-[50%] mt-[1rem] rounded-[.5rem]`}
+              >
+                <Image
+                  source={{ uri: selectedImageUri }}
+                  style={tw`w-full h-full rounded-[.5rem]`}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+            ) : (
+              <ButtonLarge
+                icon="plus"
+                title="Ajout image de couverture"
+                onClick={handleAddImage}
+                image
+              />
+            )}
+          </View>
           <ButtonLarge
-            icon="plus"
-            title="Ajout image de couverture"
-            onClick={handleAddImage}
-            image
+            title="Créer un nouveau voyage"
+            icon="check"
+            onClick={handleCreateNewTravel}
           />
-        )}
-      </View>
-      <ButtonLarge
-        title="Créer un nouveau voyage"
-        icon="check"
-        onClick={handleCreateNewTravel}
-      />
+        </>
+      )}
     </View>
   );
 }

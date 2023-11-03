@@ -3,7 +3,7 @@ import tw from 'twrnc';
 import Input from '../Input';
 import Button from '../Button';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { connectUser } from '../../reducers/user';
 //import { API_KEY } from '@env';
 
@@ -11,6 +11,7 @@ const API_KEY = 'http://192.168.1.59:3000';
 
 export default function SignInUp({ register, setRegister, navigation }) {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -33,9 +34,12 @@ export default function SignInUp({ register, setRegister, navigation }) {
 
   const signIn = () => {
     if (checkEmail() && password) {
-      fetch(`http://192.168.1.13:3000/user/login`, {
+      fetch(`${API_KEY}/user/login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        },
         body: JSON.stringify({ email: email, password: password }),
       })
         .then((response) => response.json())
@@ -61,9 +65,11 @@ export default function SignInUp({ register, setRegister, navigation }) {
 
   const signUp = () => {
     if (registerInfosIsOk) {
-      fetch(`http://192.168.1.13:3000/user/signup`, {
+      fetch(`${API_KEY}/user/signup`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           email,
           password,

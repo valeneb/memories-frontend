@@ -7,6 +7,9 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './reducers/configureStore';
 
+import { LogBox } from 'react-native';
+LogBox.ignoreAllLogs();
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
