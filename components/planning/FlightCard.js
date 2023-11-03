@@ -9,6 +9,7 @@ import tw from 'twrnc';
 import { formattedDate } from '../../utils/functions';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
+import InputNumber from '../InputNumber';
 
 //import {API_KEY} from '@env';
 
@@ -31,27 +32,7 @@ export default function Flights({ infos, travelId }) {
   const [departureTime, setDepartureTime] = useState(infos.departureTime || '');
   const [flightNumber, setFlightNumber] = useState(infos.flightNumber || '');
   const [notes, setNotes] = useState(infos.comments || '');
-
-  function formatTimeFromISOString(dateString) {
-    const date = new Date(dateString);
-
-    // Obtenez l'heure et les minutes de la date
-    const hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes();
-
-    // Formate l'heure en "hh:mm"
-    const formattedTime = `${String(hours).padStart(2, '0')}:${String(
-      minutes
-    ).padStart(2, '0')}`;
-
-    return formattedTime;
-  }
-
-  // Exemple d'utilisation
-  const isoString = infos.departureTime;
-  const formattedTime = formatTimeFromISOString(isoString);
-
-  //console.log(formattedTime);
+  const [price, setPrice] = useState(infos.price ? infos.price.toString() : '0');
 
   const sendInfos = (infosToSend) => {
     let route = infos._id
@@ -102,6 +83,10 @@ export default function Flights({ infos, travelId }) {
 
     if (notes !== infos.comments) {
       formData.append('comments', notes);
+    }
+
+    if (price !== infos.price) {
+      formData.append('price', parseFloat(price));
     }
 
     sendInfos(formData);
@@ -243,6 +228,12 @@ export default function Flights({ infos, travelId }) {
               multiline
             />
           )}
+        </View>
+        <View style={tw`w-full flex flex-row items-center justify-end ${isEditing ? 'pr-4' : ''}`}>
+          <View style={tw`w-[40%] flex-row items-center`}>
+              <Text style={[tw`text-[1rem] px-2 pb-2`, { color: '#073040' }]}>Prix</Text>
+              <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
+          </View>
         </View>
       </View>
     </View>

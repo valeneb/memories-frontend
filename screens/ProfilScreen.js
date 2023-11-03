@@ -17,15 +17,17 @@ import { updateUser, deleteUser } from '../reducers/user';
 import { API_KEY } from '@env';
 
 export default function ProfileScreen({ navigation }) {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+
   const [isEdit, setIsEdit] = useState(false);
   const [isSelect, setIsSelect] = useState(false);
+
   const [username, setUsername] = useState(user.account.username);
   const [firstname, setFirstname] = useState(user.firstname);
   const [lastname, setLastname] = useState(user.lastname);
   const [email, setEmail] = useState(user.email);
   const [avatar, setAvatar] = useState(user.avatar);
-  const dispatch = useDispatch();
 
   const handleUpdate = () => {
     const updatedData = {
@@ -70,7 +72,7 @@ export default function ProfileScreen({ navigation }) {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setAvatar(result.uri);
     }
   };
@@ -107,8 +109,6 @@ export default function ProfileScreen({ navigation }) {
         });
     }
   };
-
-  console.log('user', user);
 
   return (
     <KeyboardAvoidingView

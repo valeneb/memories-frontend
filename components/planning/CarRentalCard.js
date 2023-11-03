@@ -8,28 +8,24 @@ import tw from 'twrnc';
 import { formattedDate } from '../../utils/functions';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
+import InputNumber from '../InputNumber';
 //import {API_KEY} from '@env';
 
-const API_KEY = 'http://192.168.1.59:3000';
+const API_KEY='http://192.168.1.59:3000';
 
-export default function CarLocation({ infos, travelId }) {
+export default function CarLocation({infos, travelId}) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
 
-  const [startDate, setStartDate] = useState(
-    infos.rentalStart ? formattedDate(infos.rentalStart) : ''
-  );
-  const [endDate, setEndDate] = useState(
-    infos.rentalEnd ? formattedDate(infos.rentalEnd) : ''
-  );
+  const [startDate, setStartDate] = useState(infos.rentalStart ? formattedDate(infos.rentalStart) : '');
+  const [endDate, setEndDate] = useState(infos.rentalEnd ? formattedDate(infos.rentalEnd) : '');
   const [agency, setAgency] = useState(infos.rentalCompany || '');
   const [notes, setNotes] = useState(infos.comments || '');
+  const [price, setPrice] = useState(infos.price ? infos.price.toString() : '0');
 
   const sendInfos = (infosToSend) => {
-    let route = infos._id
-      ? `updateCarRental?travelId=${travelId}&carRentalId=${infos._id}`
-      : `newCar?_id=${travelId}`;
+    let route = infos._id ? `updateCarRental?travelId=${travelId}&carRentalId=${infos._id}` : `newCar?_id=${travelId}`;
     let method = infos._id ? 'PUT' : 'POST';
 
     fetch(`${API_KEY}/car/${route}`, {
@@ -39,162 +35,157 @@ export default function CarLocation({ infos, travelId }) {
       },
       body: infosToSend,
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          setIsEditing(false);
-          dispatch(
-            updatePlanning({ category: 'carRentals', updatedData: data.travel })
-          );
-        }
-      });
-
-    const handleValidation = () => {
-      const formData = new FormData();
-
-      if (startDate !== infos.rentalStart) {
-        formData.append('rentalStart', startDate);
+    .then(response => response.json())
+    .then(data => {
+      if(data.result) {
+        setIsEditing(false);
+        dispatch(updatePlanning({category: "carRentals", updatedData: data.travel}))
       }
+    })
+  };
 
-      if (endDate !== infos.rentalEnd) {
-        formData.append('rentalEnd', endDate);
-      }
+  const handleValidation = () => {
+    const formData = new FormData();
 
-      if (agency !== infos.rentalCompany) {
-        formData.append('rentalCompany', agency);
-      }
+    if (startDate !== infos.rentalStart) {
+      formData.append('rentalStart', startDate);
+    }
+    
+    if (endDate !== infos.rentalEnd) {
+      formData.append('rentalEnd', endDate);
+    }
 
-      if (notes !== infos.comments) {
-        formData.append('comments', notes);
-      }
+    if (agency !== infos.rentalCompany) {
+      formData.append('rentalCompany', agency);
+    }
 
-      sendInfos(formData);
-    };
+    if (notes !== infos.comments) {
+      formData.append('comments', notes);
+    }
 
-    const handleUpdate = () => {
-      setIsEditing(!isEditing);
-    };
+    if (price !== infos.price) {
+      formData.append('price', parseFloat(price));
+    }
 
-    const handleDelete = () => {
-      fetch(
-        `${API_KEY}/car/deleteCarRental?travelId=${travelId}&carRentalId=${infos._id}`,
-        {
-          method: 'DELETE',
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          dispatch(
-            deletePlanning({ category: 'carRentals', idToDelete: infos._id })
-          );
-        });
-    };
+    sendInfos(formData);
+  };
 
-    return (
-      <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
-        <View style={tw`flex-row mb-3 items-center justify-between`}>
-          <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
-            Location de voiture
+  const handleUpdate = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleDelete = () => {
+    fetch(`${API_KEY}/car/deleteCarRental?travelId=${travelId}&carRentalId=${infos._id}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+      dispatch(deletePlanning({ category: "carRentals", idToDelete: infos._id }));
+    })
+  };
+
+  return (
+    <View style={tw`w-[90%] m-auto bg-[#f7ebda] rounded-[.625rem] p-2 mt-3`}>
+      <View style={tw`flex-row mb-3 items-center justify-between`}>
+        <Text style={[tw`font-bold text-[1rem] p-2`, { color: '#073040' }]}>
+          Location de voiture
+        </Text>
+        {isEditing ? (
+           <View style={tw`flex items-end mt-[.5rem]`}>
+            <TouchableOpacity
+              style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`}
+              onPress={handleValidation}
+            >
+              <FontAwesome name="check" size={16} color="#F2DCC2" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <ButtonUD
+            handleUpdate={handleUpdate}
+            handleDelete={handleDelete}
+            isEditing={isEditing}
+          />
+        )}
+      </View>
+
+      <View>
+        <View style={tw`flex flex-row justify-between items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Du
           </Text>
-          {isEditing ? (
-            <View style={tw`flex items-end mt-[.5rem]`}>
-              <TouchableOpacity
-                style={tw`bg-[#073040] flex items-center py-[.3rem] px-[.5rem] rounded-[.5rem]`}
-                onPress={handleValidation}
-              >
-                <FontAwesome name="check" size={16} color="#F2DCC2" />
-              </TouchableOpacity>
-            </View>
+          {!isEditing ? (
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {startDate}
+            </Text>
           ) : (
-            <ButtonUD
-              handleUpdate={handleUpdate}
-              handleDelete={handleDelete}
-              isEditing={isEditing}
+            <InputDate
+            size="small"
+            placeholder="Début"
+            value={startDate}
+            setValue={setStartDate}
             />
           )}
         </View>
 
-        <View>
-          <View style={tw`flex flex-row justify-between items-start`}>
+        <View style={tw`flex-row justify-between items-start`}>
+          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
+          {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Du
+              {endDate}
             </Text>
-            {!isEditing ? (
-              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-                {startDate}
-              </Text>
-            ) : (
-              <InputDate
-                size="small"
-                placeholder="Début"
-                value={startDate}
-                setValue={setStartDate}
-              />
-            )}
-          </View>
+          ) : (
+            <InputDate
+            size="small"
+            placeholder="Fin"
+            value={endDate}
+            setValue={setEndDate}
+            />
+          )}
+        </View>
 
-          <View style={tw`flex-row justify-between items-start`}>
-            <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
-            {!isEditing ? (
-              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-                {endDate}
-              </Text>
-            ) : (
-              <InputDate
-                size="small"
-                placeholder="Fin"
-                value={endDate}
-                setValue={setEndDate}
-              />
-            )}
-          </View>
-
-          <View
-            style={tw`flex flex-row ${
-              isEditing ? 'justify-around' : 'justify-between'
-            } items-start`}
-          >
+        <View style={tw`flex flex-row ${isEditing ? 'justify-around' : 'justify-between'} items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Agence :
+          </Text>
+          {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Agence :
+              {agency}
             </Text>
-            {!isEditing ? (
-              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-                {agency}
-              </Text>
-            ) : (
-              <Input
-                size="small"
-                placeholder="Nom de l'agence"
-                value={agency}
-                setValue={setAgency}
-              />
-            )}
-          </View>
+          ) : (
+            <Input
+              size="small"
+              placeholder="Nom de l'agence"
+              value={agency}
+              setValue={setAgency}
+            />
+          )}
+        </View>
 
-          <View
-            style={tw`flex-row ${
-              isEditing ? 'justify-around' : 'justify-between'
-            }  items-start`}
-          >
+        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'}  items-start`}>
+          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            Notes :
+          </Text>
+          {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              Notes :
+              {notes}
             </Text>
-            {!isEditing ? (
-              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-                {notes}
-              </Text>
-            ) : (
-              <Input
-                size="small"
-                placeholder="Commentaire"
-                value={notes}
-                setValue={setNotes}
-                multiline
-              />
-            )}
+          ) : (
+            <Input
+            size="small"
+            placeholder="Commentaire"
+            value={notes}
+            setValue={setNotes}
+            multiline
+            />
+          )}
+        </View>
+        <View style={tw`w-full flex flex-row items-center justify-end ${isEditing ? 'pr-4' : ''}`}>
+          <View style={tw`w-[40%] flex-row items-center`}>
+              <Text style={[tw`text-[1rem] px-2 pb-2`, { color: '#073040' }]}>Prix</Text>
+              <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
           </View>
         </View>
       </View>
-    );
-  };
+    </View>
+  );
 }

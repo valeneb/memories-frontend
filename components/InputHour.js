@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';

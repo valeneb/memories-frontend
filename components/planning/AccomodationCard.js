@@ -8,6 +8,7 @@ import tw from 'twrnc';
 import { formattedDate } from '../../utils/functions';
 import { useDispatch } from 'react-redux';
 import { deletePlanning, updatePlanning } from '../../reducers/planning';
+import InputNumber from '../InputNumber';
 //import {API_KEY} from '@env';
 
 const API_KEY = 'http://192.168.1.59:3000';
@@ -26,6 +27,7 @@ export default function Accomodation({ infos, travelId }) {
     infos.checkOutDate ? formattedDate(infos.checkOutDate) : ''
   );
   const [notes, setNotes] = useState(infos.comments || '');
+  const [price, setPrice] = useState(infos.price ? infos.price.toString() : '0');
 
   const sendInfos = (infosToSend) => {
     let route = infos._id
@@ -75,6 +77,10 @@ export default function Accomodation({ infos, travelId }) {
 
     if (notes !== infos.comments) {
       formData.append('comments', notes);
+    }
+
+    if (price !== infos.price) {
+      formData.append('price', parseFloat(price));
     }
 
     sendInfos(formData);
@@ -198,7 +204,6 @@ export default function Accomodation({ infos, travelId }) {
             </Text>
           )}
         </View>
-
         <View
           style={tw`flex-row ${
             isEditing ? 'justify-around' : 'justify-between'
@@ -220,6 +225,12 @@ export default function Accomodation({ infos, travelId }) {
               {notes}
             </Text>
           )}
+        </View>
+        <View style={tw`w-full flex flex-row items-center justify-end ${isEditing ? 'pr-4' : ''}`}>
+          <View style={tw`w-[40%] flex-row items-center`}>
+              <Text style={[tw`text-[1rem] px-2 pb-2`, { color: '#073040' }]}>Prix</Text>
+              <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
+          </View>
         </View>
       </View>
     </View>

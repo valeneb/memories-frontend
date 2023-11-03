@@ -15,12 +15,12 @@ export default function LoginScreen({ onClick }) {
       <View style={tw`h-[40%] w-full flex flex-col items-center`}>
         <Button
           title="Sign in"
-          onClick={() => onClick('Sign in')}
+          onClick={onClick}
           marginBottom
         />
         <Button
           title="Sign up"
-          onClick={() => onClick('Sign up')}
+          onClick={onClick}
           marginBottom
         />
       </View>

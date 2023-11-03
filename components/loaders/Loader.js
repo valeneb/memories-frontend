@@ -3,16 +3,18 @@ import tw from 'twrnc';
 
 export default function Loader() {
   return (
-    <View style={tw`w-full h-full items-center`}>
-      <ActivityIndicator
-        overlayColor="rgba(255,255,255,0.5)"
-        size="large"
-        color="#073040"
-        style={styles.loader}
-      />
-      <Text style={tw`text-[1rem] text-[#073040] font-bold`}>
-        Chargement...
-      </Text>
+    <View style={tw`w-full h-full items-center flex justify-center`}>
+      <View style={tw`w-ful h-[40%]`}>
+        <ActivityIndicator
+          overlayColor="rgba(255,255,255,0.5)"
+          size="large"
+          color="#073040"
+          style={styles.loader}
+        />
+        <Text style={tw`text-[1rem] text-[#073040] font-bold`}>
+          Chargement...
+        </Text>
+      </View>
     </View>
   );
 }

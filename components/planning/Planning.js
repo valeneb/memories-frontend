@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet, Modal, Keyboard } from 'react-native';
+import { View, ScrollView, StyleSheet, Modal, Keyboard, Text } from 'react-native';
 import tw from 'twrnc';
 import ButtonLarge from '../ButtonLarge';
 import Header from '../Header';
@@ -16,11 +16,12 @@ import { initPlanning, addPlanning } from '../../reducers/planning';
 const API_KEY = 'http://192.168.1.59:3000';
 
 export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-
   const dispatch = useDispatch();
   const planning = useSelector((state) => state.planning.value);
+
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  let budget = 0;
 
   // affichage de la modal
   const toggleModal = () => {
@@ -34,12 +35,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   };
 
   const isTravelPlanningEmpty = () => {
-    if (
-      planning.accommodations.length > 0 ||
-      planning.carRentals.length > 0 ||
-      planning.flights.length > 0 ||
-      planning.others.length > 0
-    ) {
+    if (Object.values(planning).some((e) => e.length > 0)) {
       return false;
     }
 
@@ -52,6 +48,9 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     for (const key in planning) {
       if (planning[key].length > 0) {
         planning[key].map((element, index) => {
+          if (element.price) {
+            budget += element.price;
+          }
           switch (key) {
             case 'accommodations':
               result.push(
@@ -131,6 +130,8 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     };
   }, []);
 
+  console.log('planning', planning);
+
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full flex justify-between`}>
       <Header
@@ -149,7 +150,13 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
         </View>
       )}
       {!isTravelPlanningEmpty() && !isKeyboardVisible && (
-        <AddButton onClick={toggleModal} />
+        <View style={tw`w-full flex flex-row items-center justify-between`}>
+          <AddButton onClick={toggleModal} />
+          <View style={tw`w-[40%] flex items-center flex-row justify-between p-[.8rem] rounded-[.5rem] m-[.5rem] bg-[#073040]`}>
+            <Text style={tw`text-[#F2DDC2] font-bold`}>Budget :</Text>
+            <Text style={tw`text-[#F2DDC2] font-bold`}>{budget} €</Text>
+          </View>
+        </View>
       )}
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
         <View
