@@ -11,6 +11,7 @@ import AddButton from '../AddButton';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { initPlanning, addPlanning } from '../../reducers/planning';
+import Loader from '../loaders/Loader';
 //import {API_KEY} from '@env';
 
 const API_KEY = 'http://192.168.1.59:3000';
@@ -19,6 +20,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
   const dispatch = useDispatch();
   const planning = useSelector((state) => state.planning.value);
 
+  const [isLoading, setIsLoading] = useState(true);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   let budget = 0;
@@ -58,6 +60,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
                   infos={element}
                   key={`${index}_${key}`}
                   travelId={travel._id}
+                  setIsLoading={setIsLoading}
                 />
               );
               break;
@@ -67,6 +70,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
                   infos={element}
                   key={`${index}_${key}`}
                   travelId={travel._id}
+                  setIsLoading={setIsLoading}
                 />
               );
               break;
@@ -76,6 +80,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
                   infos={element}
                   key={`${index}_${key}`}
                   travelId={travel._id}
+                  setIsLoading={setIsLoading}
                 />
               );
               break;
@@ -85,6 +90,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
                   infos={element}
                   key={`${index}_${key}`}
                   travelId={travel._id}
+                  setIsLoading={setIsLoading}
                 />
               );
               break;
@@ -106,6 +112,7 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
       .then((data) => {
         if (data.result) {
           dispatch(initPlanning(data.planning));
+          setIsLoading(false);
         }
       });
   }, [travel._id]);
@@ -130,8 +137,6 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
     };
   }, []);
 
-  console.log('planning', planning);
-
   return (
     <View style={tw`bg-[#F2DDC2] w-full h-full flex justify-between`}>
       <Header
@@ -140,23 +145,29 @@ export default function Planning({ isDairyActive, setIsDairyActive, travel }) {
         isDairyActive={isDairyActive}
         setIsDairyActive={setIsDairyActive}
       />
-      {!isTravelPlanningEmpty() ? (
-        <ScrollView style={tw`w-full h-full`}>
-          <View style={tw`w-full`}>{displayTravelPlanningElements()}</View>
-        </ScrollView>
+      {isLoading ? (
+        <Loader />
       ) : (
-        <View style={tw`w-full h-[90%] flex items-center justify-center`}>
-          <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
-        </View>
-      )}
-      {!isTravelPlanningEmpty() && !isKeyboardVisible && (
-        <View style={tw`w-full flex flex-row items-center justify-between`}>
-          <AddButton onClick={toggleModal} />
-          <View style={tw`w-[40%] flex items-center flex-row justify-between p-[.8rem] rounded-[.5rem] m-[.5rem] bg-[#073040]`}>
-            <Text style={tw`text-[#F2DDC2] font-bold`}>Budget :</Text>
-            <Text style={tw`text-[#F2DDC2] font-bold`}>{budget} €</Text>
+        <>
+          {!isTravelPlanningEmpty() ? (
+          <ScrollView style={tw`w-full h-full`}>
+            <View style={tw`w-full`}>{displayTravelPlanningElements()}</View>
+          </ScrollView>
+          ) : (
+          <View style={tw`w-full h-[90%] flex items-center justify-center`}>
+            <ButtonLarge title="Commencer mon programme" onClick={toggleModal} />
           </View>
-        </View>
+          )}
+          {!isTravelPlanningEmpty() && !isKeyboardVisible && (
+            <View style={tw`w-full flex flex-row items-center justify-between`}>
+              <AddButton onClick={toggleModal} />
+              <View style={tw`w-[40%] flex items-center flex-row justify-between p-[.8rem] rounded-[.5rem] m-[.5rem] bg-[#073040]`}>
+                <Text style={tw`text-[#F2DDC2] font-bold`}>Budget :</Text>
+                <Text style={tw`text-[#F2DDC2] font-bold`}>{budget} €</Text>
+              </View>
+            </View>
+          )}
+        </>
       )}
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
         <View

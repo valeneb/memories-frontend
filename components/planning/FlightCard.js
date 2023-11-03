@@ -15,7 +15,7 @@ import InputNumber from '../InputNumber';
 
 const API_KEY = 'http://192.168.1.59:3000';
 
-export default function Flights({ infos, travelId }) {
+export default function Flights({ infos, travelId, setIsLoading }) {
   const dispatch = useDispatch();
 
   const [isEditing, setIsEditing] = useState(!infos._id);
@@ -35,6 +35,8 @@ export default function Flights({ infos, travelId }) {
   const [price, setPrice] = useState(infos.price ? infos.price.toString() : '0');
 
   const sendInfos = (infosToSend) => {
+    setIsLoading(true);
+
     let route = infos._id
       ? `updateFlight?travelId=${travelId}&flightId=${infos._id}`
       : `newFlight?_id=${travelId}`;
@@ -54,6 +56,7 @@ export default function Flights({ infos, travelId }) {
           dispatch(
             updatePlanning({ category: 'flights', updatedData: data.flight })
           );
+          setIsLoading(false);
         }
       });
   };
@@ -97,6 +100,7 @@ export default function Flights({ infos, travelId }) {
   };
 
   const handleDelete = () => {
+    setIsLoading(true);
     fetch(
       `${API_KEY}/flight/deleteFlight?travelId=${travelId}&flightId=${infos._id}`,
       {
@@ -108,6 +112,7 @@ export default function Flights({ infos, travelId }) {
         dispatch(
           deletePlanning({ category: 'flights', idToDelete: infos._id })
         );
+        setIsLoading(false);
       });
   };
 
