@@ -169,7 +169,7 @@ export default function DiaryCard({ diary, travelId, setIsLoading }) {
       updateTextHeight();
     }
   }, [diary]);
-
+  console.log('diary', diary);
   return (
     <View>
       <View style={tw`bg-white/40 rounded-[.5rem] w-full p-[.5rem] mb-[.5rem]`}>

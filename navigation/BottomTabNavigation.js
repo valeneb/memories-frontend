@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from '../screens/HomeScreen';
 import ProfilScreen from '../screens/ProfilScreen';
-import ImagesScreen from '../screens/ImagesScreen';
+import GalleryScreen from '../screens/GalleryScreen';
 import TravelScreen from '../screens/TravelScreen';
 
 const Tab = createBottomTabNavigator();
@@ -24,7 +24,7 @@ export default function BottomTabNavigation() {
             );
           } else if (route.name === 'Profil') {
             iconName = 'user';
-          } else if (route.name === 'Images') {
+          } else if (route.name === 'Gallery') {
             iconName = 'photo';
           }
 
@@ -60,8 +60,8 @@ export default function BottomTabNavigation() {
         options={{ tabBarLabel: '' }}
       />
       <Tab.Screen
-        name="Images"
-        component={ImagesScreen}
+        name="Gallery"
+        component={GalleryScreen}
         options={{ tabBarLabel: '' }}
       />
       <Tab.Screen
