@@ -107,7 +107,7 @@ export default function Other({ infos, travelId }) {
             setValue={setTitle}
           />
         ) : (
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
             {title}
           </Text>
         )}
@@ -128,60 +128,80 @@ export default function Other({ infos, travelId }) {
           />
         )}
       </View>
-
-      <View style={tw`flex-row justify-between items-start`}>
-        <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Date</Text>
-        {isEditing ? (
-          <InputDate
-            size="small"
-            placeholder="Sélectionner une date"
-            value={activityDate}
-            setValue={setActivityDate}
-          />
-        ) : (
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            {activityDate}
-          </Text>
-        )}
+      <View style={tw`flex-row ${
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}>
+          {isEditing ? (
+            <>
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>Date</Text>
+              <InputDate
+                size="small"
+                placeholder="Date"
+                value={activityDate}
+                setValue={setActivityDate}
+              />
+            </>
+          ) : (
+            <>
+              <FontAwesome name="calendar" size={16} color="#D8725B" />
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+                {activityDate}
+              </Text>
+            </>
+          )}
       </View>
-      <View style={tw`flex-row justify-between items-start`}>
-        <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>Heure</Text>
-        {isEditing ? (
-          <InputHour value={activityHour} setValue={setActivityHour} />
-        ) : (
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            {activityHour}
-          </Text>
-        )}
+
+      <View style={tw`flex-row ${
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}>
+          {isEditing ? (
+            <>
+              <Text style={[tw`text-[1rem] p-2 font-bold`, { color: '#073040' }]}>Heure</Text>
+              <InputHour value={activityHour} setValue={setActivityHour} />
+            </>
+          ) : (
+            <>
+              <FontAwesome name="hourglass" size={16} color="#D8725B" />
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+              {activityHour}
+            </Text>
+            </>
+          )}
       </View>
       <View
-        style={tw`flex-row ${
-          isEditing ? 'justify-around' : 'justify-between'
-        }  items-start`}
-      >
-        <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-          Notes :
-        </Text>
-        {isEditing ? (
-          <Input
-            size="small"
-            placeholder="Commentaire"
-            value={notes}
-            setValue={setNotes}
-            multiline
-          />
-        ) : (
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            {notes}
+          style={tw`flex-row ${
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}
+        >
+          {!isEditing && (
+            <FontAwesome name="comment" size={16} color="#D8725B" />
+          )}
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+            Notes
           </Text>
-        )}
-      </View>
-      <View style={tw`w-full flex flex-row items-center justify-end ${isEditing ? 'pr-4' : ''}`}>
-        <View style={tw`w-[40%] flex-row items-center`}>
-            <Text style={[tw`text-[1rem] px-2 pb-2`, { color: '#073040' }]}>Prix</Text>
-            <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
+          {isEditing ? (
+            <Input
+              size="small"
+              placeholder="Commentaire"
+              value={notes}
+              setValue={setNotes}
+              multiline
+            />
+          ) : (
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {notes}
+            </Text>
+          )}
         </View>
-      </View>
+        <View style={tw`w-full flex flex-row items-center justify-end ${isEditing ? 'pr-4' : ''}`}>
+          <View style={tw`w-[40%] flex-row items-center`}>
+            {!isEditing && (
+              <FontAwesome name="tag" size={16} color="#D8725B" style={tw`mb-2`} />
+            )}
+            <Text style={[tw`text-[1rem] px-2 pb-2 font-bold`, { color: '#073040' }]}>Prix</Text>
+            <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
+          </View>
+        </View>
     </View>
   );
 }

@@ -131,43 +131,49 @@ export default function Accomodation({ infos, travelId }) {
       </View>
 
       <View>
-        <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Du</Text>
-          {isEditing ? (
-            <InputDate
-              size="small"
-              placeholder="Arrivée"
-              value={checkInDate}
-              setValue={setCheckInDate}
-            />
-          ) : (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {checkInDate}
-            </Text>
-          )}
-        </View>
+        {isEditing ? (
+          <>
+            <View style={tw`flex-row justify-between items-start`}>
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>Du</Text>
+                <InputDate
+                  size="small"
+                  placeholder="Arrivée"
+                  value={checkInDate}
+                  setValue={setCheckInDate}
+                />
+          </View>
 
-        <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>Au</Text>
-          {isEditing ? (
-            <InputDate
-              size="small"
-              placeholder="Départ"
-              value={checkOutDate}
-              setValue={setCheckOutDate}
-            />
-          ) : (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {checkOutDate}
+          <View style={tw`flex-row justify-between items-start`}>
+            <Text style={[tw`text-[1rem] p-2 font-bold`, { color: '#073040' }]}>Au</Text>
+              <InputDate
+                size="small"
+                placeholder="Départ"
+                value={checkOutDate}
+                setValue={setCheckOutDate}
+              />
+          </View>
+          </>
+        ) : (
+          <View style={tw`w-full flex flex-row items-center pl-[.5rem]`}>
+            <FontAwesome name="calendar" size={16} color="#D8725B" />
+            <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+                  {checkInDate}
             </Text>
-          )}
-        </View>
+            <Text style={tw`text-[0.9rem] text-[#073040]`}>-</Text>
+            <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+                {checkOutDate}
+              </Text>
+          </View>
+        )}
         <View
           style={tw`flex-row ${
-            isEditing ? 'justify-around' : 'justify-between'
-          } items-start`}
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}
         >
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+          {!isEditing && (
+            <FontAwesome name="hotel" size={16} color="#D8725B" />
+          )}
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
             Hôtel
           </Text>
           {isEditing ? (
@@ -185,10 +191,13 @@ export default function Accomodation({ infos, travelId }) {
         </View>
         <View
           style={tw`flex-row ${
-            isEditing ? 'justify-around' : 'justify-between'
-          } items-start`}
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}
         >
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+          {!isEditing && (
+            <FontAwesome name="map-marker" size={16} color="#D8725B" />
+          )}
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
             Adresse
           </Text>
           {isEditing ? (
@@ -206,11 +215,14 @@ export default function Accomodation({ infos, travelId }) {
         </View>
         <View
           style={tw`flex-row ${
-            isEditing ? 'justify-around' : 'justify-between'
-          }  items-start`}
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}
         >
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            Notes :
+          {!isEditing && (
+            <FontAwesome name="comment" size={16} color="#D8725B" />
+          )}
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+            Notes
           </Text>
           {isEditing ? (
             <Input
@@ -228,8 +240,11 @@ export default function Accomodation({ infos, travelId }) {
         </View>
         <View style={tw`w-full flex flex-row items-center justify-end ${isEditing ? 'pr-4' : ''}`}>
           <View style={tw`w-[40%] flex-row items-center`}>
-              <Text style={[tw`text-[1rem] px-2 pb-2`, { color: '#073040' }]}>Prix</Text>
-              <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
+            {!isEditing && (
+              <FontAwesome name="tag" size={16} color="#D8725B" style={tw`mb-2`} />
+            )}
+            <Text style={[tw`text-[1rem] px-2 pb-2 font-bold`, { color: '#073040' }]}>Prix</Text>
+            <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
           </View>
         </View>
       </View>

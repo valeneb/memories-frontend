@@ -135,64 +135,92 @@ export default function Flights({ infos, travelId }) {
         )}
       </View>
       <View>
-        <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>De</Text>
+        <View style={tw`${isEditing ? '' : 'flex flex-row items-center pl-[.5rem]'}`}>
+          {!isEditing && (
+            <FontAwesome name="map-marker" size={16} color="#D8725B" />
+          )}
+          <View style={tw`flex-row ${
+              isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+            }`}>
+            <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>De</Text>
+            {isEditing ? (
+              <Input
+                size="small"
+                placeholder="Aéroport de départ"
+                value={departureAirport}
+                setValue={setDepartureAirport}
+              />
+            ) : (
+              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+                {departureAirport}
+              </Text>
+            )}
+          </View>
+          <View style={tw`flex-row ${
+              isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+            }`}>
+            <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>À</Text>
+            {isEditing ? (
+              <Input
+                size="small"
+                placeholder="Aéroport d'arrivée"
+                value={arrivalAirport}
+                setValue={setArrivalAirport}
+              />
+            ) : (
+              <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+                {arrivalAirport}
+              </Text>
+            )}
+          </View>
+        </View>
+        <View style={tw`flex-row ${
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}>
           {isEditing ? (
-            <Input
-              size="small"
-              placeholder="Aéroport de départ"
-              value={departureAirport}
-              setValue={setDepartureAirport}
-            />
+            <>
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>Le</Text>
+              <InputDate
+                size="small"
+                placeholder="Departure"
+                value={departureDate}
+                setValue={setDepartureDate}
+              />
+            </>
           ) : (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {departureAirport}
-            </Text>
+            <>
+              <FontAwesome name="calendar" size={16} color="#D8725B" />
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+                {departureDate}
+              </Text>
+            </>
           )}
         </View>
-        <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>À</Text>
+        <View style={tw`flex-row ${
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}>
           {isEditing ? (
-            <Input
-              size="small"
-              placeholder="Aéroport d'arrivée"
-              value={arrivalAirport}
-              setValue={setArrivalAirport}
-            />
+            <>
+              <Text style={[tw`text-[1rem] p-2 font-bold`, { color: '#073040' }]}>à</Text>
+              <InputHour value={departureTime} setValue={setDepartureTime} />
+            </>
           ) : (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {arrivalAirport}
-            </Text>
-          )}
-        </View>
-        <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Le</Text>
-          {isEditing ? (
-            <InputDate
-              size="small"
-              placeholder="Departure"
-              value={departureDate}
-              setValue={setDepartureDate}
-            />
-          ) : (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {departureDate}
-            </Text>
-          )}
-        </View>
-        <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>à</Text>
-          {isEditing ? (
-            <InputHour value={departureTime} setValue={setDepartureTime} />
-          ) : (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+            <>
+              <FontAwesome name="hourglass" size={16} color="#D8725B" />
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
               {departureTime}
             </Text>
+            </>
           )}
         </View>
 
-        <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>Vol</Text>
+        <View style={tw`flex-row ${
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}>
+          {!isEditing && (
+            <FontAwesome name="plane" size={16} color="#D8725B" />
+          )}
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>Vol</Text>
           {isEditing ? (
             <Input
               size="small"
@@ -209,17 +237,16 @@ export default function Flights({ infos, travelId }) {
 
         <View
           style={tw`flex-row ${
-            isEditing ? 'justify-around' : 'justify-between'
-          }  items-start`}
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}
         >
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            Notes :
+          {!isEditing && (
+            <FontAwesome name="comment" size={16} color="#D8725B" />
+          )}
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+            Notes
           </Text>
-          {!isEditing ? (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {notes}
-            </Text>
-          ) : (
+          {isEditing ? (
             <Input
               size="small"
               placeholder="Commentaire"
@@ -227,12 +254,19 @@ export default function Flights({ infos, travelId }) {
               setValue={setNotes}
               multiline
             />
+          ) : (
+            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
+              {notes}
+            </Text>
           )}
         </View>
         <View style={tw`w-full flex flex-row items-center justify-end ${isEditing ? 'pr-4' : ''}`}>
           <View style={tw`w-[40%] flex-row items-center`}>
-              <Text style={[tw`text-[1rem] px-2 pb-2`, { color: '#073040' }]}>Prix</Text>
-              <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
+            {!isEditing && (
+              <FontAwesome name="tag" size={16} color="#D8725B" style={tw`mb-2`} />
+            )}
+            <Text style={[tw`text-[1rem] px-2 pb-2 font-bold`, { color: '#073040' }]}>Prix</Text>
+            <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
           </View>
         </View>
       </View>

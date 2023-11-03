@@ -109,43 +109,49 @@ export default function CarLocation({infos, travelId}) {
       </View>
 
       <View>
-        <View style={tw`flex flex-row justify-between items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            Du
-          </Text>
-          {!isEditing ? (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {startDate}
-            </Text>
-          ) : (
-            <InputDate
-            size="small"
-            placeholder="Début"
-            value={startDate}
-            setValue={setStartDate}
-            />
-          )}
-        </View>
+        {isEditing ? (
+            <>
+              <View style={tw`flex-row justify-between items-start`}>
+                <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>Du</Text>
+                  <InputDate
+                    size="small"
+                    placeholder="Début"
+                    value={startDate}
+                    setValue={setStartDate}
+                  />
+            </View>
 
-        <View style={tw`flex-row justify-between items-start`}>
-          <Text style={[tw`text-[1rem] p-2`, { color: '#073040' }]}>au</Text>
-          {!isEditing ? (
-            <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-              {endDate}
-            </Text>
+            <View style={tw`flex-row justify-between items-start`}>
+              <Text style={[tw`text-[1rem] p-2 font-bold`, { color: '#073040' }]}>Au</Text>
+                <InputDate
+                  size="small"
+                  placeholder="Fin"
+                  value={endDate}
+                  setValue={setEndDate}
+                />
+            </View>
+            </>
           ) : (
-            <InputDate
-            size="small"
-            placeholder="Fin"
-            value={endDate}
-            setValue={setEndDate}
-            />
-          )}
-        </View>
+            <View style={tw`w-full flex flex-row items-center pl-[.5rem]`}>
+              <FontAwesome name="calendar" size={16} color="#D8725B" />
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+                    {startDate}
+              </Text>
+              <Text style={tw`text-[0.9rem] text-[#073040]`}>-</Text>
+              <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+                  {endDate}
+                </Text>
+            </View>
+        )}
 
-        <View style={tw`flex flex-row ${isEditing ? 'justify-around' : 'justify-between'} items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            Agence :
+        <View style={tw`flex-row ${
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}>
+          {!isEditing && (
+            <FontAwesome name="car" size={16} color="#D8725B" />
+          )}
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+            Agence 
           </Text>
           {!isEditing ? (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
@@ -161,28 +167,38 @@ export default function CarLocation({infos, travelId}) {
           )}
         </View>
 
-        <View style={tw`flex-row ${isEditing ? 'justify-around' : 'justify-between'}  items-start`}>
-          <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
-            Notes :
+        <View
+          style={tw`flex-row ${
+            isEditing ? 'justify-around items-start' : 'pl-[.5rem] items-center'
+          }`}
+        >
+          {!isEditing && (
+            <FontAwesome name="comment" size={16} color="#D8725B" />
+          )}
+          <Text style={[tw`text-[0.9rem] p-2 font-bold`, { color: '#073040' }]}>
+            Notes
           </Text>
-          {!isEditing ? (
+          {isEditing ? (
+            <Input
+              size="small"
+              placeholder="Commentaire"
+              value={notes}
+              setValue={setNotes}
+              multiline
+            />
+          ) : (
             <Text style={[tw`text-[0.9rem] p-2`, { color: '#073040' }]}>
               {notes}
             </Text>
-          ) : (
-            <Input
-            size="small"
-            placeholder="Commentaire"
-            value={notes}
-            setValue={setNotes}
-            multiline
-            />
           )}
         </View>
         <View style={tw`w-full flex flex-row items-center justify-end ${isEditing ? 'pr-4' : ''}`}>
           <View style={tw`w-[40%] flex-row items-center`}>
-              <Text style={[tw`text-[1rem] px-2 pb-2`, { color: '#073040' }]}>Prix</Text>
-              <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
+            {!isEditing && (
+              <FontAwesome name="tag" size={16} color="#D8725B" style={tw`mb-2`} />
+            )}
+            <Text style={[tw`text-[1rem] px-2 pb-2 font-bold`, { color: '#073040' }]}>Prix</Text>
+            <InputNumber value={price} setValue={setPrice} isEditing={isEditing} />
           </View>
         </View>
       </View>
