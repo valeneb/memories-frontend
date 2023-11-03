@@ -33,17 +33,18 @@ export default function SignInUp({ register, setRegister, navigation }) {
   };
 
   const signIn = () => {
+    console.log('infos', email, password);
     if (checkEmail() && password) {
       fetch(`${API_KEY}/user/login`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
         },
         body: JSON.stringify({ email: email, password: password }),
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log('data', data);
           if (data.user) {
             dispatch(connectUser(data.user));
             navigation.navigate('TabNavigator');
