@@ -19,7 +19,7 @@ Redux
 
 ## 🎬 View in production
 
-[![Video of the project](https://i9.ytimg.com/vi/120SyxVbSNo/mqdefault.jpg?v=6593e168&sqp=CMT5za0G&rs=AOn4CLCzDst0N2qoI7HHqobgGoPoa8ie7w)](https://youtu.be/120SyxVbSNo)
+[![Video of the project](assets/visu-app.png)](https://youtu.be/120SyxVbSNo)
 
 
 ## 📰 License
